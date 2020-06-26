@@ -1,0 +1,4 @@
+[submodule "texmarmodules"]
+	path = texmarmodules
+	url = git@github.com:dinamohammed/texmartest6.git
+	branch = DB2506
