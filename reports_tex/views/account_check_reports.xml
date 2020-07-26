@@ -1,0 +1,84 @@
+<odoo>
+    <data>
+        <template id="bank_statement_line_report_doc2" inherit_id="account_check.bank_statement_line_report_doc">   
+            <xpath expr="//div[hasclass('page')]" position="replace">
+                <div class="page">
+                    <style>
+                        .page{
+                        font-size:60px !important
+                        font-weight: 900;
+                        }
+                    </style>
+                <div class="row row-centered" t-if="o.amount &gt; 0">
+                         <h2 class="text-center">Receipt of cash number <span t-esc="o.move_name"/></h2>
+                    </div>
+                    <div class="row" t-if="o.amount &lt; 0">
+                         <h2 class="text-center">Cash receipt number <span t-esc="o.move_name"/></h2>
+                    </div>
+
+                <div class="col-md-6">
+                    <div class="mt32 mb32">
+                        <p t-if="o.amount &gt; 0">
+                            <b>Customer:</b>
+                            <span  t-if="o.partner_id" t-field="o.partner_id.name"/>
+                            <span  t-if="not o.partner_id">------------------</span></p>
+                   </div>
+                    <div class="mt32 mb32">
+                         <p t-if="o.amount &lt; 0">
+                             <b>Vendor:</b>
+                             <span  t-if="o.partner_id" t-field="o.partner_id.name"/>
+                             <span  t-if="not o.partner_id">------------------</span></p>
+                    </div>
+                    <t t-set="total" t-value="abs(o.amount)"/>
+                    <div class="mt32 mb32">
+                        <p>
+                            <b>Amount:</b>
+                            <span  t-esc="total"/>
+                        </p>
+                    </div>
+                    <div class="mt32 mb32">
+                         <p t-if="o.amount_in_words">
+                             <b>Amount in words:</b>
+                             <span t-field="o.amount_in_words"/>
+                             <b>only</b>
+                         </p>
+                    </div>
+                    <div class="mt32 mb32">
+                         <p>
+                             <b>Date:</b>
+                             <span t-field="o.date"/>
+                         </p>
+                    </div>
+                    <div class="mt32 mb32">
+                          <p>
+                              <b>Label:</b>
+                              <span t-field="o.name"/>
+                          </p>
+                    </div>
+                </div>
+                <div class="row" t-if="o.note">
+                    <p class="width:90%">Notes:</p>
+                    <p class="width:90%" t-esc="o.note"/>
+                </div>
+            </div>
+                 <div class="text-center">
+                    <strong class="text-center">Accounting guidance</strong>
+                 </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td style="text-align:center;">Secretary of the Treasury</td>
+                            <td style="text-align:center;">The recipient</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="height:60px;">
+                            <td style="text-align:center;">_ _ _ _ _ _ _ _ _ _ _ _ _ _ _</td>
+                            <td style="text-align:center;">_ _ _ _ _ _ _ _ _ _ _ _ _ _ _</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </xpath>
+        </template>
+    </data>
+</odoo>
