@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+<template id="payment_reciept_inh" inherit_id="account.report_payment_receipt_document">    
+    <xpath expr="//div/div/div[hasclass('col-6')]" position="after">
+    <div class="col-6" t-if="o.payment_method_id.name == 'Visa'">
+        <strong>Visa Number: </strong><span t-field="o.visa_account_number"/>
+    </div>
+    <div class="col-6" t-if="o.payment_method_id.name == 'Bank'">
+        <strong>Transfer Number: </strong><span t-field="o.bank_account_number"/>
+    </div>
+    <div class="col-6" t-if="o.payment_method_id.name == 'Issue Check'">
+        <strong>Check: </strong><span t-field="o.check_id.name"/>
+    </div>
+
+    </xpath>
+</template>
+</data>
+</odoo>
