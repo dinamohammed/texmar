@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+      <record id="mrp_production_form_view_inherits" model="ir.ui.view">
+            <field name="name">mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group/field[@name='bom_id']" position="after">  
+                    <field name="size_of_pieces"/>
+                </xpath>
+            </field>
+      </record>
+  </data>
+</odoo>
