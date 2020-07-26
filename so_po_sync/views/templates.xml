@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+     <template id="customer_info_delivery" inherit_id="stock.report_picking">
+        <xpath expr="//div[@class='page']/div[@class='row']/div[@class='col-5 offset-1']" position="inside">
+            <div t-if="o.branch_customer_name">
+                <span><strong>Branch Customer Name:</strong> <span t-field='o.branch_customer_name'/></span>
+            </div>
+            <div t-if="o.branch_customer_phone">
+                <span><strong>Branch Customer Phone:</strong> <span t-field='o.branch_customer_phone'/></span>
+            </div>
+         </xpath>
+        <xpath expr="//div[@class='page']/table/thead/tr/th[6]" position="before">
+            <th class="text-center">
+               <strong>Size Of Pieces</strong>
+            </th>
+         </xpath>
+        <xpath expr="//div[@class='page']/table/tbody/t/t/tr/td[5]" position="before">
+            <td>
+            <span t-field="move.size_of_pieces"/>
+            </td>
+         </xpath>
+    </template>
+    </data>
+</odoo>
