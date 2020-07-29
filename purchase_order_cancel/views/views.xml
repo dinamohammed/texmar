@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="purchase_order_cancel.list">
+      <field name="name">purchase_order_cancel list</field>
+      <field name="model">purchase_order_cancel.purchase_order_cancel</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="purchase_order_cancel.action_window">
+      <field name="name">purchase_order_cancel window</field>
+      <field name="res_model">purchase_order_cancel.purchase_order_cancel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="purchase_order_cancel.action_server">
+      <field name="name">purchase_order_cancel server</field>
+      <field name="model_id" ref="model_purchase_order_cancel_purchase_order_cancel"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="purchase_order_cancel" id="purchase_order_cancel.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="purchase_order_cancel.menu_1" parent="purchase_order_cancel.menu_root"/>
+    <menuitem name="Menu 2" id="purchase_order_cancel.menu_2" parent="purchase_order_cancel.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="purchase_order_cancel.menu_1_list" parent="purchase_order_cancel.menu_1"
+              action="purchase_order_cancel.action_window"/>
+    <menuitem name="Server to list" id="purchase_order_cancel" parent="purchase_order_cancel.menu_2"
+              action="purchase_order_cancel.action_server"/>
+-->
+  </data>
+</odoo>

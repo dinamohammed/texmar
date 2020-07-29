@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+   <record id="add_text_amount_to_payment_form" model="ir.ui.view">
+        <field name="name">add.text.amount.to.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='payment_date']" position="before">
+                <field name="amount_in_words" lang = 'user.lang'/>
+            </xpath>
+        </field>
+      </record>
+  </data>
+</odoo>
