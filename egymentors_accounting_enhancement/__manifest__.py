@@ -9,11 +9,11 @@
     'description': """
 """,
     'version': '10.0',
-    'depends': ['account', 'sale_discount_total', 'purchase_discount'],
+    'depends': ['account', 'sale_discount_total', 'purchase_discount','account'],
     'data': [
         'reports/reports.xml',
         'reports/invoice_report.xml',
-        # 'reports/sale_order_report.xml',
+        'views/signs.xml',
     ],
     'installable': True,
     'application': True,

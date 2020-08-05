@@ -88,17 +88,8 @@
                     </div>
                     <h3>Offer specifications and conditions :-</h3>
                     <div class="row">
-                        <ul>
-                            <li><strong>All prices are in Egyptian pound LE and subject to 14% vat.</strong></li>
-                            <li>Please note any fabric marked WRF are 100% flam ratadant polyster durable for 12 to 16 wash to match and pass the highest required American standard NFPA701</li>
-                            <li>All original fabric is construction engineered to match the project durability use and safety requirements.</li>
-                            <li>All fabrics made to pass aatcc 16e (U.S.A) Xeon test 5 blue scale minimum (for light fastness)</li>
-                            <li>Fabric specifications for indoor use only</li>
-                            <li>All fabrics made to pass aatcc 8 (U.S.A) for dry and wet grey scale (crocking fastness rubbing)</li>
-                            <li>All upholstery fabrics made to pass astm 4966 Abrasion test for upholstery items (20000 rubs minimum)</li>
-                        </ul>
+                        <span t-raw="o.specs_conditions"/>
                     </div>
-                    <p>Ordered qty subject for (5% + or -) on delivery</p>
                 </div>
             </t>
     </template>
@@ -119,23 +110,20 @@
         </t>
 
         <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header text-center">
-                <div class="row">
-                    <div class="col-12">
+            <div class="o_boxed_header">
+                <div class="row mb8">
+                    <div class="col-6">
                         <div class="row">
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                         </div>
-                    </div>
-                </div>
-                <br/>
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-4">
-                        <div class="row">
-                            <h1 style="text-align:center;margin-left:120px;">Offer</h1>
+                        <div class="row" style="margin-top:5px;" >
+                            <h4 class="mt0" t-field="o.company_id.report_header"/>
+                            <div name="company_address" class="mb4">
+                                <span class="company_address" t-field="o.company_id.partner_id"
+                                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4"></div>
                 </div>
             </div>
         </div>

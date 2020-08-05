@@ -9,10 +9,12 @@
     'description': """
 """,
     'version': '10.0',
-    'depends': ['sale_management'],
+    'depends': ['sale_management', 'stock'],
     'data': [
         'reports/reports.xml',
         'reports/sale_order_report.xml',
+        
+        'views/specs_conditions.xml',
     ],
     'installable': True,
     'application': True,
