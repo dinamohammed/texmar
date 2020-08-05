@@ -7,15 +7,15 @@
             </t>
             <div class="page">
                 <div class="oe_structure"/>
-                <div class="row">
+<!--                 <div class="row">
                     <div class="row" style="padding-left:60%;">
                         <ul style="list-style:none;">
                             <li><strong>Ref No: </strong><span t-field="o.name"/></li>
                             <li><strong>Date: </strong><span t-field="o.date_order"/></li>
                         </ul>
-                    </div>
+                    </div> 
                 </div>
-<!--                 <div class="oe_structure"/>
+                 <div class="oe_structure"/>
  -->
             <h2 t-if="o.state == 'draft'">Request for Quotation #<span t-field="o.name"/></h2>
             <h2 t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h2>
@@ -112,8 +112,8 @@
                     </table>
                 </div>
                 <div class="row">
-<!--                     <div class="col-9">
-                        <p>All item prices included Sales Tax and all other taxes جميع أسعار الأصناف شاملة ضريبة المبيعات و جميع أنواع الضرائب اﻷخري </p>
+                    <div class="col-9">
+<!--                         <p>All item prices included Sales Tax and all other taxes جميع أسعار الأصناف شاملة ضريبة المبيعات و جميع أنواع الضرائب اﻷخري </p>
                         <p>All delivery notes and invoices shall be marked with the PO no. on delivery يجب وضع رقم أمر التوريد علي كل من اذن الاستلام و الفواتير</p>
                         <p>All items are under supplier guaranty for any defects جميع البضائع تحت ضمان المورد ضد أي عيوب</p>
                         <br/>
@@ -122,8 +122,8 @@
                             <div class="row" style="border:2px solid black;">
                                 <p t-field="o.notes" style="margin:10px;"/>
                             </div>
-                        </t>
-                    </div> -->
+                        </t> -->
+                    </div>
                     <div class="col-3">
                         <table class="table">
                             <tbody>
