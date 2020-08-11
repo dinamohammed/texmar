@@ -115,54 +115,19 @@
                 <div class="page" style="font-size:24px;">
                     <div class="oe_structure"/>
                     <div class="row">
-                        <div class="col-4"></div>
-                        <div class="col-4"></div>
                         <div class="col-4">
-                            <ul style="list-style:none;">
-                                <li><strong>Ref No: </strong><span t-field="o.name"/></li>
-                                <li><strong>Date: </strong><span t-field="o.invoice_date"/></li>
-                            </ul>
+                            <p><strong>Customer Name: </strong><span t-field="o.partner_id.name"/></p>
+                            <p><strong>Source: </strong><span t-field="o.invoice_origin"/></p>
+                            <p><strong>Date: </strong><span t-field="o.invoice_date"/></p>
+                            <p><strong>Due Date: </strong><span t-field="o.invoice_date_due"/></p>
+                        </div>
+                        <div class="col-4"><h4 t-field='o.name'/></div>
+                        <div class="col-4">
+                        
                         </div>
                     </div>
 
-                    <div class="row">
-                        <table class="table" style="width:100%;">
-                            <thead>
-                                <tr style="border-style:hidden;font-size:24px;">
-                                    <td colspan="3"><strong>Billing to :-</strong></td>
-                                    <td colspan="3"><strong>Delivery to :- </strong><span style="margin-left:25px;font-size:14px;">If different than original address</span></td>
-                                </tr>
-                            </thead>
-                            <tbody style="font-size:22px;">
-                                <tr style="border-style:hidden;">
-                                    <td style="width:10%">Name</td>
-                                    <td style="width:10%">الاسم</td>
-                                    <td style="width:30%"><span t-field="o.partner_id"/></td>
-                                    <td style="width:10%">Name</td>
-                                    <td style="width:10%">الاسم</td>
-                                    <td style="width:30%"></td>
-                                </tr>
-                                <tr style="border-style:hidden;">
-                                    <td style="width:10%">Tel</td>
-                                    <td style="width:10%"></td>
-                                    <td style="width:30%"><span t-field="o.partner_id.phone"/></td>
-                                    <td style="width:10%">Tel</td>
-                                    <td style="width:10%"></td>
-                                    <td style="width:30%"></td>
-                                </tr>
-                                <tr style="border-style:hidden;">
-                                    <td style="width:10%">Address</td>
-                                    <td style="width:10%">العنوان</td>
-                                    <td style="width:30%">
-                                        <span t-esc="o.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
-                                    </td>
-                                    <td style="width:10%">Address</td>
-                                    <td style="width:10%">العنوان</td>
-                                    <td style="width:30%"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
 
                     <h2>Comments</h2>
                     <div class="row" style="font-size:22px;">
@@ -217,14 +182,6 @@
 
                     <div class="row">
                         <div class="row col-9">
-                            <div class="col-6">
-                                <p>Bill is unpaid without Company Payment receipt</p>
-                                <p>Delivered product is under consignment until fully paid</p>
-                            </div>
-                            <div class="col-6">
-                                <p>الفاتوره لا تعتبر مسدده الا بموجب ايصال رسمي</p>
-                                <p>الفاتورة المسلمة تعتبر أمانة طرفكم لحين سداد كامل الفاتورة</p>
-                            </div>
                         </div>
                         <div class="col-3">
                             <table class="table">
@@ -541,24 +498,12 @@
                         <div class="row">
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                         </div>
-                        <div class="row" style="margin-top:30px;">
+                        <div class="row" style="margin-top:30px;" >
                             <h4 class="mt0" t-field="o.company_id.report_header"/>
                             <div name="company_address" class="mb4">
                                 <span class="company_address" t-field="o.company_id.partner_id"
                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-6 mb4">
-                        <div class="col-md-12" style="padding-top:20px;padding-bottom:5px;">
-                            <h1 class="col-md-12 text-center">Invoice</h1>
-                        </div>
-                        <div class="row">
-                            <ul style="list-style:none;margin-left:120px;">
-                                <li>Company Registration no 10346 سجل تجاري رقم</li>
-                                <li>Tax Reg. no 4879/221/102 تسجيل ضرائب عامة رقم</li>
-                                <li>Company Registration no. 100/000/088 تسجيل ضريبة مبيعات رقم</li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -581,19 +526,19 @@
                 </div>
                 <div class="oe_clear"/>
                 <div class="row" style="margin-bottom:50px;">
-                    <div style="width:20%;">
+                    <div style="width:20%;" t-if='o.name_sig'>
                             Name :-
                     </div>
-                    <div style="width:20%;">
+                    <div style="width:20%;" t-if='o.id_sig'>
                             ID :-
                     </div>
-                    <div style="width:20%;">
+                    <div style="width:20%;" t-if='o.signture_sig'>
                             Signature :-
                     </div>
-                    <div style="width:20%;">
+                    <div style="width:20%;" t-if='o.accounting_sig'>
                             Accounting :-
                     </div>
-                    <div style="width:20%;">
+                    <div style="width:20%;" t-if='o.ledger_sig'>
                             General Ledger :-
                     </div>
                 </div>
