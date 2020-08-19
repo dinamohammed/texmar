@@ -1,18 +1,16 @@
 <odoo>
   <data>
-      
-      
-      
-      
-      
-      
-      
+
       <record model="ir.ui.view" id="note_order_line_tree">
         <field name="name">note.order.line.tree</field>
         <field name="model">note.order.line</field>
-        <field name="inherit_id" ref=""/>
+        <field name="inherit_id" ref="sale.view_order_line_tree"/>
         <field name="priority" eval="1"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='price_subtotal']" position="after">
+                <field name="to_sale"/>
+                <field name="to_request"/>
+            </xpath>
 
         </field>
     </record>
@@ -33,9 +31,9 @@
       
       <menuitem
         id="menu_note_order_line_requests"
-        name="Note Orders"
+        name="Note Order Lines"
         parent="sale.sale_order_menu"
         action="note_order_line_view_action"
-        sequence="8"/>
+        sequence="9"/>
   </data>
 </odoo>
