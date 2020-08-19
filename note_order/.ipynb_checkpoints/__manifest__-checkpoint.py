@@ -27,6 +27,5 @@
         'security/ir.model.access.csv',
         'views/note_order_view.xml',
         'views/note_order_line_view.xml',
-        'views/templates.xml',
     ],
 }
