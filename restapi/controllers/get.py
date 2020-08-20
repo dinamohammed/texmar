@@ -90,7 +90,7 @@ class get(controllers.Restapi):
             return {'error':'You are not allowed to do this'}  
         
     
-     @http.route('/popular_products',type='json',auth='none')
+     @http.route('/popular_products',type='json',auth='none',cors='*')
      def popular_products(self,base_location=None):
         result = []
         dev_token = request.httprequest.headers['DevToken']
@@ -119,7 +119,7 @@ class get(controllers.Restapi):
         except AccessError:
             return {'error':'You are not allowed to do this'}
      
-     @http.route('/new_products',type='json',auth='none')
+     @http.route('/new_products',type='json',auth='none',cors='*')
      def new_product(self,base_location=None):
         result = []
         dev_token = request.httprequest.headers['DevToken']
@@ -148,7 +148,7 @@ class get(controllers.Restapi):
         except AccessError:
             return {'error':'You are not allowed to do this'}
      
-     @http.route('/search_products',type='json',auth='none')
+     @http.route('/search_products',type='json',auth='none',cors='*')
      def search_products(self,keyword,base_location=None):
         dev_token = request.httprequest.headers['DevToken']
         user_token = request.httprequest.headers['UserToken'] 
