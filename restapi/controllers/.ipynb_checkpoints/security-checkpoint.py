@@ -13,20 +13,17 @@ class security(controllers.Restapi):
      @http.route('/forget_password',type='json',auth='none',cors='*')
      def forget_password(self,email,base_location=None):
         dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken'] 
         try:
             if self.authrize_developer(dev_token) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
-                return {'error':'invalid user token'}
             else:
-                user_info = self.authrize_user(user_token)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                user = request.env['res.users'].search([('login','=',email)],limit=1)
+                user = request.env['res.users'].sudo().search([('login','=',email)],limit=1)
                 user.sudo().action_reset_password()
-                return  'resend a reset password to user mail' if user else 'no user found'
+                return 'resend a reset password to user mail' if user else 'no user found'
         except AccessError:
             return {'error':'You are not allowed to do this'}
+        except:
+            return {'error':'unexcepcted error occured'}
         
     
      @http.route('/create_dev_token',type='json',auth='none',cors='*')
