@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_purchase_fx">
+        <t t-call="fx_report.fx_layout">
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+            <t t-if="o.dest_address_id">
+            </t>
+            <div class="page">
+                <div class="oe_structure"/>
+                
+
+            <div align="center" style="margin-bottom:50px;">    
+            <h2>Project No: <span t-field="o.fx_num_id"/></h2>
+            <h3>رقم المشروع</h3>
+            </div>
+                
+                <div class="row">
+                    <table class="table" style="width:100%;border-collapse: collapse;">
+                        <thead style="border: 2px solid black;">
+                            <tr style="border-bottom: 2px solid black;">
+                                <td style="border-right: 2px solid black;text-align:center;">Item Code Name <br/> كود الصنف </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Price <br/> السعر </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Qty <br/> الكمية </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Total <br/> الاجمالي </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Received QTY <br/> كمية الوارد </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Received Value <br/> قيمة الوارد </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Under Received <br/> تحت التسليم </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Under Received Value <br/> قيمة تحت التسليم </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Invoice NO <br/> رقم الفاتورة </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Qty <br/> الكمية </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Value <br/> القيمة </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Date <br/> التاريخ </td>
+                                <td style="border-right: 2px solid black;text-align:center;">Supplier Name <br/> اسم المورد </td>
+                            </tr>
+                        </thead>
+                        <tbody style="border: 2px solid black;">
+                            <!-- Setting Totals -->
+                            <t t-set="total_price" t-value="0.0"/>
+                            <t t-set="total_qty" t-value="0.0"/>
+                            <t t-set="total_total" t-value="0.0"/>
+                            <t t-set="total_received_qty" t-value="0.0"/>
+                            <t t-set="total_received_value" t-value="0.0"/>
+                            <t t-set="total_under_received" t-value="0.0"/>
+                            <t t-set="total_under_received_value" t-value="0.0"/>
+                            <t t-set="total_qty_2" t-value="0.0"/>
+                            <t t-set="total_value" t-value="0.0"/>
+                            
+                            <t t-foreach="o.order_line" t-as="line">
+                                <tr style="border-bottom: 2px solid black;">
+                                    <!-- Item Code Name -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.name"/></td>
+                                    
+                                    <!-- Price -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_unit"/></td>
+                                    
+                                    <!-- Qty -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_qty"/></td>
+                                    
+                                    <!-- Total -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_subtotal"/></td>
+                                    
+                                    <!-- Received QTY -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.qty_received"/></td>
+                                    
+                                    <!-- Received Value -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.qty_received * line.price_unit"/></td>
+                                    
+                                    <!-- Under QTY -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_qty - line.qty_received"/></td>
+                                    
+                                    <!-- Under Received Value -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_qty - line.qty_received"/></td>
+                                    <!-- Invoice NO -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="o.invoice_ids.id"/></td>
+                                    
+                                    <!-- Qty -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.qty_invoiced"/></td>
+                                    
+                                    <!-- Value -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_subtotal"/></td>
+                                    
+                                    <!-- Date -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="o.date_order"/></td>
+                                    
+                                    <!-- Supplier Name -->
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="o.partner_id.name"/></td>
+                                    
+                                    
+                                    <!-- TOTALS -->
+                                    
+                                    <!-- Price Total -->
+                                    <t t-set="total_price" t-value="line.price_unit + total_price"/>
+                                    
+                                    <!-- Qty Total -->
+                                    <t t-set="total_qty" t-value="line.product_qty + total_qty"/>
+                                
+                                    <!-- Total Total -->
+                                    <t t-set="total_total" t-value="line.price_subtotal + total_total"/>
+                                
+                                    <!-- Received Qty Total -->
+                                    <t t-set="total_received_qty" t-value="line.qty_received + total_received_qty"/>
+                                
+                                    <!-- Received Value Total -->
+                                    <t t-set="total_received_value" t-value="(line.qty_received * line.price_unit) + total_received_value"/>
+                                
+                                    <!-- Under Received Total -->
+                                    <t t-set="total_under_received" t-value="(line.product_qty - line.qty_received) + total_under_received"/>
+                                
+                                    <!-- Under Received Value Total -->
+                                    <t t-set="total_under_received_value" t-value="(line.product_qty - line.qty_received) + total_under_received_value"/>
+                                
+                                    <!-- Qty Total -->
+                                    <t t-set="total_qty_2" t-value="line.qty_invoiced + total_qty_2"/>
+                                
+                                    <!-- Value Total -->
+                                    <t t-set="total_value" t-value="line.price_subtotal + total_value"/>
+
+
+                                </tr>
+                            </t>
+                            <tr style="border-bottom: 2px solid black;">
+                                
+                                <!-- TOTALS -->
+                                
+                                <!-- Total Title -->
+                                <td style="border-right: 2px solid black;text-align:center;"><b>Total: </b></td>
+                                
+                                <!-- Price Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_price"/></td>
+                                
+                                <!-- Qty Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_qty"/></td>
+                                
+                                <!-- Total Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_total"/></td>
+                                
+                                <!-- Received Qty Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_received_qty"/></td>
+                                
+                                <!-- Received Value Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_received_value"/></td>
+                                
+                                <!-- Under Received Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_under_received"/></td>
+                                
+                                <!-- Under Received Value Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_under_received_value"/></td>
+                                
+                                <!-- Invoice No Total Placeholder -->
+                                <td style="border-right: 2px solid black;text-align:center;"></td>
+                                
+                                <!-- Qty Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_qty_2"/></td>
+                                
+                                <!-- Value Total -->
+                                <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_value"/></td>
+                                
+                                <!-- Date Total Placeholder -->
+                                <td style="border-right: 2px solid black;text-align:center;"></td>
+                                
+                                <!-- Supplier Name Total Placeholder -->
+                                <td style="border-right: 2px solid black;text-align:center;"></td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-9">
+
+                    </div>
+                    
+                    <!--
+                    <div class="col-3">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:right;"><strong>Total Qty</strong></td>
+                                    <td style="text-align:center;"><span t-esc="total_qty"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:right;"><strong>Total Due</strong></td>
+                                    <td style="text-align:center;"><span t-field="o.amount_total"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    -->
+                </div>
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+    <template id="fx_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div t-attf-class="header o_company_#{company.id}_layout">
+            <div class="o_boxed_header">
+                <div class="row mb8">
+                    <div class="col-6">
+                        <div class="row">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                        </div>
+                        <div class="row" style="margin-top:30px;">
+                            <h4 class="mt0" t-field="o.company_id.report_header"/>
+                            <div name="company_address" class="mb4">
+                                <span class="company_address" t-field="o.company_id.partner_id"
+                                    t-options='{"widget": "contact", "fields": ["phone", "email"], "no_marker": true}'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb4">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+    </template>
+    <template id="report_fx">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="fx_report.report_purchase_fx" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>
