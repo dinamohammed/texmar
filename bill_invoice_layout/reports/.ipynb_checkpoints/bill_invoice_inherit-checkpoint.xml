@@ -42,7 +42,7 @@
         </xpath>
        
         <xpath expr="//div[4]/table/tbody/t/tr/td[7]" position="after">
-         <t t-set="tax_value_line" t-value="line.total_with_tax - line.price_subtotal"/>   
+         <t t-set="tax_value_line" t-value="round(line.total_with_tax - line.price_subtotal,2)"/>   
          <td style="border-right: 2px solid black;text-align:center;"><span t-esc="tax_value_line"/></td>
         </xpath>
        
