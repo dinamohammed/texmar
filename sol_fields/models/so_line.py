@@ -9,3 +9,5 @@ class SOLineInherit(models.Model):
     to_sell = fields.Boolean("Sell")
     
     to_request = fields.Boolean("Request")
+    
+    custom_model_id = fields.Many2one('so.lines', 'Custom Model')
