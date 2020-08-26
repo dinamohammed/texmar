@@ -2,6 +2,7 @@ from odoo import http,fields,models
 from odoo.http import request,Response,JsonRequest
 from odoo.exceptions import ValidationError,AccessError,AccessDenied
 from datetime import datetime,timedelta,timezone
+from werkzeug.wrappers import AcceptMixin, BaseRequest
 import time
 import io
 import base64
@@ -27,7 +28,7 @@ class security(controllers.Restapi):
         
     
      @http.route('/create_dev_token',type='json',auth='none',cors='*')
-     def create_dev_token(self,login,password,headers = None,base_location=None): 
+     def create_dev_token(self,login,password,**kw): 
         try:
             request.session.authenticate(self.db,login,password)
             exp_time = datetime.utcnow() + timedelta(days=7)
