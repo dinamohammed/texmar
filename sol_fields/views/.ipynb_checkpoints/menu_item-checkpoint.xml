@@ -5,10 +5,6 @@
             <field name="name">so.lines.tree</field>
             <field name="model">sale.order.line</field>
             <field name="arch" type="xml">
-<!--                 <xpath expr="//filter[@name='my_sales_order_lines']" position="after">
-                    <filter name="to_sell" string="Sell" domain="[('to_sell','=',True)]"/>
-                    <filter name="to_request" string="Request" domain="[('to_request','=',True)]"/>
-                </xpath> -->
                 <tree string="Order Lines Tree">
                     <field name="order_id" on_change="1" can_create="true" can_write="true" modifiers="{'required':true}"/>
                     <field name="order_partner_id" can_create="true" can_write="true" modifiers="{}"/>
@@ -28,6 +24,19 @@
                     <field name="line_status" optional="show" modifiers="{}"/>
                     <field name="is_cut" modifiers="{}"/>
                 </tree>
+            </field>
+        </record>
+        
+        
+        <record id="my_sales_order_line_filter" model="ir.ui.view">
+            <field name="name">sale.order.line.select.inhert</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_sales_order_lines']" position="after">
+                    <filter name="to_sell" string="Sell" domain="[('to_sell','=',True)]"/>
+                    <filter name="to_request" string="Request" domain="[('to_request','=',True)]"/>
+                </xpath>
             </field>
         </record>
         
