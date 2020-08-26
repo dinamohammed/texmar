@@ -36,6 +36,9 @@
                 <xpath expr="//filter[@name='my_sales_order_lines']" position="after">
                     <filter name="to_sell" string="Sell" domain="[('to_sell','=',True)]"/>
                     <filter name="to_request" string="Request" domain="[('to_request','=',True)]"/>
+                    
+                    <filter name="to_sell" string="Sell" context="{'group_by':'to_sell'}" />
+                    <filter name="to_request" string="Request" context="{'group_by':'to_request'}" />
                 </xpath>
             </field>
         </record>
