@@ -1,0 +1,16 @@
+<odoo>
+  <data>
+        <!-- Sale Order Line-->
+        <record id="so_line_tree_inherit" model="ir.ui.view">
+            <field name="name">sale.order.line.tree.inherited</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='price_subtotal']" position="after">
+                    <field name="to_sell"/>
+                    <field name="to_request"/>
+                </xpath>
+            </field>
+        </record>
+  </data>
+</odoo>
