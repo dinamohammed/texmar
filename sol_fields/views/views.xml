@@ -1,12 +1,26 @@
 <odoo>
   <data>
-        <!-- Sale Order Line-->
+        <!-- Sale Order Line
         <record id="so_line_tree_inherit" model="ir.ui.view">
             <field name="name">sale.order.line.tree.inherited</field>
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_order_line_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='price_subtotal']" position="after">
+                    <field name="to_sell"/>
+                    <field name="to_request"/>
+                </xpath>
+            </field>
+        </record>
+        -->
+      
+        <record model="ir.ui.view" id="view_order_form_inherit_sale_timesheet_custom">
+            <field name="name">sale.order.custom.ertrac.form</field>
+            <field name="model">sale.order</field>
+            <field name="priority" eval="1"/>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='name']" position="after">
                     <field name="to_sell"/>
                     <field name="to_request"/>
                 </xpath>
