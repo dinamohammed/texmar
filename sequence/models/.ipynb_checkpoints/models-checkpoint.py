@@ -7,6 +7,25 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
     
+    state = fields.Selection([
+        ('note_order','Note Order'),
+        ('draft', 'Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('sale', 'Sales Order'),
+        ('done', 'Locked'),
+        ('cancel', 'Cancelled'),
+        ], string='Status', readonly=True, copy=False, index=True, tracking=3, default=lambda self: self._compute_state_company())
+    
+    def _compute_state_company(self):
+        state = None
+        if self.env.company.parent_id:
+            state = 'note_order'
+        else:
+            state = 'draft'
+        return state
+
+    
+    
     @api.model
     def create(self, vals):
         # if company has parent ie its a Branch
