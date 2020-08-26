@@ -5,11 +5,11 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-<!--                 <xpath expr="//button[@name='action_cancel']" position="before">
+                <xpath expr="//button[@name='action_cancel']" position="before">
                     <button name="action_confirm_note_order"
                             attrs="{'invisible': [('state','not in', ('note_order'))]}"
                             type="object" string="Confirm NO"/>
-                </xpath> -->
+                </xpath>
                 <xpath expr="/form/header/field[@name='state']" position="replace">
                         <field name="state" widget="statusbar" statusbar_visible="note_order,draft,sent,sale"/>
                 </xpath>
