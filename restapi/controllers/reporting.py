@@ -7,17 +7,15 @@ from . import controllers
 class reporting(controllers.Restapi): 
     
      @http.route('/sales_home',type='json',auth='none',cors='*')
-     def sales_home(self,base_location=None):
+     def sales_home(self,DevToken,UserToken,base_location=None):
         result = []
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken'] 
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 allowed_companies = self.prepare_allowed_companies(user_info['login'])
                 sales = request.env['sale.order'].search([('company_id','in',allowed_companies)])
@@ -47,17 +45,15 @@ class reporting(controllers.Restapi):
     
     
      @http.route('/sales_dashboard',type='json',auth='none',cors='*')
-     def sales_dashboard(self,base_location=None):
+     def sales_dashboard(self,DevToken,UserToken,base_location=None):
         result = []
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken'] 
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 allowed_companies = self.prepare_allowed_companies(user_info['login'])
                 sales = request.env['sale.order'].search([('company_id','in',allowed_companies)])

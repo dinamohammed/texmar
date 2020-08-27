@@ -12,10 +12,9 @@ from . import controllers
 class security(controllers.Restapi):
     
      @http.route('/forget_password',type='json',auth='none',cors='*')
-     def forget_password(self,email,base_location=None):
-        dev_token = request.httprequest.headers['DevToken']
+     def forget_password(self,email,DevToken,base_location=None):
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
             else:
                 user = request.env['res.users'].sudo().search([('login','=',email)],limit=1)
@@ -42,19 +41,18 @@ class security(controllers.Restapi):
             
      
      @http.route('/login',type='json',auth='none',cors='*')
-     def login(self,login,password,headers = None,base_location=None):
-        dev_token = request.httprequest.headers['DevToken']
+     def login(self,login,password,DevToken,headers = None,base_location=None):
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
             else:
                 request.session.authenticate(self.db,login,password)
                 user = request.env['res.users'].sudo().search([('login','=',login)])
                 token = jwt.encode({'user_id':user.id,'login':login,'password':password}, self.secret, algorithm=self.algorithm)
                 request.env['restapi.user.tokens'].sudo().create({
-                    'name':token,
-                    'user_id':user.id
-                })
+                        'name':token,
+                        'user_id':user.id
+                    })
 
                 return token
         except AccessError:
