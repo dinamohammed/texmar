@@ -100,7 +100,7 @@ class get(controllers.Restapi):
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 
-                products = request.env['product.product'].search([],limit=limit,offset=offset)
+                products = request.env['product.product'].search([('company_id','=',False)],limit=limit,offset=offset)
                 
                 for product in products:
                     image = product.image_1920
