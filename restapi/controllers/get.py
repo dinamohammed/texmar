@@ -47,7 +47,7 @@ class get(controllers.Restapi):
                 companies = request.env['res.company'].search([])
                 for company in companies:
                     vals = {
-                            'mobile ':company.phone,
+                            'mobile':company.phone,
                             'address':company.street or company.street2,
                             'lat':company.lat,
                             'long':company.long,
@@ -72,7 +72,7 @@ class get(controllers.Restapi):
                 customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)])
                 for customer in customers:
                     vals = {
-                        'customer_name ':customer.name,
+                        'customer_name':customer.name,
                         'mobile':customer.mobile,
                         'email':customer.email,
                         'customer_id':customer.id,
