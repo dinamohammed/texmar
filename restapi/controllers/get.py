@@ -69,7 +69,10 @@ class get(controllers.Restapi):
             else:
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)])
+                params = self.get_params(request.httprequest.url)
+                limit = params.get('limit',5)
+                offset = params.get('offset',0)
+                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset)
                 for customer in customers:
                     vals = {
                         'customer_name':customer.name,
