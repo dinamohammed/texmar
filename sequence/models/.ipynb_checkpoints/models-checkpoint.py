@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+import odoo.addons.decimal_precision as dp
 
 
 class SaleOrder(models.Model):
@@ -37,10 +38,51 @@ class SaleOrder(models.Model):
         required=True, change_default=True, index=True, tracking=1,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",)
     
-#     validity_date = fields.Date(string='Expiration', readonly=True, copy=False, 
-#                                 states={'draft': [('readonly', False)],'sent':[('readonly',False)],
-#                                 'note_order':[('readonly',False)]},default=lambda self: self._default_validity_date)
+    validity_date = fields.Date(string='Expiration', readonly=True, copy=False, 
+                                states={'draft': [('readonly', False)],'sent':[('readonly',False)],
+                                'note_order':[('readonly',False)]},default=lambda self: self._default_validity_date())
     
+    
+    sale_order_template_id = fields.Many2one(
+        'sale.order.template', 'Quotation Template',
+        readonly=True, check_company=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'note_order': [('readonly', False)]},
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
+    
+    partner_invoice_id = fields.Many2one(
+        'res.partner', string='Invoice Address',
+        readonly=True, required=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 
+                'sale': [('readonly', False)], 'note_order': [('readonly', False)]},
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",)
+    
+    partner_shipping_id = fields.Many2one(
+        'res.partner', string='Delivery Address', readonly=True, required=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)],
+                'sale': [('readonly', False)], 'note_order': [('readonly', False)]},
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",)
+
+    date_order = fields.Datetime(string='Order Date', required=True, readonly=True, index=True, 
+                                 states={'draft': [('readonly', False)], 'sent': [('readonly', False)],
+                                         'note_order': [('readonly', False)]}, copy=False, default=fields.Datetime.now,
+                                 help="Creation date of draft/sent orders,\nConfirmation date of confirmed orders.")
+                         
+    pricelist_id = fields.Many2one(
+        'product.pricelist', string='Pricelist', check_company=True,  # Unrequired company
+        required=True, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)],
+         'note_order': [('readonly', False)]}, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        help="If you change the pricelist, only newly added lines will be affected.")
+    
+    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount type',
+                                     readonly=True,states={'draft': [('readonly', False)], 'sent': [('readonly', False)],
+                                                           'note_order': [('readonly', False)]}, default='percent')
+                         
+    discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
+                                 readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]
+                                                       , 'note_order': [('readonly', False)]})
+    def _get_default_require_signature(self):
+        return self.env.company.portal_confirmation_sign
+
     
 #     def _prepare_so(self):
 #         self.ensure_one()
