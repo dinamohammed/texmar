@@ -10,6 +10,11 @@
                   <field name="to_sell"/>
                   <field name="to_request"/>
               </xpath>
+                <xpath expr="//button[@name='action_cancel']" position="before">
+                    <button name="_prepare_sol"
+                            attrs="{'invisible': [('state','not in', ('note_order'))]}"
+                            type="object" string="Prepare SOL"/>
+                </xpath>
           </field>
       </record>
   </data>
