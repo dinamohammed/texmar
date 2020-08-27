@@ -27,7 +27,7 @@ class security(controllers.Restapi):
             return {'error':'unexcepcted error occured'}
         
     
-     @http.route('/create_dev_token',type='json',auth='none',cors='*')
+     @http.route('/create_dev_token',type='json',auth='none',cors='*',csrf=False)
      def create_dev_token(self,login,password,**kw): 
         try:
             request.session.authenticate(self.db,login,password)
