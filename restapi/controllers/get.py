@@ -115,21 +115,19 @@ class get(controllers.Restapi):
             
      
      @http.route('/new_products',type='json',auth='none',cors='*')
-     def new_product(self,base_location=None):
+     def new_product(self,DevToken,UserToken,base_location=None):
         result = []
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken']
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
                 params = self.get_params(request.httprequest.url)
                 limit = params.get('limit',5)
                 offset = params.get('offset',0)
                 
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 
                 exp_time = datetime.utcnow() - timedelta(days=30)
@@ -144,16 +142,14 @@ class get(controllers.Restapi):
             return {'error':'You are not allowed to do this'}
      
      @http.route('/search_products',type='json',auth='none',cors='*')
-     def search_products(self,keyword,base_location=None):
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken'] 
+     def search_products(self,DevToken,UserToken,keyword,base_location=None):
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 products = request.env['product.product'].search([('company_id','=',False)])
                 result = []
