@@ -24,6 +24,24 @@ class SaleOrder(models.Model):
             state = 'draft'
         return state
     
+    def _default_validity_date(self):
+        if self.env['ir.config_parameter'].sudo().get_param('sale.use_quotation_validity_days'):
+            days = self.env.company.quotation_validity_days
+            if days > 0:
+                return fields.Date.to_string(datetime.now() + timedelta(days))
+        return False
+    
+    partner_id = fields.Many2one(
+        'res.partner', string='Customer', readonly=True,
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'note_order': [('readonly', False)]},
+        required=True, change_default=True, index=True, tracking=1,
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",)
+    
+#     validity_date = fields.Date(string='Expiration', readonly=True, copy=False, 
+#                                 states={'draft': [('readonly', False)],'sent':[('readonly',False)],
+#                                 'note_order':[('readonly',False)]},default=lambda self: self._default_validity_date)
+    
+    
 #     def _prepare_so(self):
 #         self.ensure_one()
 #         return {'name' : self.client_order_ref,
