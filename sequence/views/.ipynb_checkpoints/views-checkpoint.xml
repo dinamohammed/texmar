@@ -9,6 +9,9 @@
                     <button name="action_confirm_note_order"
                             attrs="{'invisible': [('state','not in', ('note_order'))]}"
                             type="object" string="Confirm NO"/>
+                    <button name="prepare_so"
+                            attrs="{'invisible': [('state','not in', ('note_order'))]}"
+                            type="object" string="Prepare Sale Order"/>
                 </xpath>
                 <xpath expr="/form/header/field[@name='state']" position="replace">
                         <field name="state" widget="statusbar" statusbar_visible="note_order,draft,sent,sale"/>

@@ -2,6 +2,8 @@
 
 from odoo import models, fields, api, _
 import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, ValidationError
+
 
 
 class SaleOrder(models.Model):
@@ -84,17 +86,20 @@ class SaleOrder(models.Model):
         return self.env.company.portal_confirmation_sign
 
     
-#     def _prepare_so(self):
-#         self.ensure_one()
-#         return {'name' : self.client_order_ref,
-#                 'partner_id' : self.partner_id.id,
+    def prepare_so(self):
+        self.ensure_one()
+        sale_order_line = {}
+        for record in self:
+               sale_order_line = {'name' : record.name,
+                  'state' : 'draft',
+                  'partner_id' : record.partner_id.id,
 #                 'partner_invoice_id' : self.partner_invoice_id.id,
 #                 'customer_order' : self.customer_order,
 #                 'partner_shipping_id' : self.partner_shipping_id.id,
 #                 'partner_invoice_id' : self.partner_invoice_id.id,
-#                 'sale_order_template_id' : self.sale_order_template_id.id,
-#                 'validity_date' : self.validity_date,
-#                 'date_order' : self.date_order,
+                  'sale_order_template_id' : record.sale_order_template_id.id,
+                  'validity_date' : record.validity_date,
+                  'date_order' : record.date_order,
 #                 'hide_cancel' : self.hide_cancel,
 #                 'stop_cancel_at' : self.stop_cancel_at,
 #                 'pricelist_id' : self.pricelist_id.id,
@@ -127,7 +132,11 @@ class SaleOrder(models.Model):
 #                 'signed_by' : self.signed_by,
 #                 'signed_on' : self.signed_on,
 #                 'signature' : self.signature,
-#                }
+#                 'order_line' : [],
+               }
+        raise ValidationError(sale_order_line['name'])
+        return sale_order_line
+    
     
     
     @api.model
