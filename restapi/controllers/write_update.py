@@ -7,16 +7,14 @@ from . import controllers
 
 class write_update(controllers.Restapi):
      @http.route('/edit_customer',type='json',auth='none',cors='*')
-     def edit_customer(self,customer_id,full_name,country_code,mobile,email,base_location=None):
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken'] 
+     def edit_customer(self,customer_id,full_name,country_code,mobile,email,DevToken,UserToken,base_location=None):
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 country = request.env['res.country'].search([('code','=',country_code)],limit=1).id
                 if not country:
@@ -41,16 +39,14 @@ class write_update(controllers.Restapi):
             return {'error':e.name}
      
      @http.route('/create_customer',type='json',auth='none',cors='*')
-     def create_customer(self,email,full_name,country_code,mobile,base_location=None):
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken'] 
+     def create_customer(self,email,full_name,country_code,mobile,DevToken,UserToken,base_location=None):
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 country = request.env['res.country'].search([('code','=',country_code.upper())],limit=1).id
                 if not country:
