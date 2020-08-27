@@ -234,11 +234,24 @@ class SOLineInherit(models.Model):
         self.ensure_one()
 #         for line in self:
         if self.to_sell:
-            sol = {'product_id' : self.product_id.id,
-                    'name' : self.name,
-                    'product_uom_qty' : self.product_uom_qty,
-                    'price_unit' : self.price_unit,
-                    'price_subtotal' : self.price_subtotal}
+            sol = {
+#                'image_small' : self.image_small,
+                'product_id' : self.product_id.id,
+                'name' : self.name,
+                'analytic_tag_ids' : self.analytic_tag_ids,
+#                 'route_id' : self.route_id,
+                'product_uom_qty' : self.product_uom_qty,
+                'product_uom' : self.product_uom.id,
+                'customer_lead' : self.customer_lead,
+#                 'product_packaging' : self.product_packaging,
+                'price_unit' : self.price_unit,
+                'tax_id' : self.tax_id,
+#                 'discount' : self.discount,
+                'price_subtotal' : self.price_subtotal,
+                'sample_date' : self.sample_date,
+                'line_delivery_date' : self.line_delivery_date,
+                'approval_status' : self.approval_status,
+                'line_status' : self.line_status}
                     
 #         raise ValidationError(sol['name'])
         return sol
