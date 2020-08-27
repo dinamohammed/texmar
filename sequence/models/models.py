@@ -86,11 +86,12 @@ class SaleOrder(models.Model):
         return self.env.company.portal_confirmation_sign
 
     
-    def prepare_so(self):
+    def _prepare_so(self):
         self.ensure_one()
         sale_order_line = {}
         for record in self:
-               sale_order_line = {'name' : record.name,
+               sale_order_line = {
+#                    'name' : record.name,
                   'state' : 'draft',
                   'partner_id' : record.partner_id.id,
 #                 'partner_invoice_id' : self.partner_invoice_id.id,
@@ -132,11 +133,31 @@ class SaleOrder(models.Model):
 #                 'signed_by' : self.signed_by,
 #                 'signed_on' : self.signed_on,
 #                 'signature' : self.signature,
-#                 'order_line' : [],
+                'order_line' : [],
                }
-        raise ValidationError(sale_order_line['name'])
+#         raise ValidationError(sale_order_line['name'])
         return sale_order_line
     
+    
+    def action_confirm_note_order(self):
+        for record in self :
+            new_sale_order = record._prepare_so()
+#             if self.get('name', _('New')) == _('New'):
+#                 seq_date = None
+#                 if 'date_order' in record:
+#                     seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(record['date_order']))
+#                 if 'company_id' in record:
+#                     order_name = self.env['ir.sequence'].with_context(force_company=record['company_id']).next_by_code(
+#                         'sale.order', sequence_date=seq_date) or _('New')
+#             else:
+#                 order_name = self.env['ir.sequence'].next_by_code('sale.order', sequence_date=seq_date) or _('New')
+
+            new_sale_order['name'] = self.env['ir.sequence'].next_by_code('sale.order') or _('New')
+            for line in record.order_line:
+                if line._prepare_sol():
+                    new_sale_order['order_line'].append((0, 0, line._prepare_sol()))
+        
+        self.create(new_sale_order)
     
     
     @api.model
@@ -186,3 +207,38 @@ class SaleOrder(models.Model):
                 
         
         return result
+
+    
+    
+    
+class SOLineInherit(models.Model):
+    _name = 'so.lines'
+    
+    sale_order_line_ids = fields.One2many('sale.order.line', 'custom_model_id', 'Sale Order Line')
+    
+
+    
+class SOLineInherit(models.Model):
+    _inherit = 'sale.order.line'
+    
+    to_sell = fields.Boolean("Sell")
+    
+    to_request = fields.Boolean("Request")
+    
+    custom_model_id = fields.Many2one('so.lines', 'Custom Model')
+    
+    
+    def _prepare_sol(self):
+        sol ={}
+        
+        self.ensure_one()
+#         for line in self:
+        if self.to_sell:
+            sol = {'product_id' : self.product_id.id,
+                    'name' : self.name,
+                    'product_uom_qty' : self.product_uom_qty,
+                    'price_unit' : self.price_unit,
+                    'price_subtotal' : self.price_subtotal}
+                    
+#         raise ValidationError(sol['name'])
+        return sol

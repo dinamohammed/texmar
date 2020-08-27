@@ -20,11 +20,11 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','sale','sale_management'],
+    'depends': ['base','sale','sale_management','egymentors_purchase_fx'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'data/irsequence.xml',
         'views/views.xml',
         'views/templates.xml',
