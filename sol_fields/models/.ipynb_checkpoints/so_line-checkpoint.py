@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import UserError, ValidationError
 
 
 class SOLineInherit(models.Model):
@@ -17,9 +18,22 @@ class SOLineInherit(models.Model):
 class SOInherit(models.Model):
     _inherit = 'sale.order'
     
-    def _prepare_sol(self):
-         self .ensure_one()
-         if self.to_sale :
-            return { 'name' : self.name,
-                    'product_id' : self.product_id.id, 
-                    'product_uom_id' : self.product_uom_id}
+    def prepare_sol(self):
+        sol ={}
+        
+        self.ensure_one()
+            
+        for record in self:
+            for line in record.order_line:
+                if line.to_sell:
+                    sol = {'product_id' : line.product_id.id,
+                            'name' : line.name,
+                            'product_uom_qty' : line.product_uom_qty,
+                            'price_unit' : line.price_unit,
+                            'price_subtotal' : line.price_subtotal}
+                    
+        raise ValidationError(sol['name'])
+        return sol
+                
+                
+      
