@@ -25,7 +25,7 @@ class get(controllers.Restapi):
                     'code':product.barcode,
                     'price':product.list_price,
                     'description':product.description if product.description else '' ,
-                    'stock_availability ':product.virtual_available,
+                    'stock_availability':product.virtual_available,
                     'product_id':product.id
                 }
                 return info if product else 'no product found'
@@ -47,7 +47,7 @@ class get(controllers.Restapi):
                 companies = request.env['res.company'].search([])
                 for company in companies:
                     vals = {
-                            'mobile ':company.phone,
+                            'mobile':company.phone,
                             'address':company.street or company.street2,
                             'lat':company.lat,
                             'long':company.long,
@@ -69,10 +69,13 @@ class get(controllers.Restapi):
             else:
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)])
+                params = self.get_params(request.httprequest.url)
+                limit = params.get('limit',5)
+                offset = params.get('offset',0)
+                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset)
                 for customer in customers:
                     vals = {
-                        'customer_name ':customer.name,
+                        'customer_name':customer.name,
                         'mobile':customer.mobile,
                         'email':customer.email,
                         'customer_id':customer.id,
@@ -115,21 +118,19 @@ class get(controllers.Restapi):
             
      
      @http.route('/new_products',type='json',auth='none',cors='*')
-     def new_product(self,base_location=None):
+     def new_product(self,DevToken,UserToken,base_location=None):
         result = []
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken']
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
                 params = self.get_params(request.httprequest.url)
                 limit = params.get('limit',5)
                 offset = params.get('offset',0)
                 
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 
                 exp_time = datetime.utcnow() - timedelta(days=30)
@@ -144,16 +145,14 @@ class get(controllers.Restapi):
             return {'error':'You are not allowed to do this'}
      
      @http.route('/search_products',type='json',auth='none',cors='*')
-     def search_products(self,keyword,base_location=None):
-        dev_token = request.httprequest.headers['DevToken']
-        user_token = request.httprequest.headers['UserToken'] 
+     def search_products(self,DevToken,UserToken,keyword,base_location=None):
         try:
-            if self.authrize_developer(dev_token) == False:
+            if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
-            elif not self.authrize_user(user_token):
+            elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                user_info = self.authrize_user(user_token)
+                user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 products = request.env['product.product'].search([('company_id','=',False)])
                 result = []

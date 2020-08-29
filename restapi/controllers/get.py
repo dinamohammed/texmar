@@ -25,7 +25,7 @@ class get(controllers.Restapi):
                     'code':product.barcode,
                     'price':product.list_price,
                     'description':product.description if product.description else '' ,
-                    'stock_availability ':product.virtual_available,
+                    'stock_availability':product.virtual_available,
                     'product_id':product.id
                 }
                 return info if product else 'no product found'
