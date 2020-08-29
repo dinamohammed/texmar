@@ -10,7 +10,7 @@ class write_update(controllers.Restapi):
      def edit_customer(self,customer_id,full_name,country_code,mobile,email,DevToken,UserToken,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'} 
+                return {'error':'developer token expired'}  
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
