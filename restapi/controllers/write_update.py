@@ -16,7 +16,7 @@ class write_update(controllers.Restapi):
             else:
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                country = request.env['res.country'].search([('code','=',country_code)],limit=1).id
+                country = request.env['res.country'].search([('code','=',country_code.upper())],limit=1).id
                 if not country:
                     return 'invalid country code'
                 customer = request.env['res.partner'].search([('id','=',customer_id)],limit=1)
