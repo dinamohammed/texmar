@@ -58,33 +58,7 @@ class get(controllers.Restapi):
             return 'You are not allowed to do this'
         
      
-     @http.route('/list_customers',type='json',auth='none',cors='*')
-     def list_customers(self,DevToken,UserToken,base_location=None):
-        result = []
-        try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                params = self.get_params(request.httprequest.url)
-                limit = params.get('limit',5)
-                offset = params.get('offset',0)
-                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset)
-                for customer in customers:
-                    vals = {
-                        'customer_name':customer.name,
-                        'mobile':customer.mobile,
-                        'email':customer.email,
-                        'customer_id':customer.id,
-                        'history' : {}
-                    }
-                    result.append(vals)
-                return result if len(result) > 0 else 'no customers found'
-        except AccessError:
-            return {'error':'You are not allowed to do this'}  
+
         
     
      @http.route('/popular_products',type='json',auth='none',cors='*')
@@ -168,3 +142,7 @@ class get(controllers.Restapi):
                 
         except AccessError:
             return {'error':'You are not allowed to do this'}
+        
+        
+     
+
