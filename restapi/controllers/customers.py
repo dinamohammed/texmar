@@ -9,6 +9,25 @@ from datetime import datetime,timedelta,timezone
 from . import controllers
 
 class customers(controllers.Restapi):
+     def get_hostiry(self,id):
+          drafts = request.env['sale.order'].search([('partner_id','=',id),('state','=','note_order')])
+          notes = request.env['sale.order'].search([('partner_id','=',id),('state','not =','note_order')])
+          notes_arr = []
+          drafts_arr = []
+          for draft in drafts:
+               drafts_arr.append({
+               'draft_name':draft.name,
+               'amount':draft.amount_total
+               })
+          for note in notes:
+               notes_arr.append({
+               'note_name':note.name,
+               'amount':note.amount_total
+               })
+          return {
+          'drafts':drafts_arr,'notes':notes_arr
+          }
+     
      @http.route('/list_customers',type='json',auth='none',cors='*')
      def list_customers(self,DevToken,UserToken,base_location=None):
         result = []
@@ -54,12 +73,16 @@ class customers(controllers.Restapi):
                 for customer in customers:
                     search = str(keyword).lower()
                     if re.search(search,customer.name.lower()) != None or customer.mobile == keyword or customer.phone == keyword:   
+                        history = get_hostiry(customer.id)
                         result.append({
                         'customer_name':customer.name,
                         'mobile':customer.mobile,
                         'email':customer.email,
                         'customer_id':customer.id,
-                        'history' : {}
+                        'history' : {
+                         'draft':history['drafts'],
+                         'notes':history['notes'],
+                        }
                         })     
                 return result if len(result) > 0 else 'no customers found'
                     
