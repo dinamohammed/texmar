@@ -9,7 +9,7 @@ from datetime import datetime,timedelta,timezone
 from . import controllers
 
 class customers(controllers.Restapi):
-     def get_hostiry(self,id):
+     def get_history(self,id):
           drafts = request.env['sale.order'].search([('partner_id','=',id),('state','=','note_order')])
           notes = request.env['sale.order'].search([('partner_id','=',id),('state','not =','note_order')])
           notes_arr = []
@@ -73,7 +73,7 @@ class customers(controllers.Restapi):
                 for customer in customers:
                     search = str(keyword).lower()
                     if re.search(search,customer.name.lower()) != None or customer.mobile == keyword or customer.phone == keyword:   
-                        history = get_hostiry(customer.id)
+                        history = self.get_history(customer.id)
                         result.append({
                         'customer_name':customer.name,
                         'mobile':customer.mobile,
