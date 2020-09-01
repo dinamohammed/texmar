@@ -62,7 +62,7 @@ class customers(controllers.Restapi):
     
     
      @http.route('/customers_search',type='json',auth='none',cors='*')                                                               
-     def search_products(self,DevToken,UserToken,keyword,base_location=None):
+     def search_customers(self,DevToken,UserToken,keyword,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
