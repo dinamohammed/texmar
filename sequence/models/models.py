@@ -83,7 +83,6 @@ class SaleOrder(models.Model):
     discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
                                  readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]
                                                        , 'note_order': [('readonly', False)]})
-    is_confirmed = fields.Boolean(default=False)
     def _get_default_require_signature(self):
         return self.env.company.portal_confirmation_sign
 
@@ -143,9 +142,6 @@ class SaleOrder(models.Model):
     
     def action_confirm_note_order(self):
         for record in self :
-            record.wirte({
-            'is_confirmed':True
-            })
             new_sale_order = record._prepare_so()
 #             if self.get('name', _('New')) == _('New'):
 #                 seq_date = None
