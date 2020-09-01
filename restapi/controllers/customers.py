@@ -13,7 +13,7 @@ class customers(controllers.Restapi):
      def list_customers(self,DevToken,UserToken,base_location=None):
         result = []
         try:
-            if self.authrize_developer(DevToken) == False:
+            if self.authrize_developer(DevToken) == False:   
                 return {'error':'developer token expired'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
