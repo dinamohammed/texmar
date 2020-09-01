@@ -44,12 +44,15 @@ class customers(controllers.Restapi):
                 offset = params.get('offset',0)
                 customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset)
                 for customer in customers:
+                    history = self.get_history(customer.id)
                     vals = {
                         'customer_name':customer.name,
                         'mobile':customer.mobile,
                         'email':customer.email,
                         'customer_id':customer.id,
-                        'history' : {}
+                        'history' : {                         
+                         'draft':history['drafts'],
+                         'notes':history['notes']}
                     }
                     result.append(vals)
                 return result if len(result) > 0 else 'no customers found'
