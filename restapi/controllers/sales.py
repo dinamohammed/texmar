@@ -19,6 +19,16 @@ class reporting(controllers.Restapi):
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 allowed_companies = self.prepare_allowed_companies(user_info['login'])
                 sales = request.env['sale.order'].search([('company_id','in',allowed_companies)])
+                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False)]) 
+                drafts_arr = []
+                for draft in drafts:
+                    drafts_arr.append({
+                        'date':draft.date_order,
+                        'customer_name':draft.partner_id.name,
+                        'state':draft.state,
+                        'amount':draft.amount_total
+                    })
+                    
 
                 #dates
                 day = fields.date.today().day 
@@ -37,7 +47,7 @@ class reporting(controllers.Restapi):
                 return {
                     'today_sales_amount':sales_today_sum,
                     'today_sales_percentage':float("{0:.1f}".format(perc)),
-                    'draft_notes':[]
+                    'draft_notes':drafts_arr
                 }
         except AccessError:
             return {'error':'You are not allowed to do this'}
@@ -62,6 +72,7 @@ class reporting(controllers.Restapi):
                 day = fields.date.today().day 
                 month = fields.date.today().month
                 year = fields.date.today().year
+                
                 #filtering sale depending on date
                 sales_today = [sale for sale in sales if sale.date_order.day == day and sale.date_order.month == month and sale.date_order.year == year]                                                        
                 sales_yesterday = [sale for sale in sales if sale.date_order.day == day - 1 and sale.date_order.month == month and sale.date_order.year == year]                                                          
