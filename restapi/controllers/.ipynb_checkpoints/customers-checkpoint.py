@@ -9,11 +9,30 @@ from datetime import datetime,timedelta,timezone
 from . import controllers
 
 class customers(controllers.Restapi):
+     def get_history(self,id):
+          drafts = request.env['sale.order'].search([('partner_id','=',id),('state','=','note_order'),('is_confirmed','=',False)]) 
+          notes = request.env['sale.order'].search([('partner_id','=',id),('state','!=','note_order')])
+          notes_arr = []
+          drafts_arr = []
+          for draft in drafts:
+               drafts_arr.append({
+               'draft_name':draft.name,
+               'amount':draft.amount_total
+               })
+          for note in notes:
+               notes_arr.append({
+               'note_name':note.name,
+               'amount':note.amount_total
+               })
+          return {
+          'drafts':drafts_arr,'notes':notes_arr
+          }
+     
      @http.route('/list_customers',type='json',auth='none',cors='*')
      def list_customers(self,DevToken,UserToken,base_location=None):
         result = []
         try:
-            if self.authrize_developer(DevToken) == False:
+            if self.authrize_developer(DevToken) == False:   
                 return {'error':'developer token expired'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
@@ -25,12 +44,15 @@ class customers(controllers.Restapi):
                 offset = params.get('offset',0)
                 customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset)
                 for customer in customers:
+                    history = self.get_history(customer.id)
                     vals = {
                         'customer_name':customer.name,
                         'mobile':customer.mobile,
                         'email':customer.email,
                         'customer_id':customer.id,
-                        'history' : {}
+                        'history' : {                         
+                         'draft':history['drafts'],
+                         'notes':history['notes']}
                     }
                     result.append(vals)
                 return result if len(result) > 0 else 'no customers found'
@@ -40,7 +62,7 @@ class customers(controllers.Restapi):
     
     
      @http.route('/customers_search',type='json',auth='none',cors='*')                                                               
-     def search_products(self,DevToken,UserToken,keyword,base_location=None):
+     def search_customers(self,DevToken,UserToken,keyword,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
@@ -54,12 +76,16 @@ class customers(controllers.Restapi):
                 for customer in customers:
                     search = str(keyword).lower()
                     if re.search(search,customer.name.lower()) != None or customer.mobile == keyword or customer.phone == keyword:   
+                        history = self.get_history(customer.id)
                         result.append({
                         'customer_name':customer.name,
                         'mobile':customer.mobile,
                         'email':customer.email,
                         'customer_id':customer.id,
-                        'history' : {}
+                        'history' : {
+                         'draft':history['drafts'],
+                         'notes':history['notes'],
+                        }
                         })     
                 return result if len(result) > 0 else 'no customers found'
                     
