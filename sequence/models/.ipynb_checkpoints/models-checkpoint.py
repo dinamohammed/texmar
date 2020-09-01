@@ -10,6 +10,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
     
+    
     state = fields.Selection([
         ('note_order','Note Order'),
         ('draft', 'Quotation'),
@@ -82,6 +83,7 @@ class SaleOrder(models.Model):
     discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
                                  readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]
                                                        , 'note_order': [('readonly', False)]})
+    is_confirmed = fields.Boolean(default=False)
     def _get_default_require_signature(self):
         return self.env.company.portal_confirmation_sign
 
@@ -156,6 +158,7 @@ class SaleOrder(models.Model):
             for line in record.order_line:
                 if line._prepare_sol():
                     new_sale_order['order_line'].append((0, 0, line._prepare_sol()))
+            record.write({'is_confirmed':True})
         
         self.create(new_sale_order)
     
