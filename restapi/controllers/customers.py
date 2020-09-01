@@ -10,7 +10,6 @@ from . import controllers
 
 class customers(controllers.Restapi):
      def get_history(self,id):
-#           drafts = request.env['sale.order'].search([('partner_id','=',id),('state','=','note_order'),('is_confirmed','=',False)])
           drafts = request.env['sale.order'].search([('partner_id','=',id),('state','=','note_order')]) 
           notes = request.env['sale.order'].search([('partner_id','=',id),('state','!=','note_order')])
           notes_arr = []
