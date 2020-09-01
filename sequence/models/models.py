@@ -83,7 +83,7 @@ class SaleOrder(models.Model):
     discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
                                  readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]
                                                        , 'note_order': [('readonly', False)]})
-    is_confirmed = fields.Bolean(default=False)
+    is_confirmed = fields.Boolean(default=False)
     def _get_default_require_signature(self):
         return self.env.company.portal_confirmation_sign
 
