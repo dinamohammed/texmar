@@ -3,5 +3,5 @@
 from . import controllers
 from . import get
 from . import customers
-from . import reporting
+from . import sales
 from . import security

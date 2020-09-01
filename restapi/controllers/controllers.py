@@ -37,7 +37,7 @@ class Restapi(http.Controller):
             
     def prepare_allowed_companies(self,login):
             user  = request.env['res.users'].search([('login','=',login)])
-            ids = [company.id for company in user.company_id]
+            ids = [company.id for company in user.company_ids]
             return ids
     
     def get_total_sales(self,sales):

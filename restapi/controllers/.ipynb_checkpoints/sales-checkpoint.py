@@ -89,4 +89,43 @@ class reporting(controllers.Restapi):
         except AccessError:
             return 'You are not allowed to do this'
         
-                                                       
+        
+     
+     @http.route('/confirm_order',type='json',auth='none',cors='*')
+     def confirm_order(self,DevToken,UserToken,order_id,base_location=None):
+         try:
+            if self.authrize_developer(DevToken) == False:
+                return {'error':'developer token expired'}
+            elif not self.authrize_user(UserToken):
+                return {'error':'invalid user token'}
+            else:
+                user_info = self.authrize_user(UserToken)
+                request.session.authenticate(self.db,user_info['login'],user_info['password'])
+                sale = request.env['sale.order'].search([('id','=',order_id)])
+                company_id = sale.company_id.id
+                company = request.env['res.company'].search([('id','=',company_id)])
+                sale.env.company = company
+                sale.action_confirm_note_order()
+                return 'order confirmed' if sale else 'sale order not found'
+         
+         except AccessError:
+            return 'You are not allowed to do this'    
+     
+    
+     @http.route('/delete_order',type='json',auth='none',cors='*')
+     def delete_order(self,DevToken,UserToken,order_id,base_location=None):
+         try:
+            if self.authrize_developer(DevToken) == False:
+                return {'error':'developer token expired'}
+            elif not self.authrize_user(UserToken):
+                return {'error':'invalid user token'}
+            else:
+                user_info = self.authrize_user(UserToken)
+                request.session.authenticate(self.db,user_info['login'],user_info['password'])
+                sale = request.env['sale.order'].search([('id','=',order_id)])
+                sale.write({'state':'cancel'})
+                sale.unlink()
+                return 'order deleted' if sale else 'sale order not found'
+         
+         except AccessError:
+            return 'You are not allowed to do this'
