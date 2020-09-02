@@ -5,103 +5,7 @@ import io
 import base64
 from . import controllers
 class reporting(controllers.Restapi): 
-    
-     @http.route('/sales_home',type='json',auth='none',cors='*')
-     def sales_home(self,DevToken,UserToken,base_location=None):
-        result = []
-        try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                allowed_companies = self.prepare_allowed_companies(user_info['login'])
-                sales = request.env['sale.order'].search([('company_id','in',allowed_companies)])
-                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False)]) 
-                drafts_arr = []
-                for draft in drafts:
-                    drafts_arr.append({
-                        'date':draft.date_order,
-                        'customer_name':draft.partner_id.name,
-                        'state':draft.state,
-                        'amount':draft.amount_total
-                    })
-                    
-
-                #dates
-                day = fields.date.today().day 
-                month = fields.date.today().month
-                year = fields.date.today().year
-                #filtering sale depending on date
-                sales_today = [sale for sale in sales if sale.date_order.day == day and sale.date_order.month == month and sale.date_order.year == year]                                                        
-                sales_yesterday = [sale for sale in sales if sale.date_order.day == day - 1 and sale.date_order.month == month and sale.date_order.year == year]  
-                # getting the sum of all sales
-                sales_today_sum = self.get_total_sales(sales_today)
-                sales_yesterday_sum = self.get_total_sales(sales_yesterday)
-
-                # calculating the percentage
-                perc = self.get_percentage(sales_yesterday_sum,sales_today_sum) if sales_today_sum > 1 else -100 #abbas
-                
-                return {
-                    'today_sales_amount':sales_today_sum,
-                    'today_sales_percentage':float("{0:.1f}".format(perc)),
-                    'draft_notes':drafts_arr
-                }
-        except AccessError:
-            return {'error':'You are not allowed to do this'}
-        
-    
-    
-     @http.route('/sales_dashboard',type='json',auth='none',cors='*')
-     def sales_dashboard(self,DevToken,UserToken,base_location=None):
-        result = []
-        try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                allowed_companies = self.prepare_allowed_companies(user_info['login'])
-                sales = request.env['sale.order'].search([('company_id','in',allowed_companies)])
-
-                #dates
-                day = fields.date.today().day 
-                month = fields.date.today().month
-                year = fields.date.today().year
-                
-                #filtering sale depending on date
-                sales_today = [sale for sale in sales if sale.date_order.day == day and sale.date_order.month == month and sale.date_order.year == year]                                                        
-                sales_yesterday = [sale for sale in sales if sale.date_order.day == day - 1 and sale.date_order.month == month and sale.date_order.year == year]                                                          
-                sales_this_month = [sale for sale in sales if sale.date_order.month == month and sale.date_order.year == year]                                                                                                                                             
-                sales_last_month = [sale for sale in sales if sale.date_order.month == month - 1 and sale.date_order.year == year]                                                                           
-
-                # getting the sum of all sales
-                sales_today_sum = self.get_total_sales(sales_today)
-                sales_yesterday_sum = self.get_total_sales(sales_yesterday)
-                sales_this_month_sum = self.get_total_sales(sales_this_month)
-                sales_last_month_sum = self.get_total_sales(sales_last_month)
-
-                # calculating the percentage
-                daily_perc = self.get_percentage(sales_yesterday_sum,sales_today_sum) if sales_today_sum > 1 else -100
-                monthly_perc = self.get_percentage(sales_last_month_sum,sales_this_month_sum) if sales_this_month_sum > 1 else -100
-
-                return {'sales' : [
-                            {'period' : 'daily' , 'amount': sales_today_sum , 'percentage' : float("{0:.1f}".format(daily_perc))},
-                            {'period' : 'monthly' , 'amount': sales_this_month_sum , 'percentage' :float("{0:.1f}".format(monthly_perc))},
-                            ],
-                                    'target' : { 'date' : '', 'sales_amount': '','sales_percentage' : '','target_amount': '' } ,
-                                    'history' :
-                                    [ {'date': '' , 'sales_amount' : '' }] ,
-                        }
-        except AccessError:
-            return 'You are not allowed to do this'
-        
-        
-     
+ 
      @http.route('/confirm_order',type='json',auth='none',cors='*')
      def confirm_order(self,DevToken,UserToken,order_id,base_location=None):
          try:
@@ -140,11 +44,11 @@ class reporting(controllers.Restapi):
          
          except AccessError:
             return 'You are not allowed to do this'
+        
      
-     
-     @http.route('/notes',type='json',auth='none',cors='*')
-     def notes(self,DevToken,UserToken,base_location=None):
-         try:
+     @http.route('/add_to_cart',type='json',auth='none',cors='*')
+     def add_to_cart(self,DevToken,UserToken,customer_id,product_id,qty,base_location=None):
+         try:            
             if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
             elif not self.authrize_user(UserToken):
@@ -152,37 +56,42 @@ class reporting(controllers.Restapi):
             else:
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False)]) 
-                notes = request.env['sale.order'].search([('state','!=','note_order')])
-                requests = request.env['sale.order.line'].search([('to_request','=',True)])
-                result = {'draft_draft':[],'notes':[],'requests':[]}
-                
-                for req in requests:
-                    sale = request.env['sale.order'].search([('id','=',req.order_id.id)])
-                    result['requests'].append({
-                        'date':sale.date_order,
-                        'customer_name':sale.partner_id.name,
-                        'state':sale.state,
-                        'amount':req.price_subtotal
+                #get companies
+                company_id = self.prepare_allowed_companies(user_info['login'])[0]
+                company = request.env['res.company'].search([('id','=',company_id)])
+                old_sale = request.env['sale.order'].search([('partner_id.id','=',customer_id),('state','=','note_order'),('is_confirmed','=',False)])
+                # sale order preprations
+                sale_order = request.env['sale.order']
+                sale_order.env.company = company
+                #get customers info
+                customer =  request.env['res.partner'].search([('id','=',customer_id)])
+                #get product
+                product =  request.env['product.product'].search([('id','=',product_id)])
+                # check if this customer has a note order still open
+                if old_sale:
+                    sol = {
+                        'product_id':product.id,
+                        'product_uom_qty':qty,
+                        'order_id':old_sale.id
+                    }
+                    old_sale['order_line'].create(sol)
+                else:
+                    new_sale = sale_order.create({
+                        'partner_id':customer.id,
+                        'state':'note_order',
+                        'company_id':company_id,
+                        'order_line':[]
                     })
-                
-                for note in notes:
-                    result['notes'].append({
-                        'date':note.date_order,
-                        'customer_name':note.partner_id.name,
-                        'state':note.state,
-                        'amount':note.amount_total
-                    })
-                
-                for draft in drafts:
-                    result['draft_draft'].append({
-                        'date':draft.date_order,
-                        'customer_name':draft.partner_id.name,
-                        'state':draft.state,
-                        'amount':draft.amount_total
-                    })                    
-                return result
-         
+                    sol = {
+                        'product_id':product.id,
+                        'product_uom_qty':qty,
+                        'order_id':new_sale.id
+                    }
+                    new_sale['order_line'].create(sol)
+ 
+                return 'added successfully'
+     
          except AccessError:
-            return 'You are not allowed to do this'        
+            return 'You are not allowed to do this'     
+        
         

@@ -118,6 +118,7 @@ class get(controllers.Restapi):
         except AccessError:
             return {'error':'You are not allowed to do this'}
      
+     
      @http.route('/search_products',type='json',auth='none',cors='*')
      def search_products(self,DevToken,UserToken,keyword,base_location=None):
         try:
@@ -142,6 +143,56 @@ class get(controllers.Restapi):
                 
         except AccessError:
             return {'error':'You are not allowed to do this'}
+    
+    
+    
+     @http.route('/notes',type='json',auth='none',cors='*')
+     def notes(self,DevToken,UserToken,base_location=None):
+         try:
+            if self.authrize_developer(DevToken) == False:
+                return {'error':'developer token expired'}
+            elif not self.authrize_user(UserToken):
+                return {'error':'invalid user token'}
+            else:
+                user_info = self.authrize_user(UserToken)
+                request.session.authenticate(self.db,user_info['login'],user_info['password'])
+                
+                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False),                                                                             ('user_id.login','=',user_info['login'])]) 
+                
+                notes = request.env['sale.order'].search([('state','!=','note_order'),('user_id.login','=',user_info['login'])])
+                
+                requests = request.env['sale.order.line'].search([('to_request','=',True),                                                                      ('order_id.user_id.login','=',user_info['login'])])
+                
+                result = {'draft_draft':[],'notes':[],'requests':[]}
+                
+                for req in requests:
+                    sale = request.env['sale.order'].search([('id','=',req.order_id.id)])
+                    result['requests'].append({
+                        'date':sale.date_order,
+                        'customer_name':sale.partner_id.name,
+                        'state':sale.state,
+                        'amount':req.price_subtotal
+                    })
+                
+                for note in notes:
+                    result['notes'].append({
+                        'date':note.date_order,
+                        'customer_name':note.partner_id.name,
+                        'state':note.state,
+                        'amount':note.amount_total
+                    })
+                
+                for draft in drafts:
+                    result['draft_draft'].append({
+                        'date':draft.date_order,
+                        'customer_name':draft.partner_id.name,
+                        'state':draft.state,
+                        'amount':draft.amount_total
+                    })                    
+                return result
+         
+         except AccessError:
+            return 'You are not allowed to do this'
         
         
      
