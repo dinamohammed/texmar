@@ -7,56 +7,58 @@
             </t>
             <div class="page">
                 <div class="oe_structure"/>
-<!--                 <div class="row">
-                    <div class="row" style="padding-left:60%;">
-                        <ul style="list-style:none;">
-                            <li><strong>Ref No: </strong><span t-field="o.name"/></li>
-                            <li><strong>Date: </strong><span t-field="o.date_order"/></li>
-                        </ul>
-                    </div> 
+                
+            <!-- PO / RFQ Reference -->    
+            <h1 t-if="o.state == 'draft'">Request for Quotation #<span t-field="o.name"/></h1>
+            <h1 t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h1>
+            <h1 t-if="o.state in ['purchase', 'done']">Purchase Order #<span t-field="o.name"/></h1>
+            <h1 t-if="o.state == 'cancel'">Cancelled Purchase Order #<span t-field="o.name"/></h1>
+                
+            <div class="row" style="margin-top:40px;">
+                <!-- Vendor Details -->
+                <div class="col-6">
+                    <strong style='font-size:20px;'>Vendor:</strong>
+                    <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.street"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.phone"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.vat"/>
                 </div>
-
-                 <div class="oe_structure"/>
-
- -->
-            <h2 t-if="o.state == 'draft'">Request for Quotation #<span t-field="o.name"/></h2>
-            <h2 t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h2>
-            <h2 t-if="o.state in ['purchase', 'done']">Purchase Order #<span t-field="o.name"/></h2>
-            <h2 t-if="o.state == 'cancel'">Cancelled Purchase Order #<span t-field="o.name"/></h2>
-
-            <div id="informations" class="row mt32 mb32">
+                <!-- Shipping Details -->
+                <div class="col-6">
+                    <strong style='font-size:20px;'>Shipping Address:</strong>
+                    <p style='font-size:20px; font-weight:bold' t-field="o.picking_type_id.warehouse_id.display_name"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
+                </div>
+            </div>
+                
+            <!-- Info Div -->
+            <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                <!-- FX Number -->
                 <div t-if="o.user_id" class="col-3 bm-2">
-                    <strong>Purchase Representative:</strong>
-                    <p t-field="o.user_id" class="m-0"/>
+                    <strong style='font-size:20px;'>FX Number:</strong>
+                    <p style='font-size:20px;' t-field="o.fx_num_id" class="m-0"/>
                 </div>
-                <div t-if="o.partner_ref" class="col-3 bm-2">
-                    <strong>Your Order Reference:</strong>
-                    <p t-field="o.partner_ref" class="m-0"/>
+                <!-- FX Purchase Representative -->
+                <div t-if="o.user_id" class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Purchase Representative:</strong>
+                    <p style='font-size:20px;' t-field="o.user_id" class="m-0"/>
                 </div>
+                <!-- Order Date -->
                 <div t-if="o.date_order" class="col-3 bm-2">
-                    <strong>Order Date:</strong>
-                    <p t-field="o.date_order" class="m-0"/>
+                    <strong style='font-size:20px;'>Order Date:</strong>
+                    <p style='font-size:20px;' t-field="o.date_order" class="m-0"/>
+                </div>
+                <!-- Currency -->
+                <div t-if="o.user_id" class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Currency:</strong>
+                    <p style='font-size:20px;' t-field="o.currency_id.name" class="m-0"/>
                 </div>
             </div>
 
-<!--                 <h2>Supplied Form</h2>
-                <div class="row">
-                    <table class="table text-center" style="width:100%;border: 2px solid black;border-collapse: collapse;">
-                        <tbody style="border: 2px solid black;">
-                            <tr style="border-bottom: 2px solid black;width:50%;">
-                                <td style="border-right: 2px solid black;width:25%;"><span style="margin-left:10px;"> Company شركة :-</span></td>
-                                <td style="border-right: 2px solid black;width:25%;"><span style="margin-left:10px;" t-esc="o.partner_id.name"/></td>
-                                <td rowspan="2" style="border-right: 2px solid black;width:25%;"><span style="margin-left:10px;"> Address العنوان :-</span></td>
-                                <td rowspan="2" style="border-right: 2px solid black;width:25%;"><span class="company_address" t-field="o.partner_id"
-                                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}' style="margin-left:10px;"/></td>
-                            </tr>
-                            <tr style="border-top: 2px solid black;width:50%;">
-                                <td style="border-right: 2px solid black;width:25%;"><span style="margin-left:10px;"> Tel &amp; Fax :-</span></td>
-                                <td style="width:25%;"><span style="margin-left:10px;" t-field="o.partner_id.phone" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> -->
                 <h2>Comments</h2>
                 <div class="row">
                     <table class="table" style="width:100%;border:2px solid black;border-collapse: collapse;">
@@ -184,33 +186,20 @@
             <div class="o_boxed_header">
                 <div class="row mb8">
                     <div class="col-6">
-                        <div class="row">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                        <!-- Company Logo -->
+                       <div class="row">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
                         </div>
+                        <!-- Company Address -->
                         <div class="row" style="margin-top:30px;">
                             <h4 class="mt0" t-field="o.company_id.report_header"/>
-                            <div name="company_address" class="mb4">
+                            <div name="company_address" class="mb4" style="color:grey">
                                 <span class="company_address" t-field="o.company_id.partner_id"
-                                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 mb4">
-                        <!--
-                        <div class="col-md-12" style="padding-top:20px;padding-bottom:5px;">
-                            <h1 class="col-md-12 text-center">Purchase Order</h1>
-                        </div>
-                        <div class="row">
-                            <h1 class="col-md-12 text-center">أمر شراء</h1>
-                        </div>
-                        <div class="row">
-                            <ul style="list-style:none;margin-left:120px;">
-                                <li>Company Registration no 10346 سجل تجاري رقم</li>
-                                <li>Tax Reg. no 4879/221/102 تسجيل ضرائب عامة رقم</li>
-                                <li>Company Registration no. 100/000/088 تسجيل ضريبة مبيعات رقم</li>
-                            </ul>
-                        </div>
--->
                     </div>
                 </div>
             </div>
