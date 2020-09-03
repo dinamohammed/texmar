@@ -4,96 +4,153 @@
     <template id="report_invoice_document_with_payments_new">
         <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
         <t t-if="o.type == 'in_invoice'" t-call="egymentors_accounting_enhancement.vendor_bill_layout">
-                <div class="page" style="font-size:40px;">
+                 <div class="row" style="margin-top:40px;">
+                <!-- Vendor Details -->
+                <div class="col-6">
+                    <strong style='font-size:20px;'>Vendor:</strong>
+                    <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.street"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.phone"/>
+                    <p style='font-size:20px;' t-field="o.partner_id.vat"/>
+                </div>
+                <!-- Shipping Details -->
+                <div class="col-6">
+                    <strong style='font-size:20px;'>Shipping Address:</strong>
+                    <p style='font-size:20px; font-weight:bold' t-field="o.picking_type_id.warehouse_id.display_name"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
+                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
+                </div>
+            </div>
+              <!-- Header -->  
+              <div class="page">
                     <div class="oe_structure"/>
+                     <h1>Vendor Bill <span t-field="o.name"/></h1>
+           
+        <!--      Info Div                      -->
+              <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                <!-- Invocie Date -->
+                <div t-if="o.invoice_date" class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Invoice Date:</strong>
+                    <p style='font-size:20px;' t-field="o.invoice_date" class="m-0"/>
+                </div>
+                <!-- Vendor code -->
+                <div t-if="o.partner_id.ref" class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Vendor code:</strong>
+                    <p style='font-size:20px;' t-field="o.partner_id.ref" class="m-0"/>
+                </div>
+                <!-- Reference -->
+                <div t-if="o.ref" class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Vendor Invoice Ref:</strong>
+                    <p style='font-size:20px;' t-field="o.ref" class="m-0"/>
+                </div>
+            </div>      
+                    
                     <div class="row">
-                        <div class="row">
-                            <div>
-                               <p><strong> Vendor Bill </strong><span t-field="o.name"/></p>
-                            </div>
-                        </div>
-                    </div>
-
-                <div class="page" style="font-size:23px;">
-                     <div class="oe_structure"/>
-                        <table class="table" style="width:20%;">
-                            <tbody>
-                                <tr style="border-style:hidden;">
-                                    <td style="width:10%;"><strong> Invoice Date </strong></td>
-                                    <td style="width:10%;"><strong> Vendor code</strong></td>
-                                    <td style="width:10%;"><strong> Reference </strong></td>
-                                </tr>
-                                <tr style="border-style:hidden;">
-                                    <td style="width:10%;"><span t-field="o.invoice_date"/></td>
-                                    <td style="width:10%;"><span t-field="o.partner_id.ref"/></td>
-                                    <td style="width:10%;"><span t-field="o.ref"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="row" style="direction:rtl;text-align:right;">
                         <table class="table" style="width:100%;border-collapse: collapse;">
                             <thead style="border: 2px solid black;">
                                 <tr style="border-bottom: 2px solid black;">
-                                    <td style="border-right: 2px solid black;text-align:center;">كود الصنف </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">الكمية</td>
-                                    <td style="border-right: 2px solid black;text-align:center;">الوحدة </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">السعر</td>
-                                    <td style="border-right: 2px solid black;text-align:center;">الخصم</td>
-                                    <td style="border-right: 2px solid black;text-align:center;">الإجمالى بعد الضريبة</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">code</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">Description</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">UOM</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">Qty</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">price</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">discount</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">final price product</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">Total untaxes</td>                                                       <td style="border-right: 2px solid black;text-align:center;">Taxes</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">Total final Taxes</td>
                                 </tr>
                             </thead>
                             <tbody style="border: 2px solid black;">
                                 <t t-set="total_qty" t-value="0"/>
+                                <t t-set="Total_product" t-value="0"/>
+                                <t t-set="taxe_total" t-value="0"/>
+                                <t t-set="Total_after_taxes" t-value="0"/>
+
                                 <t t-foreach="o.invoice_line_ids" t-as="line">
                                     <tr style="border-bottom: 2px solid black;">
                                         <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.quantity"/></td>
+                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.name"/></td> 
                                         <td style="border-right: 2px solid black;text-align:center;"><span t-field="line.product_id.uom_id"/></td>
-
+                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.quantity"/></td>
                                         <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_unit"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.discount"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.total_with_tax"/></td> 
+                                        <!-- discount for one product -->
+                                        <td style="border-right: 2px solid black;text-align:center;">
+                                            <span t-esc="o.discount_rate" class="oe_inline">(%%)   
+                                            </span>
+                                        </td>    
+                                        <!-- price for one product after discount -->
+                                        <td style="border-right: 2px solid black;text-align:center;">
+                                        <t t-set="final_price_oneproduct" t-value="line.price_unit-(o.discount_rate/100)*line.price_unit"/>
+                                            <span t-esc="final_price_oneproduct"/></td>
+                                        <!-- price total product after discount-->
+                                        <td style="border-right: 2px solid black;text-align:center;">
+                                        <t t-set="total_price_product" t-value="final_price_oneproduct*line.quantity"/>
+                                            <span t-esc="total_price_product"/></td>
+                                        <!-- value of taxes for one product-->
+                                        <td style="border-right: 2px solid black;text-align:center;">
+                                             <t t-set="taxes_product" t-value="(line.tax_ids.amount/100)*total_price_product"/>
+                                            <span t-esc="taxes_product"/></td> 
+                                        <!-- Amount after taxes -->
+                                        <td style="border-right: 2px solid black;text-align:center;">
+                                        <t t-set="amount_taxes" t-value="taxes_product+total_price_product"/>
+                                        <span t-esc="amount_taxes"/></td>
+                                        
                                         <t t-set="total_qty" t-value="total_qty + line.quantity"/>
+                                        <t t-set="Total_discount" t-value="o.amount_discount"/>
+                                        <t t-set="Total_product" t-value="Total_product+total_price_product"/> 
+                                       <t t-set="taxe_total" t-value="taxe_total+taxes_product"/> 
+                                       <t t-set="Total_after_taxes" t-value="Total_after_taxes+amount_taxes"/> 
                                     </tr>
                                 </t>
                                 <tr>
-                                    <td colspan="2" style="border-right: 2px solid black;">اجمالي اﻷصناف</td>
+                                    <td colspan="2" style="border-right: 2px solid black;">Total Products</td>
+                                    <td style="border-right: 2px solid black;;"></td>
                                     <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_qty"/></td>
                                     <td style="border-right: 2px solid black;;"></td>
-                                    <td style="border-right: 2px solid black;"></td>
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="o.amount_untaxed"/></td>
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="Total_discount"/></td>
+                                    <td style="border-right: 2px solid black;;"></td>
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="Total_product"/></td>
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="taxe_total"/></td>
+                                   <td style="border-right: 2px solid black;text-align:center;"><span t-esc="Total_after_taxes"/></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <h2 style="direction:rtl;text-align:right;">تفاصيل الضرائب</h2>
-                    <div class="row" style="direction:rtl;text-align:right;">
+                    <h2>Taxes Details</h2>
+                    <div class="row">
                         <table class="table" style="width:100%;border-collapse: collapse;">
                             <thead style="border: 2px solid black;">
                                 <tr style="border-bottom: 2px solid black;">
-                                    <td style="border-right: 2px solid black;text-align:center;">الاسم </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">العملة </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">النسبة</td>
-                                    <td style="border-right: 2px solid black;text-align:center;">المبلغ</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">Name Taxe </td>
+                                    <td style="border-right: 2px solid black;text-align:center;">The Rate</td>
+                                    <td style="border-right: 2px solid black;text-align:center;">Tax Value</td>
                                 </tr>
                             </thead>
                             <tbody style="border: 2px solid black;">
-                                <t t-set="total_taxes" t-value="0"/>
-                                <t t-foreach="o.amount_by_group" t-as="tax_line">
+                                <t t-set="total_taxes" t-value="0.0"/>
+                                <t t-set="taxes_product_tax" t-value="0.0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
                                     <tr style="border-bottom: 2px solid black;">
-                                        <t t-set="percentage" t-value="(tax_line[2] != 0) and ((tax_line[1]*100)/tax_line[2]) or 0"/>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="tax_line[0]"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-field="o.currency_id"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="percentage"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="tax_line[3]"/></td>
-                                        <t t-set="total_taxes" t-value="total_taxes + tax_line[1]"/>
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="line.tax_ids.name"/></td>
+                                        <td style="border-right: 2px solid black;text-align:center;">
+                                            <span t-esc="line.tax_ids.amount"/>   
+                                        </td> 
+                                        <td style="border-right: 2px solid black;text-align:center;">
+                                     <t t-set="final_price_oneproduct_tax" t-value="line.price_unit-(o.discount_rate/100)*line.price_unit"/>   
+                                         <t t-set="total_price_product_tax" t-value="final_price_oneproduct_tax*line.quantity"/>
+                                             <t t-set="taxes_product_tax" t-value="(line.tax_ids.amount/100)*total_price_product_tax"/>
+                                            <span t-esc="taxes_product_tax"/>
+                                        </td> 
+                                     <t t-set="total_taxes" t-value="total_taxes + taxes_product_tax"/>
                                     </tr>
                                 </t>
+                                  
                                 <tr>
-                                    <td colspan="3" style="border-right: 2px solid black;">اجمالي الضرائب</td>
+                                    <td colspan="2" style="border-right: 2px solid black;">Total_Taxes</td>
                                     <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_taxes"/></td>
                                 </tr>
                             </tbody>
@@ -401,7 +458,7 @@
             </t>
     </template>
 
-    <template id="vendor_bill_layout">
+   <template id="vendor_bill_layout">
         <t t-if="not o" t-set="o" t-value="doc"/>
         <t t-if="not company">
             <!-- Multicompany -->
@@ -419,60 +476,29 @@
         <div t-attf-class="header o_company_#{company.id}_layout">
             <div class="o_boxed_header">
                 <div class="row mb8">
-                    <div class="col-4">
-                        <div class="row">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                    <div class="col-6">
+                        <!-- Company Logo -->
+                       <div class="row" style="margin-top:30px;">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
                         </div>
+                        <!-- Company Address -->
                         <div class="row" style="margin-top:30px;">
                             <h4 class="mt0" t-field="o.company_id.report_header"/>
-                            <div name="company_address" class="mb4">
+                            <div name="company_address" class="mb4" style="color:grey">
                                 <span class="company_address" t-field="o.company_id.partner_id"
-                                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="col-md-12" style="padding-top:70px;">
-                            <h1 class="col-md-12 text-center">مشتروات الشركة</h1>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="col-md-12" style="padding-top:20px;padding-bottom:10px;">
-                            <h1 class="col-md-12 text-center">Supplier Invoice</h1>
-                        </div>
-
-                        <div class="col-md-12 text-center">
-                            <ul style="list-style:none;">
-                                <li>Company Registration no 10346 سجل تجاري رقم</li>
-                                <li>Tax Reg. no 4879/221/102 تسجيل ضرائب عامة رقم</li>
-                                <li>Company Registration no. 100/000/088 تسجيل ضريبة مبيعات رقم</li>
-                            </ul>
-                        </div>
+                    <div class="col-6 mb4">
                     </div>
                 </div>
             </div>
         </div>
-
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+       <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
             <t t-raw="0"/>
         </div>
-
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-right" style="margin-top:25px;font-size:20px;direction:rtl;">
-                <div class="row">
-                    <div class="col-4">
-                        <span><strong>التوقيع الثاني :-</strong></span>
-                    </div>
-                    <div class="col-4">
-                        <span><strong>التوقيع الثالث :-</strong></span>
-                    </div>
-                    <div class="col-4">
-                        <span><strong>التوقيع الرابع :-</strong></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+       
     </template>
 
     <template id="customer_invoice_layout">
