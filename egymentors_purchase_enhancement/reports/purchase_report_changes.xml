@@ -112,10 +112,15 @@
                 
                 <!-- Totals -->
                 <div class="row">
-                    <div class="col-9">
+                    
+                    <!-- NOTES -->
+                    <div class="col-6">
+                        <strong style='font-size:20px;'>Notes:</strong>
+                        <p style='font-size:15px;' t-field="o.notes"/>
                     </div>
-    
-                    <div class="col-3">
+                    
+                    <!-- TOTALS -->
+                    <div class="col-6">
                         <table class="table">
                             <tbody>
                                 <!-- Subtotal -->
