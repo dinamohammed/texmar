@@ -36,8 +36,8 @@
             model="purchase.order"
             report_type="qweb-pdf"
             menu="False"
-            name="purchase.report_purchasequotation"
-            file="purchase.report_purchasequotation"
+            name="purchase.report_purchaseorder"
+            file="purchase.report_purchaseorder"
             paperformat="egymentors_purchase_enhancement.po_paperformat"
             print_report_name="'Request for Quotation - %s' % (object.name)"
         />
