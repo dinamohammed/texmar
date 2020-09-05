@@ -23,6 +23,7 @@ class reporting(controllers.Restapi):
                 drafts_arr = []
                 for draft in drafts:
                     drafts_arr.append({
+                        'order_id':draft.id,
                         'date':draft.date_order,
                         'customer_name':draft.partner_id.name,
                         'state':draft.state,

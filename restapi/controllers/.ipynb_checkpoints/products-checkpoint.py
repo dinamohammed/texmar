@@ -26,7 +26,8 @@ class products(controllers.Restapi):
                     'price':product.list_price,
                     'description':product.description if product.description else '' ,
                     'stock_availability':product.virtual_available,
-                    'product_id':product.id
+                    'product_id':product.id,
+                    'image':product.image_1920
                 }
                 return info if product else 'no product found'
         except AccessError:
