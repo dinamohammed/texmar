@@ -73,7 +73,7 @@
                         <tbody>
                             <!-- Loop Order Lines -->
                             <t t-foreach="o.move_ids_without_package" t-as="line">
-    
+                                <t t-set="total_qty" t-value="0.0"/>
                                 <tr>
                                     <!-- Code -->
                                     <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
@@ -87,6 +87,17 @@
                                     <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
                                     <!-- Quantity -->
                                     <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom_qty"/></td>
+                                    
+                                    <!-- Quantity Total -->
+                                    <t t-set="total_qty" t-value="line.product_uom_qty + total_qty"/>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="total_qty"/></td>
                                 </tr>
                             </t>
                         </tbody>
