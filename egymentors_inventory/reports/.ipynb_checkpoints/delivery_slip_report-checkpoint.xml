@@ -367,38 +367,32 @@
                     </div>
                 </div>
                 
-            <div style="border-top:1px solid black;border-bottom:1px solid black;">
             <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="margin-top:20px;">
+            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
                 <!-- Phone -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Phone</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Phone: <span t-field="o.company_id.phone"/></p>
                 </div>
                 <!-- Email -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Email</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Email: <span t-field="o.company_id.email"/></p>
                 </div>
                 <!-- Website -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Website</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Website: <span t-field="o.company_id.website"/></p>
                 </div>
                 <!-- Sales TRN -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Sales TRN</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
                 </div>
-            </div>
             </div>
             
                 <!-- Footer Note -->
-                <div style="margin-top:10px;">
+<!--                 <div style="margin-top:10px;">
                 <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
                 <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
                 <h2 class="text-center">Thank You for Your Business</h2>
-                </div>
+                </div> -->
                 
             </div>
         </div>
@@ -485,38 +479,32 @@
                     </div>
                 </div>
                 
-            <div style="border-top:1px solid black;border-bottom:1px solid black;">
             <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="margin-top:20px;">
+            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
                 <!-- Phone -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Phone</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Phone: <span t-field="o.company_id.phone"/></p>
                 </div>
                 <!-- Email -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Email</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Email: <span t-field="o.company_id.email"/></p>
                 </div>
                 <!-- Website -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Website</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Website: <span t-field="o.company_id.website"/></p>
                 </div>
                 <!-- Sales TRN -->
-                <div class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Sales TRN</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
                 </div>
-            </div>
             </div>
             
                 <!-- Footer Note -->
-                <div style="margin-top:10px;">
+<!--                 <div style="margin-top:10px;">
                 <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
                 <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
                 <h2 class="text-center">Thank You for Your Business</h2>
-                </div>
+                </div> -->
                 
             </div>
         </div>
