@@ -61,20 +61,20 @@
                 
                 <!-- Table -->
                 <div class="row">
-                    <table class="table" style="width:100%;border-collapse: collapse;">
-                        <thead style="border: 2px solid black;">
-                            <tr style="border-bottom: 2px solid black;">
-                                <td style="border-right: 2px solid black;text-align:center;">Code <br/> كود </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Description <br/> اسم الصنف </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Deliver To <br/> مخزن رقم </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Unit <br/> الوحده </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Qty <br/> الكمية </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Price <br/> السعر </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Discount % <br/> الخصم </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Amount <br/> القيمة </td>
+                    <table class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td style="font-size:20px;text-align:center;">Code <br/> كود </td>
+                                <td style="font-size:20px;text-align:center;">Description <br/> اسم الصنف </td>
+                                <td style="font-size:20px;text-align:center;">Deliver To <br/> مخزن رقم </td>
+                                <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
+                                <td style="font-size:20px;text-align:center;">Qty <br/> الكمية </td>
+                                <td style="font-size:20px;text-align:center;">Price <br/> السعر </td>
+                                <td style="font-size:20px;text-align:center;">Discount % <br/> الخصم </td>
+                                <td style="font-size:20px;text-align:center;">Amount <br/> القيمة </td>
                             </tr>
                         </thead>
-                        <tbody style="border: 2px solid black;">
+                        <tbody>
                             <!-- Setting Totals -->
                             <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
                             <t t-set="total_discount" t-value="0.0"/>
@@ -85,23 +85,23 @@
                                 <!-- Subtotal Before Taxes & Discounts -->
                                 <t t-set="subtotal_before_tax_and_discount" t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_qty)"/>
                                 
-                                <tr style="border-bottom: 2px solid black;">
+                                <tr>
                                     <!-- Code -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
                                     <!-- Description -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.name"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.name"/></td>
                                     <!-- Deliver To / Location -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="o.picking_type_id"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-field="o.picking_type_id"/></td>
                                     <!-- Unit -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
                                     <!-- Quantity -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_qty"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_qty"/></td>
                                     <!-- Price -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_unit"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.price_unit"/></td>
                                     <!-- Discount -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.discount"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.discount"/></td>
                                     <!-- Amount -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="line.price_subtotal"
+                                    <td style="font-size:20px;text-align:center;"><span t-field="line.price_subtotal"
                                                 t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                                 </tr>
                             </t>
