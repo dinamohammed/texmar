@@ -341,10 +341,9 @@
         </div>
 
         <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
-                
-                
-                            <p>All supplied products are under revision and inspection for 15 days from delivery جميع البضائع المورده تحت الفحص و الاستلام لمدة 15 يوم</p>
+            <div class="text-center" style="margin-bottom:20px;">
+                           
+<!--                 <p>All supplied products are under revision and inspection for 15 days from delivery جميع البضائع المورده تحت الفحص و الاستلام لمدة 15 يوم</p> -->
                 <div class="row">
                     <div class="col-3" style="text-align:center;">
                         <span><strong>Received by</strong></span>
@@ -360,7 +359,7 @@
                     </div>
                 </div>
                 <div class="oe_clear"/>
-                <div class="row" style="margin-top:25px;">
+                <div class="row" style="margin-top:25px;margin-bottom:25px;">
                     <div class="col-3" style="text-align:center;">
                         <span>-------------------</span>
                     </div>
@@ -379,22 +378,22 @@
             <!-- Footer Info -->
             <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
                 <!-- Phone -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div class="col-3 bm-2">
                      <strong style='font-size:20px;'>Phone</strong>
                     <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
                 </div>
                 <!-- Email -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div class="col-3 bm-2">
                      <strong style='font-size:20px;'>Email</strong>
                     <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
                 </div>
                 <!-- Website -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div class="col-3 bm-2">
                      <strong style='font-size:20px;'>Website</strong>
                     <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
                 </div>
                 <!-- Sales TRN -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div class="col-3 bm-2">
                      <strong style='font-size:20px;'>Sales TRN</strong>
                     <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
                 </div>
@@ -459,11 +458,11 @@
         </div>
 
         <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
+            <div class="text-center" style="margin-bottom:50px;">
                 
                 
-                            <p>All supplied products are under revision and inspection for 15 days from delivery جميع البضائع المورده تحت الفحص و الاستلام لمدة 15 يوم</p>
-                <div class="row">
+<!--                     <p>All supplied products are under revision and inspection for 15 days from delivery جميع البضائع المورده تحت الفحص و الاستلام لمدة 15 يوم</p> -->
+                <div class="row" style="margin-top:25px;margin-bottom:25px;">
                     <div class="col-3" style="text-align:center;">
                         <span><strong>Received by</strong></span>
                     </div>
@@ -495,7 +494,7 @@
                 
             <div style="border-top:1px solid black;border-bottom:1px solid black;">
             <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
+            <div id="footer_information" class="row mt32 mb32" style="margin-top:20px;">
                 <!-- Phone -->
                 <div t-if="o.user_id" class="col-3 bm-2">
                      <strong style='font-size:20px;'>Phone</strong>
@@ -520,7 +519,7 @@
             </div>
             
                 <!-- Footer Note -->
-                <div style="margin-top:10px;">
+                <div style="margin-top:10px;margin-bottom:50px;">
                 <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
                 <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
                 <h2 class="text-center">Thank You for Your Business</h2>
