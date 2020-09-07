@@ -144,37 +144,28 @@
                                 
                                 
                                 <!-- Total Taxes -->
-                                <!-- Sum Taxes  -->
-                                <t t-foreach="o.invoice_ids" t-as="i">
-                                <t t-foreach="i.amount_by_group" t-as="amount_by_group">
-                                    <tr>
-                                        <t t-if="len(i.line_ids.filtered(lambda line: line.tax_line_id)) == 1 and i.amount_untaxed == amount_by_group[2]">
-                                                <td><strong><span style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]"/></strong></td>
+                                 <!-- Sum Taxes  -->
+                                        <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                        <tr>
+                                            <t t-if="len(o.line_ids.filtered(lambda line: line.tax_line_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                <td><span style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]"/></td>
                                                 <td style="text-align:right;font-size:20px;">
-                                                    <span t-esc="amount_by_group[3]"/>
+                                                    <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]" />
                                                 </td>
                                             </t>
-                                        
                                             <t t-else="">
                                                 <td>
-                                                    <strong>
-                                                    <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]"/>
-                                                    </strong>
-                                                    
-                                                    <strong>
-                                                    <span style="text-align:right;font-size:20px;"> on
-                                                    <t t-esc="amount_by_group[4]"/></span>
-                                                    </strong>
-                                                    
+                                                    <span t-esc="amount_by_group[0]"/>
+                                                    <span class="text-nowrap"> on
+                                                        <t t-esc="amount_by_group[4]"/>
+                                                    </span>
                                                 </td>
                                                 <td style="text-align:right;font-size:20px;">
                                                     <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]"/>
                                                 </td>
                                             </t>
                                         </tr>
-                                    </t>
-                                </t>
-                                
+                                    </t>                                
                                 
                                 
                                 <!-- Net Amount -->
