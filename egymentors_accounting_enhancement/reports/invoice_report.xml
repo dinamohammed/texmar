@@ -54,6 +54,7 @@
                                     <td style="text-align:center;font-weight:bold">final price product</td>
                                     <td style="text-align:center;font-weight:bold">Total untaxes</td>                                                                     <td style="text-align:center;font-weight:bold">Taxes</td>
                                     <td style="text-align:center;font-weight:bold">Total final Taxes</td>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,6 +121,7 @@
                                         <t t-set="amount_taxes" t-value="round(amount_taxes,2)"/>
                                         <span t-esc="amount_taxes"/></td>
                                         
+
                                         <t t-set="total_qty" t-value="total_qty + line.quantity"/>
                                         <t t-set="Total_product" t-value="Total_product+total_price_product"/>
                                         <t t-set="total_amount_dicount" t-value="total_amount_dicount+amount_discount"/>
@@ -152,6 +154,7 @@
                                         <t t-set="Total_after_taxes" t-value="round(Total_after_taxes,2)"/>
                                        <span t-esc="Total_after_taxes"/>
                                    </td>
+
                                 </tr>
                             </tbody>
                         </table>

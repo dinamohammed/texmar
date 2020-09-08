@@ -192,6 +192,7 @@
                                 <tr>
                                     <td colspan="2" style="font-weight:bold">Total_Taxes</td>
                                     <td style="text-align:center;"><span t-esc="total_taxes"/></td>
+
                                 </tr>
                             </tbody>
                         </table>
@@ -255,6 +256,7 @@
                     </div>
                 </div>
                   
+
                 </div>
             </t>
         <t t-elif="o.type == 'out_invoice'" t-call="egymentors_accounting_enhancement.customer_invoice_layout">
@@ -551,6 +553,7 @@
    <template id="vendor_bill_layout">
        
        <t t-if="not o" t-set="o" t-value="doc"/>
+
         <t t-if="not company">
             <!-- Multicompany -->
             <t t-if="company_id">
@@ -582,6 +585,7 @@
                         </div>
                     </div>
                     <div class="col-6 mb4">
+
                     </div>
                 </div>
             </div>
@@ -589,6 +593,7 @@
 
         <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
             <t t-call="web.address_layout"/>
+
             <t t-raw="0"/>
         </div>
 
@@ -631,6 +636,7 @@
             </div>
         </div>
        
+
     </template>
 
     <template id="customer_invoice_layout">
