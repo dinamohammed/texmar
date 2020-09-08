@@ -9,17 +9,17 @@
         A customized report for payment receipts
     """,
 
-    'author': "Egymentors",
-    'website': "http://www.egymentors.com",
+    'author': "Egymentors@MuhammedAshraf9244",
+    'website': "https://www.egymentors.com",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
+    'category': 'Account',
+    'version': '13.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account', 'account_accountant'],
 
     # always loaded
     'data': [
@@ -27,4 +27,8 @@
         'reports/reports.xml',
         'reports/payment_receipt_report.xml',
     ],
+    
+    'installable': True,
+    'application': True,
+    'auto_install': False,
 }
