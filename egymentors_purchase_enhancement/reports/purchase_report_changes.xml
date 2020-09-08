@@ -61,20 +61,20 @@
                 
                 <!-- Table -->
                 <div class="row">
-                    <table class="table" style="width:100%;border-collapse: collapse;">
-                        <thead style="border: 2px solid black;">
-                            <tr style="border-bottom: 2px solid black;">
-                                <td style="border-right: 2px solid black;text-align:center;">Code <br/> كود </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Description <br/> اسم الصنف </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Deliver To <br/> مخزن رقم </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Unit <br/> الوحده </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Qty <br/> الكمية </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Price <br/> السعر </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Discount % <br/> الخصم </td>
-                                <td style="border-right: 2px solid black;text-align:center;">Amount <br/> القيمة </td>
+                    <table class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <td style="font-size:20px;text-align:center;">Code <br/> كود </td>
+                                <td style="font-size:20px;text-align:center;">Description <br/> اسم الصنف </td>
+                                <td style="font-size:20px;text-align:center;">Deliver To <br/> مخزن رقم </td>
+                                <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
+                                <td style="font-size:20px;text-align:center;">Qty <br/> الكمية </td>
+                                <td style="font-size:20px;text-align:center;">Price <br/> السعر </td>
+                                <td style="font-size:20px;text-align:center;">Discount % <br/> الخصم </td>
+                                <td style="font-size:20px;text-align:center;">Amount <br/> القيمة </td>
                             </tr>
                         </thead>
-                        <tbody style="border: 2px solid black;">
+                        <tbody>
                             <!-- Setting Totals -->
                             <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
                             <t t-set="total_discount" t-value="0.0"/>
@@ -85,23 +85,23 @@
                                 <!-- Subtotal Before Taxes & Discounts -->
                                 <t t-set="subtotal_before_tax_and_discount" t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_qty)"/>
                                 
-                                <tr style="border-bottom: 2px solid black;">
+                                <tr>
                                     <!-- Code -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
                                     <!-- Description -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.name"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.name"/></td>
                                     <!-- Deliver To / Location -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="o.picking_type_id"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-field="o.picking_type_id"/></td>
                                     <!-- Unit -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
                                     <!-- Quantity -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_qty"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_qty"/></td>
                                     <!-- Price -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_unit"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.price_unit"/></td>
                                     <!-- Discount -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.discount"/></td>
+                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.discount"/></td>
                                     <!-- Amount -->
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="line.price_subtotal"
+                                    <td style="font-size:20px;text-align:center;"><span t-field="line.price_subtotal"
                                                 t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                                 </tr>
                             </t>
@@ -110,8 +110,8 @@
                 </div>
                 
                 
-                <!-- Totals -->
-                <div class="row">
+                <!-- Totals & Notes -->
+                <div class="row" style="margin-top:20px;">
                     
                     <!-- NOTES -->
                     <div class="col-6">
@@ -121,34 +121,57 @@
                     
                     <!-- TOTALS -->
                     <div class="col-6">
-                        <table class="table">
+                        <table class="table" style="border-bottom:1px solid black;">
                             <tbody>
                                 <!-- Subtotal -->
                                 <tr>
-                                    <td style="text-align:right;font-size:20px;"><strong>Subtotal</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-esc="subtotal_before_tax_and_discount"/></td>
+                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Subtotal</strong></td>
+                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
                                 </tr>
                                 <!-- Total Discount -->
                                 <tr>
                                     <!-- Total Discount -->
                                     <t t-set="total_discount" t-value="total_discount + (subtotal_before_tax_and_discount - total_after_discount)"/>
-                                    <td style="text-align:right;font-size:20px;"><strong>Total Discount</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-esc="total_discount"/></td>
+                                    <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
+                                    <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-esc="total_discount"/></td>
                                 </tr>
                                 <!-- Total After Discount -->
                                 <tr>
-                                    <td style="text-align:right;font-size:20px;"><strong>Total</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-field="o.amount_untaxed"/></td>
+                                    <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
+                                    <td style="text-align:right;font-size:20px;"><span t-field="o.amount_untaxed"/></td>
                                 </tr>
+                                
+                                
+                                
                                 <!-- Total Taxes -->
-                                <tr>
-                                    <td style="text-align:right;font-size:20px;"><strong>Taxes</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-field="o.amount_tax"/></td>
-                                </tr>
+                                 <!-- Sum Taxes  -->
+                                <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                    <tr>
+                                        <t t-if="len(o.order_line.filtered(lambda line: line.taxes_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                            <!-- HEADING -->
+                                            <td><strong><span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
+                                            <!-- VALUE -->
+                                            <td style="text-align:right;font-size:20px;">
+                                                <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]" />
+                                            </td>
+                                        </t>
+                                        
+                                        <t t-else="">
+                                            <!-- HEADING -->
+                                            <td><strong><span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
+                                            <!-- VALUE -->
+                                            <td style="text-align:right;font-size:20px;">
+                                                <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>                                
+                                
+                                
                                 <!-- Net Amount -->
                                 <tr>
-                                    <td style="text-align:right;font-size:20px;"><strong>Total Due</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-esc="o.amount_untaxed - o.amount_tax"/></td>
+                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Total Due</strong></td>
+                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="o.amount_total"/></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -204,38 +227,32 @@
         <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
             <div class="text-center">
                 
-            <div style="border-top:1px solid black;border-bottom:1px solid black;">
             <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
+            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
                 <!-- Phone -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Phone</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Phone: <span t-field="o.company_id.phone"/></p>
                 </div>
                 <!-- Email -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Email</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Email: <span t-field="o.company_id.email"/></p>
                 </div>
                 <!-- Website -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Website</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Website: <span t-field="o.company_id.website"/></p>
                 </div>
                 <!-- Sales TRN -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Sales TRN</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
                 </div>
-            </div>
             </div>
             
                 <!-- Footer Note -->
-                <div style="margin-top:10px;">
+<!--                 <div style="margin-top:10px;">
                 <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
                 <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
                 <h2 class="text-center">Thank You for Your Business</h2>
-                </div>
+                </div> -->
                 
             </div>
         </div>
