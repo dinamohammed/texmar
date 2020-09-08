@@ -5,3 +5,4 @@ from . import stock_inventory_changes
 #from . import purchase_request
 #from . import purchase_order_changes
 #from . import purchase_requisition_changes
+from . import quantity_in_words

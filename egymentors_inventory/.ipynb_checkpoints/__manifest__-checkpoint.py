@@ -40,6 +40,7 @@
 
         # 'views/res_config_view_changes.xml',
         'views/stock_inventory_view_changes.xml',
+        'views/quantity_in_words.xml',
         #'views/purchase_request_view.xml',
         #'views/purchase_order_view_changes.xml',
         #'views/purchase_requisition_view_changes.xml',
