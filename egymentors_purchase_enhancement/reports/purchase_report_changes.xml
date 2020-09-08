@@ -110,8 +110,8 @@
                 </div>
                 
                 
-                <!-- Totals -->
-                <div class="row">
+                <!-- Totals & Notes -->
+                <div class="row" style="margin-top:20px;">
                     
                     <!-- NOTES -->
                     <div class="col-6">
@@ -121,23 +121,23 @@
                     
                     <!-- TOTALS -->
                     <div class="col-6">
-                        <table class="table">
+                        <table class="table" style="border-bottom:1px solid black;">
                             <tbody>
                                 <!-- Subtotal -->
                                 <tr>
-                                    <td style="text-align:right;font-size:20px;"><strong>Subtotal</strong></td>
-                                    <td style="text-align:right;font-size:20px;"><span t-esc="subtotal_before_tax_and_discount"/></td>
+                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Subtotal</strong></td>
+                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
                                 </tr>
                                 <!-- Total Discount -->
                                 <tr>
                                     <!-- Total Discount -->
                                     <t t-set="total_discount" t-value="total_discount + (subtotal_before_tax_and_discount - total_after_discount)"/>
-                                    <td style="text-align:right;font-size:20px;"><strong>Total Discount</strong></td>
-                                    <td style="text-align:right;font-size:20px;"><span t-esc="total_discount"/></td>
+                                    <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
+                                    <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-esc="total_discount"/></td>
                                 </tr>
                                 <!-- Total After Discount -->
                                 <tr>
-                                    <td style="text-align:right;font-size:20px;"><strong>Total</strong></td>
+                                    <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
                                     <td style="text-align:right;font-size:20px;"><span t-field="o.amount_untaxed"/></td>
                                 </tr>
                                 
@@ -145,32 +145,33 @@
                                 
                                 <!-- Total Taxes -->
                                  <!-- Sum Taxes  -->
-                                        <t t-foreach="o.amount_by_group" t-as="amount_by_group">
-                                        <tr>
-                                            <t t-if="len(o.order_line.filtered(lambda line: line.taxes_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
-                                                <td><strong><span style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]"/></strong></td>
-                                                <td style="text-align:right;font-size:20px;">
-                                                    <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]" />
-                                                </td>
-                                            </t>
-                                            <t t-else="">
-                                                <td>
-                                                    <strong>
-                                                    <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]"/>
-                                                    </strong>
-                                                </td>
-                                                <td style="text-align:right;font-size:20px;">
-                                                    <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]"/>
-                                                </td>
-                                            </t>
-                                        </tr>
-                                    </t>                                
+                                <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                    <tr>
+                                        <t t-if="len(o.order_line.filtered(lambda line: line.taxes_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                            <!-- HEADING -->
+                                            <td><strong><span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
+                                            <!-- VALUE -->
+                                            <td style="text-align:right;font-size:20px;">
+                                                <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]" />
+                                            </td>
+                                        </t>
+                                        
+                                        <t t-else="">
+                                            <!-- HEADING -->
+                                            <td><strong><span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
+                                            <!-- VALUE -->
+                                            <td style="text-align:right;font-size:20px;">
+                                                <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>                                
                                 
                                 
                                 <!-- Net Amount -->
                                 <tr>
-                                    <td style="text-align:right;font-size:20px;"><strong>Total Due</strong></td>
-                                    <td style="text-align:right;font-size:20px;"><span t-esc="o.amount_total"/></td>
+                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Total Due</strong></td>
+                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="o.amount_total"/></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -226,38 +227,32 @@
         <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
             <div class="text-center">
                 
-            <div style="border-top:1px solid black;border-bottom:1px solid black;">
             <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
+            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
                 <!-- Phone -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Phone</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Phone: <span t-field="o.company_id.phone"/></p>
                 </div>
                 <!-- Email -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Email</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Email: <span t-field="o.company_id.email"/></p>
                 </div>
                 <!-- Website -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Website</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Website: <span t-field="o.company_id.website"/></p>
                 </div>
                 <!-- Sales TRN -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Sales TRN</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
                 </div>
-            </div>
             </div>
             
                 <!-- Footer Note -->
-                <div style="margin-top:10px;">
+<!--                 <div style="margin-top:10px;">
                 <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
                 <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
                 <h2 class="text-center">Thank You for Your Business</h2>
-                </div>
+                </div> -->
                 
             </div>
         </div>
