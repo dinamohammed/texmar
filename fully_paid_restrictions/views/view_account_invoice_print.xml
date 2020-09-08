@@ -13,10 +13,10 @@
            <field name="arch" type="xml">
 
                <xpath expr="//header/button[@name='action_print']" position="attributes">
-                   <attribute name="attrs"> {'invisible': ['|',('invoice_payment_state', 'not in', ['draft','posted','paid']),('type', 'not in', ('out_invoice', 'in_invoice','out_refund', 'in_refund'))]} </attribute>
+                   <attribute name="attrs"> {'invisible': ['|',('state', 'not in', ['draft','posted','paid']),('type', 'not in', ('out_invoice', 'in_invoice','out_refund', 'in_refund'))]} </attribute>
                </xpath>
                 <xpath expr="//header/button[@name='action_print_without_payment']" position="attributes">
-                   <attribute name="attrs"> {'invisible': ['|',('invoice_payment_state', 'not in', ['draft','posted','paid']),('type', 'not in', ('out_invoice', 'in_invoice','out_refund', 'in_refund'))]} </attribute>
+                   <attribute name="attrs"> {'invisible': ['|',('state', 'not in', ['draft','posted','paid']),('type', 'not in', ('out_invoice', 'in_invoice','out_refund', 'in_refund'))]} </attribute>
                </xpath>
            </field>
        </record>
@@ -31,7 +31,7 @@
            <field name="arch" type="xml">
 
                <xpath expr="//header/button[@name='action_invoice_sent']" position="attributes">
-                   <attribute name="attrs"> {'invisible': ['|',('invoice_payment_state', 'not in', ['draft','posted','paid']),('type', 'not in', ('out_invoice', 'in_invoice','out_refund', 'in_refund'))]} </attribute>
+                   <attribute name="attrs"> {'invisible': ['|',('state', 'not in', ['draft','posted','paid']),('type', 'not in', ('out_invoice', 'in_invoice','out_refund', 'in_refund'))]} </attribute>
                </xpath>
            </field>
        </record>
