@@ -1,28 +1,20 @@
 # -*- coding: utf-8 -*-
+from odoo import fields, models, api, _
+from num2words import num2words
 
-from odoo import models, fields, api, _
 
-
-class QuantityInWords(models.Model):
+class StockMove(models.Model):
     _inherit = 'stock.move'
 
-    quantity_in_words = fields.Char(string="Quantity in Words" , readonly=True)
+    product_qty_in_words = fields.Char(string='Quantity In Words', compute='get_product_qty_in_words')
 
-    @api.depends('product_uom_qty')
-    def _onchange_quantity(self):
-        res = QuantityInWords, self._onchange_quantity()
-        for qty in self:
-            amount_text = self.product_uom.with_context({'lang': self.env.user.lang}).amount_to_text(
-			qty.product_uom_qty)
-            if qty.env.user.lang in ['ar', 'ar_SY', 'ar_001']:
-                quantity_in_words = "%s %s" % (amount_text, "فقط")
-                quantity_in_words = str(quantity_in_words).replace('Units', 'وحده')
+    @api.depends('product_uom', 'product_uom_qty')
+    def get_product_qty_in_words(self):
+        for move in self:
+            if move.product_uom_qty and move.product_uom:
+                words = 'Only '
+                words += num2words(float(move.product_uom_qty), lang='en')
+                words += ' ' + str(move.product_uom.name)
+                move.product_qty_in_words = words
             else:
-                quantity_in_words = amount_text + ' only'
-
-            qty.quantity_in_words = quantity_in_words
-        return res
-    
-    def set_quantity_in_words(self):
-        for quantity in self:
-            quantity.quantity_in_words = quantity.quantity_in_words(quantity.product_uom_qty)
+                move.product_qty_in_words = ''
