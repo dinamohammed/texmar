@@ -29,7 +29,7 @@ class PurchaseOrderTaxes(models.Model):
 						if tax_id in line.taxes_id.ids:
 							vals = line._prepare_compute_all_values()
 							taxes = tax.compute_all(
-								vals['price_unit'],
+								vals['price_subtotal'],
 								vals['currency_id'],
 								vals['product_qty'],
 								vals['product'],
@@ -59,7 +59,7 @@ class PurchaseOrderTaxes(models.Model):
 			done_taxes = set()
 			for line in tax_lines:
 				for tax_id in line.taxes_id:
-					tax_dict = tax_id.compute_all(line.price_unit, line.currency_id,
+					tax_dict = tax_id.compute_all(line.price_subtotal, line.currency_id,
 					                              line.product_qty, line.product_id,
 					                              order.partner_id).get('taxes', [])[0]
 					print("tax_dict: ", tax_dict)

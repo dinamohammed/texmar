@@ -50,7 +50,7 @@
                 <!-- Order Date -->
                 <div t-if="o.date_order" class="col-3 bm-2">
                     <strong style='font-size:20px;'>Order Date:</strong>
-                    <p style='font-size:20px;' t-field="o.date_order" class="m-0"/>
+                    <p style='font-size:20px;' t-field="o.date_order" t-options='{"widget":"date"}' class="m-0"/>
                 </div>
                 <!-- Currency -->
                 <div t-if="o.user_id" class="col-3 bm-2">
