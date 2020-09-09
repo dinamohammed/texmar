@@ -4,15 +4,15 @@
         <t t-call="payment_receipt_report.payment_receipt_layout">
             <t t-set="o" t-value="o.with_context(lang=lang)"/>
             <div class="page">
-                <h3><strong>Payment Receipt: <span t-field="o.name"/></strong></h3>
-                <div class="row mt64">
-                    <div class="col-6" t-if="o.payment_date">
-                        <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
-                    </div>
-                </div>
+                  <h3><strong>Payment Receipt: <span t-field="o.name"/></strong></h3>
+                  <div class="row mt64">
+                       <div class="col-6" t-if="o.payment_date">
+                           <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
+                        </div>
+                  </div>
               <div id="information" class="row mt32 mb32" style="margin-top:40px;">
                      <!-- Vendor or Customer-->
-                    <div class="col-3 bm-2" t-if="o.partner_type">
+                  <div class="col-3 bm-2" t-if="o.partner_type">
                         <t t-if="o.partner_type == 'customer'">
                             <strong>Customer: </strong>
                         </t>
@@ -21,10 +21,9 @@
                         </t><span t-field="o.partner_id"/>
                     </div>
                 <!-- Payment Amount:  -->    
-                       <div class="col-3 bm-2" t-if="o.amount">
+                    <div class="col-3 bm-2" t-if="o.amount">
                          <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>  
                        </div>
-                 
             <!--Vendor Reference :  -->    
                        <div class="col-3 bm-2" > 
                            <t t-if="o.partner_id.ref">
@@ -33,41 +32,50 @@
                         </div> 
                     <!-- Source: -->     
                        <div class="col-3 bm-2" t-if="o.communication">
-                            <strong>Source: </strong><span t-field="o.communication"/>
-                       </div>
-                    
+                            <strong class="text-nowrap">Source: </strong><span class="text-nowrap" t-field="o.communication"/>
+                       </div>   
               </div>
+                <!-- Amount -->
                 <div class="row mt64">
+                    <div class="col-6" t-if="o.amount_in_words">
+                        <strong>Amount: </strong><span t-field="o.amount"/>
+                    </div>
+                 </div>
+                <!-- Amount in words-->
+                 <div class="row mt64">
                     <div class="col-6" t-if="o.amount_in_words">
                         <strong>Amount in Word: </strong><span t-field="o.amount_in_words"/>
                     </div>
                  </div>
-                
+                <!-- Payment Method-->
                 <div class="row mt64">
                    <div class="col-6" t-if="o.payment_method_id">
                         <strong>Payment Method: </strong><span t-field="o.payment_method_id.name"/>
                     </div> 
                 </div>
-<!--                 <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th><span>Invoice Date</span></th>
-                            <th><span>Invoice Number</span></th>
-                            <th class="text-right"><span>Original Amount</span></th>
-                            <th class="text-right"><span>Amount Paid</span></th>
-                            <th class="text-right"><span>Balance</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr t-foreach="o.reconciled_invoice_ids" t-as="inv">
-                            <td><span t-field="inv.invoice_date"/></td>
-                            <td><span t-field="inv.name"/></td>
-                            <td class="text-right"><span t-field="inv.amount_total"/></td>
-                            <td class="text-right"><span t-esc="o._get_invoice_payment_amount(inv)" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/></td>
-                            <td class="text-right"><span t-field="inv.amount_residual"/></td>
-                        </tr>
-                    </tbody>
-                </table> -->
+            
+            <div class="row mt64">    
+               <t t-if="o.payment_method_id.name=='Issue Check'" >
+                   
+                 <div class="col-6">
+                       <t t-if="o.checkbook_id.issue_check_subtype=='deferred'"> 
+                        <strong>Issue Check Subtype: </strong><span> Deferred Check </span>
+                        </t>
+                        <t t-elif="o.checkbook_id.issue_check_subtype=='currents'"> 
+                        <strong>Issue Check Subtype: </strong><span> Currents Check </span>
+                         </t>   
+                    </div>
+                   
+                   <div class="col-6"  t-if="o.check_issue_date">
+                        <strong>Check Issue Date : </strong><span t-field="o.check_issue_date"/>
+                    </div>
+                   <div class="col-6"  t-if="o.check_payment_date">
+                        <strong>Check  Payment  Date : </strong><span t-field="o.check_payment_date"/>
+                    </div>
+                   
+                </t>   
+           </div>      
+
          <br/>
         <h4><strong>Remarks</strong></h4>   
          <table class="table table-sm" style="width:100%; border: 3px solid black;">
