@@ -10,8 +10,9 @@
                         <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-6" t-if="o.partner_type">
+              <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                     <!-- Vendor or Customer-->
+                    <div class="col-3 bm-2" t-if="o.partner_type">
                         <t t-if="o.partner_type == 'customer'">
                             <strong>Customer: </strong>
                         </t>
@@ -19,19 +20,35 @@
                             <strong>Vendor: </strong>
                         </t><span t-field="o.partner_id"/>
                     </div>
-                    <div class="col-6" t-if="o.payment_method_id">
-                        <strong>Payment Method: </strong><span t-field="o.payment_method_id.name"/>
+                <!-- Payment Amount:  -->    
+                       <div class="col-3 bm-2" t-if="o.amount">
+                         <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>  
+                       </div>
+                 
+            <!--Vendor Reference :  -->    
+                       <div class="col-3 bm-2" > 
+                           <t t-if="o.partner_id.ref">
+                                <strong> Vendor Reference : <span t-field="o.partner_id.ref"/></strong>
+                             </t>  
+                        </div> 
+                    <!-- Source: -->     
+                       <div class="col-3 bm-2" t-if="o.communication">
+                            <strong>Source: </strong><span t-field="o.communication"/>
+                       </div>
+                    
+              </div>
+                <div class="row mt64">
+                    <div class="col-6" t-if="o.amount_in_words">
+                        <strong>Amount in Word: </strong><span t-field="o.amount_in_words"/>
                     </div>
+                 </div>
+                
+                <div class="row mt64">
+                   <div class="col-6" t-if="o.payment_method_id">
+                        <strong>Payment Method: </strong><span t-field="o.payment_method_id.name"/>
+                    </div> 
                 </div>
-                <div class="row mb64">
-                    <div class="col-6" t-if="o.amount">
-                        <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
-                     </div>
-                    <div class="col-6" t-if="o.communication">
-                        <strong>Memo: </strong><span t-field="o.communication"/>
-                     </div>
-                </div>
-                <table class="table table-sm">
+<!--                 <table class="table table-sm">
                     <thead>
                         <tr>
                             <th><span>Invoice Date</span></th>
@@ -50,9 +67,36 @@
                             <td class="text-right"><span t-field="inv.amount_residual"/></td>
                         </tr>
                     </tbody>
+                </table> -->
+         <br/>
+        <h4><strong>Remarks</strong></h4>   
+         <table class="table table-sm" style="width:100%; border: 3px solid black;">
+              <tr>
+                 <th>   </th>
+                 <th>   </th> 
+                <th>  </th>
+             </tr>
+              <tr>
+                  <td>   </td>
+                  <td></td>
+                <td></td>
+              </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
                 </table>
+      
             </div>
+            
         </t>
+
     </template>
 
     <template id="payment_receipt_layout">
@@ -106,22 +150,22 @@
             <!-- Footer Info -->
             <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
                 <!-- Phone -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div t-if="o.company_id.phone" class="col-3 bm-2">
                      <strong style='font-size:20px;'>Phone</strong>
                     <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
                 </div>
                 <!-- Email -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div t-if="o.company_id.email" class="col-3 bm-2">
                      <strong style='font-size:20px;'>Email</strong>
                     <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
                 </div>
                 <!-- Website -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div t-if="o.company_id.website" class="col-3 bm-2">
                      <strong style='font-size:20px;'>Website</strong>
                     <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
                 </div>
                 <!-- Sales TRN -->
-                <div t-if="o.user_id" class="col-3 bm-2">
+                <div t-if="o.company_id.vat" class="col-3 bm-2">
                      <strong style='font-size:20px;'>Sales TRN</strong>
                     <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
                 </div>

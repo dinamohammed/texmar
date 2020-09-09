@@ -17,7 +17,7 @@
 
 
      <report
-            string="Payment Receipt Report"
+            string="Payment Receipt Report2"
             id="account.action_report_payment_receipt"
             model="account.payment"
             report_type="qweb-pdf"
