@@ -67,7 +67,7 @@
                                 <t t-foreach="o.invoice_line_ids" t-as="line">
                                     <tr>
                                         <td style="text-align:center;"><span t-esc="line.product_id.default_code"/></td>
-                                        <td style="text-align:center;"><span t-field="line.product_id.name"/></td> 
+                                        <td style="text-align:center;"><span t-esc="line.product_id.name"/></td> 
                                         <td style="text-align:center;"><span t-field="line.product_id.uom_id"/></td>
                                         <td style="text-align:center;"><span t-esc="line.quantity"/></td>
                                          <t t-set="line.price_unit" t-value="round(line.price_unit,2)"/>
@@ -103,12 +103,12 @@
                                                 <t t-set="one_taxe_product" t-value="one_taxe_product+(tax_id.amount/100)*total_price_product"/> 
                                                 <t t-set="one_taxe_product" t-value="round(one_taxe_product,2)"/> 
                                              <t t-if="count%2==0" >
-                                                 <span style="font-size:14px ;font-weight:bold"> , </span>   
-                                                 <span style="text-align:right;font-size:20px;" t-esc="one_taxe_product"/>
+                                                 <span class="text-nowrap" style="font-size:25px ;font-weight:bold"> , </span>   
+                                                 <span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="one_taxe_product"/>
                                                 <t t-set="count" t-value="count+1"/>  
                                               </t> 
                                              <t t-else="">
-                                                 <span style="text-align:right;font-size:20px;" t-esc="one_taxe_product"/>
+                                                 <span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="one_taxe_product"/>
                                                 <t t-set="count" t-value="count+1"/> 
                                               </t> 
                                                <t t-set="taxes_product" t-value="taxes_product+one_taxe_product"/> 
