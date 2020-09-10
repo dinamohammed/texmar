@@ -49,7 +49,7 @@
                         <!-- Customer Order -->
                         <div t-if="o.user_id" class="col-3 bm-2">
                             <strong style='font-size:20px;'>Customer Order</strong>
-                            <p style='font-size:20px;' t-field="o.name" class="m-0"/>
+                            <p style='font-size:20px;' t-field="o.customer_order" class="m-0"/>
                         </div>                        
                         <!-- Currency -->
                         <div t-if="o.user_id" class="col-3 bm-2">
@@ -62,45 +62,56 @@
                     <p style='font-size:20px;'>We have the pleasure to manufacture and supply upholstery and Curtain fabrics for your project. As per approved fabrics scheme and out offer specifications as follows,</p>
                     </div>
 
+                    <!-- Table -->
                     <div class="row">
-                        <table class="table" style="width:100%;border-collapse: collapse;">
-                            <thead style="border: 2px solid black;">
-                                <tr style="border-bottom: 2px solid black;">
-                                    <td style="border-right: 2px solid black;text-align:center;">Code</td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Width </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Description composition </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Sample</td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Qty</td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Unit Price </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Line Total </td>
+                        <table class="table" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <td style="font-size:20px;text-align:center;">Code </td>
+                                    <td style="font-size:20px;text-align:center;">Description </td>
+                                    <td style="font-size:20px;text-align:center;">Treatment </td>
+                                    <td style="font-size:20px;text-align:center;">Product Image </td>
+                                    <td style="font-size:20px;text-align:center;">Quantity </td>
+                                    <td style="font-size:20px;text-align:center;">Unit Price </td>
+                                    <td style="font-size:20px;text-align:center;">Discount </td>
+                                    <td style="font-size:20px;text-align:center;">Amount </td>
                                 </tr>
                             </thead>
-                            <tbody style="border: 2px solid black;">
+                            <tbody>
                                 <t t-set="total_untaxed" t-value="0"/>
                                 <t t-foreach="o.order_line" t-as="line">
-                                    <tr style="border-bottom: 2px solid black;">
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.texmar_width"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-field="line.name"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;">
-                                            <span t-field="line.product_id.image_128" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}"/>
-<!--                                            <img t-if="line.product_id.image_1920" t-att-src="image_data_uri(line.product_id.image_1920)"/>-->
+                                    <tr>
+                                        <!-- Code -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                        <!-- Description + Width -->
+                                        <td style="font-size:20px;text-align:center;"><span t-field="line.product_id.name"/><br/><span t-esc="line.product_id.texmar_width"/></td>
+                                        <!-- Treatment -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.texmar_width"/></td>
+                                        <!-- Product Image -->
+                                        <td style="font-size:20px;text-align:center;"><span t-field="line.product_id.image_128" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}"/>
                                         </td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_uom_qty"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_unit"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_subtotal"/></td>
+                                        <!-- Quantity -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom_qty"/></td>
+                                        <!-- Unit Price -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.price_unit"/></td>
+                                        <!-- Discount -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.discount"/></td>
+                                        <!-- Amount -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.price_subtotal"/></td>
+                                        
                                         <t t-set="total_untaxed" t-value="total_untaxed + line.price_subtotal"/>
                                     </tr>
                                 </t>
                             </tbody>
                         </table>
                     </div>
+                    
+                    
+                    <!-- TOTALS -->
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-6">
                         </div>
-                        <div class="col-4">
-                        </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <table class="table">
                                 <tbody>
                                     <tr>
