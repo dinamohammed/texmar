@@ -78,8 +78,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- Setting Totals -->
                                 <t t-set="total_untaxed" t-value="0"/>
+                                <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
                                 <t t-foreach="o.order_line" t-as="line">
+                                    <!-- Computing Totals -->
+                                    <!-- Subtotal Before Taxes & Discounts -->
+                                    <t t-set="subtotal_before_tax_and_discount" t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_uom_qty)"/>
                                     <tr>
                                         <!-- Code -->
                                         <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
@@ -114,14 +119,27 @@
                         <div class="col-6">
                             <table class="table">
                                 <tbody>
+                                    <!-- Subtotal -->
                                     <tr>
-                                        <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Subtotal Qty</strong></td>
-                                        <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-field="o.amount_untaxed"/></td>
+                                        <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Subtotal</strong></td>
+                                        <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
                                     </tr>
+                                    <!-- Discount -->
                                     <tr>
-                                        <td style="text-align:left;font-size:20px;"><strong>14 % VAT</strong></td>
-                                        <td style="text-align:right;font-size:20px;"><span t-field="o.amount_tax"/></td>
+                                        <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
+                                        <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-field="o.amount_discount"/></td>
                                     </tr>
+                                    <!-- Total After Discount -->
+                                    <tr>
+                                        <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
+                                        <td style="text-align:right;font-size:20px;"><span t-field="o.amount_untaxed"/></td>
+                                    </tr>
+                                    <!-- Taxes -->
+                                    <tr>
+                                        <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>14 % VAT</strong></td>
+                                        <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-field="o.amount_tax"/></td>
+                                    </tr>
+                                    <!-- Total -->
                                     <tr>
                                         <td style="text-align:left;font-size:20px;border-top:1px solid black;border-bottom:1px solid black;"><strong>Total</strong></td>
                                         <td style="text-align:right;font-size:20px;border-top:1px solid black;border-bottom:1px solid black;"><span t-field="o.amount_total"/></td>
@@ -132,11 +150,14 @@
                     </div>
                     
                     <!-- Show Specs & Conditions Template based on Selection -->
+                    <div style='margin-top:100px;'>
+                        <p style='font-size:20px;font-weight:bold;'>Offer Specifications and Conditions :-</p>
                     <div class="row">
                         <p style='font-size:20px;' t-if="o.template_selection == 'template_one'" t-raw="o.specs_conditions_1"/>
                         <p style='font-size:20px;' t-if="o.template_selection == 'template_two'" t-raw="o.specs_conditions_2"/>
                         <p style='font-size:20px;' t-if="o.template_selection == 'template_three'" t-raw="o.specs_conditions_3"/>
                         <p style='font-size:20px;' t-if="o.template_selection == 'template_four'" t-raw="o.specs_conditions_4"/>
+                    </div>
                     </div>
                 </div>
             </t>
