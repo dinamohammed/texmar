@@ -10,7 +10,7 @@
                            <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
                         </div>
                   </div>
-              <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+              <div id="information" class="row mt32 mb32" style="margin-bottom:10px;">
                      <!-- Vendor or Customer-->
                   <div class="col-3 bm-2" t-if="o.partner_type">
                         <t t-if="o.partner_type == 'customer'">
@@ -20,10 +20,7 @@
                             <strong>Vendor: </strong>
                         </t><span t-field="o.partner_id"/>
                     </div>
-                <!-- Payment Amount:  -->    
-                    <div class="col-3 bm-2" t-if="o.amount">
-                         <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>  
-                       </div>
+              
             <!--Vendor Reference :  -->    
                        <div class="col-3 bm-2" > 
                            <t t-if="o.partner_id.ref">
@@ -35,73 +32,140 @@
                             <strong class="text-nowrap">Source: </strong><span class="text-nowrap" t-field="o.communication"/>
                        </div>   
               </div>
+               <!-- Payment Amount:  -->    
+                 <div class="row mt64" style="margin-top:3px;">
+                      <div class="col-6" t-if="o.amount">
+                          <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>  
+                       </div>
+                 </div>   
                 <!-- Amount -->
-                <div class="row mt64">
+                <div class="row mt64" style="margin-top:3px;">
                     <div class="col-6" t-if="o.amount_in_words">
                         <strong>Amount: </strong><span t-field="o.amount"/>
                     </div>
                  </div>
                 <!-- Amount in words-->
-                 <div class="row mt64">
-                    <div class="col-6" t-if="o.amount_in_words">
+                 <div class="row mt64" style="margin-top:3px;">
+                    <div class="col-6" t-if="o.amount_in_words" >
                         <strong>Amount in Word: </strong><span t-field="o.amount_in_words"/>
                     </div>
                  </div>
                 <!-- Payment Method-->
-                <div class="row mt64">
+                <div class="row mt64" style="margin-top:3px;">
                    <div class="col-6" t-if="o.payment_method_id">
                         <strong>Payment Method: </strong><span t-field="o.payment_method_id.name"/>
                     </div> 
                 </div>
-            
-            <div class="row mt64">    
+           <!-- if pament type is send money and payment method is issue check --> 
+            <div class="row mt32 mb32" style="margin-top:3px;">    
                <t t-if="o.payment_method_id.name=='Issue Check'" >
                    
-                 <div class="col-6">
+                 <div class="col-3 bm-2" >
                        <t t-if="o.checkbook_id.issue_check_subtype=='deferred'"> 
-                        <strong>Issue Check Subtype: </strong><span> Deferred Check </span>
+                        <p><strong>Issue Check Subtype: </strong><span> Deferred Check </span></p>
                         </t>
                         <t t-elif="o.checkbook_id.issue_check_subtype=='currents'"> 
-                        <strong>Issue Check Subtype: </strong><span> Currents Check </span>
+                        <p><strong>Issue Check Subtype: </strong><span> Currents Check </span></p>
                          </t>   
                     </div>
                    
-                   <div class="col-6"  t-if="o.check_issue_date">
-                        <strong>Check Issue Date : </strong><span t-field="o.check_issue_date"/>
+                   <div class="col-3 bm-2"   t-if="o.check_id.issue_date">
+                        <p><strong>Check Issue Date : </strong><span t-field="o.check_id.issue_date"/></p>
                     </div>
-                   <div class="col-6"  t-if="o.check_payment_date">
-                        <strong>Check  Payment  Date : </strong><span t-field="o.check_payment_date"/>
+                   <div class="col-3 bm-2" t-if="o.check_id.payment_date" >
+                        <strong>Check  Payment  Date : </strong><span t-field="o.check_id.payment_date"/>
                     </div>
                    
                 </t>   
-           </div>      
-
-         <br/>
-        <h4><strong>Remarks</strong></h4>   
-         <table class="table table-sm" style="width:100%; border: 3px solid black;">
-              <tr>
-                 <th>   </th>
-                 <th>   </th> 
-                <th>  </th>
-             </tr>
-              <tr>
-                  <td>   </td>
-                  <td></td>
-                <td></td>
-              </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </table>
-      
-            </div>
+        
+           </div> 
+         
+                
+      <!-- if payment method is received third check -->
+                <div class="row mt32 mb32" style="margin-top:3px;">
+                    <t t-if="o.payment_method_id.name=='Received Third Check'">
+                        <!-- check number-->
+                        <div class="col-3 bm-2">
+                            <strong>Check Number : </strong><span t-field="o.check_id.number"/>
+                         </div>
+                        <!-- Check Date -->
+                        <div class="col-3 bm-2"   t-if="o.check_id.issue_date">
+                            <p><strong>Check Issue Date : </strong><span t-field="o.check_id.issue_date"/></p>
+                         </div>
+                        <div class="col-3 bm-2" t-if="o.check_id.payment_date" >
+                           <strong>Check  Payment  Date : </strong><span t-field="o.check_id.payment_date"/>
+                        </div>
+                        <div class="col-3 bm-2" t-if="o.check_id.owner_name" >
+                           <strong>Check Owner Name : </strong><span t-field="o.check_id.owner_name"/>
+                        </div>
+                           <div class="col-3 bm-2" t-if="o.check_id.owner_vat" >
+                           <strong>Check Owner Vat : </strong><span t-field="o.check_id.owner_vat"/>
+                        </div>
+                    </t>    
+                </div>    
+        
+                
+         <!-- Remarks -->       
+        <h3 style="margin-top:10px;"><strong>Remarks</strong></h3>  
+         <textarea cols="150" rows="10" style="border:solid 2px black;">
+         </textarea> 
+                
+       <!-- if check and invoice line-->         
+        <h2 style="font-weight:bold;margin-top:30px;">Jounral Entity Datails</h2>
+         <t t-if="o.move_line_ids">
+            <div class="row">   
+             <table class="table" style="width:100%;border-collapse: collapse;">
+                            <thead style="border: 2px solid black;">
+                                <tr style="border-bottom: 2px solid black;">
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Jounral Entity </td>
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Account</td>
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Debit</td>
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Credit</td>
+                                </tr>
+                            </thead>
+                            <tbody style="border: 2px solid black;">
+                                <t t-set="total_debit" t-value="0.0"/>
+                                <t t-set="total_credit" t-value="0.0"/>
+                                <t t-foreach="o.move_line_ids" t-as="move_line">
+                                    <tr style="border-bottom: 2px solid black;">
+                                        <!--Jounral Entity -->
+                                 <td style="border-right: 2px solid black;text-align:center;"> 
+                                    <span t-esc="move_line.move_id.name"/> <span t-esc="move_line.move_id.ref"/>
+                                        </td>
+                                      <!-- Account -->  
+                                    <td style="border-right: 2px solid black;text-align:center;">
+                                       <span t-esc="move_line.account_id.code"/> <span t-esc="move_line.account_id.name"/>
+                                        </td>
+                                    <!-- Debit -->    
+                                    <td style="border-right: 2px solid black;text-align:center;">
+                                       <span t-esc="move_line.debit"/>
+                                    </td>
+                               
+                                <!-- Credit -->    
+                                    <td style="border-right: 2px solid black;text-align:center;">
+                                       <span t-esc="move_line.credit"/>
+                                    </td>
+                                        <t t-set="total_debit" t-value="total_debit+move_line.credit"/>
+                                         <t t-set="total_credit" t-value="total_credit+move_line.credit"/>
+                                    </tr>      
+                              </t>
+                                 <tr>
+                                  <td colspan="2" style="border-right: 2px solid black;">Total</td>
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_debit"/></td>  
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_credit"/></td>  
+                                </tr>    
+                                    
+                            </tbody>
+                        </table>
+                </div>
+            </t> 
+       <!-- Signature--> 
+      <div style="margin-top:300px;">
+                    <div class="col-3" style="text-align:right;">
+                        <span><strong>Signature</strong></span>
+                    </div>
+             </div>    
+     </div>
             
         </t>
 
@@ -151,9 +215,12 @@
             <t t-raw="0"/>
         </div>
 
+        
         <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
             <div class="text-center">
                 
+             
+                 
             <div style="border-top:1px solid black;border-bottom:1px solid black;">
             <!-- Footer Info -->
             <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
