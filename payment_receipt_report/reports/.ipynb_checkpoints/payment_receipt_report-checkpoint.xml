@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payment_receipt_document">
+        <t t-call="payment_receipt_report.payment_receipt_layout">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+                  <h3><strong>Payment Receipt: <span t-field="o.name"/></strong></h3>
+                  <div class="row mt64">
+                       <div class="col-6" t-if="o.payment_date">
+                           <strong>Payment Date: </strong> <span t-field="o.payment_date"/>
+                        </div>
+                  </div>
+              <div id="information" class="row mt32 mb32" style="margin-bottom:10px;">
+                     <!-- Vendor or Customer-->
+                  <div class="col-3 bm-2" t-if="o.partner_type">
+                        <t t-if="o.partner_type == 'customer'">
+                            <strong>Customer: </strong>
+                        </t>
+                        <t t-if="o.partner_type == 'supplier'">
+                            <strong>Vendor: </strong>
+                        </t><span t-field="o.partner_id"/>
+                    </div>
+              
+            <!--Vendor Reference :  -->    
+                       <div class="col-3 bm-2" > 
+                           <t t-if="o.partner_id.ref">
+                                <strong> Vendor Reference : <span t-field="o.partner_id.ref"/></strong>
+                             </t>  
+                        </div> 
+                    <!-- Source: -->     
+                       <div class="col-3 bm-2" t-if="o.communication">
+                            <strong class="text-nowrap">Source: </strong><span class="text-nowrap" t-field="o.communication"/>
+                       </div>   
+              </div>
+               <!-- Payment Amount:  -->    
+                 <div class="row mt64" style="margin-top:3px;">
+                      <div class="col-6" t-if="o.amount">
+                          <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>  
+                       </div>
+                 </div>   
+                <!-- Amount -->
+                <div class="row mt64" style="margin-top:3px;">
+                    <div class="col-6" t-if="o.amount_in_words">
+                        <strong>Amount: </strong><span t-field="o.amount"/>
+                    </div>
+                 </div>
+                <!-- Amount in words-->
+                 <div class="row mt64" style="margin-top:3px;">
+                    <div class="col-6" t-if="o.amount_in_words" >
+                        <strong>Amount in Word: </strong><span t-field="o.amount_in_words"/>
+                    </div>
+                 </div>
+                <!-- Payment Method-->
+                <div class="row mt64" style="margin-top:3px;">
+                   <div class="col-6" t-if="o.payment_method_id">
+                        <strong>Payment Method: </strong><span t-field="o.payment_method_id.name"/>
+                    </div> 
+                </div>
+           <!-- if pament type is send money and payment method is issue check --> 
+            <div class="row mt32 mb32" style="margin-top:3px;">    
+               <t t-if="o.payment_method_id.name=='Issue Check'" >
+                   
+                 <div class="col-3 bm-2" >
+                       <t t-if="o.checkbook_id.issue_check_subtype=='deferred'"> 
+                        <p><strong>Issue Check Subtype: </strong><span> Deferred Check </span></p>
+                        </t>
+                        <t t-elif="o.checkbook_id.issue_check_subtype=='currents'"> 
+                        <p><strong>Issue Check Subtype: </strong><span> Currents Check </span></p>
+                         </t>   
+                    </div>
+                   
+                   <div class="col-3 bm-2"   t-if="o.check_id.issue_date">
+                        <p><strong>Check Issue Date : </strong><span t-field="o.check_id.issue_date"/></p>
+                    </div>
+                   <div class="col-3 bm-2" t-if="o.check_id.payment_date" >
+                        <strong>Check  Payment  Date : </strong><span t-field="o.check_id.payment_date"/>
+                    </div>
+                   
+                </t>   
+        
+           </div> 
+         
+                
+      <!-- if payment method is received third check -->
+                <div class="row mt32 mb32" style="margin-top:3px;">
+                    <t t-if="o.payment_method_id.name=='Received Third Check'">
+                        <!-- check number-->
+                        <div class="col-3 bm-2">
+                            <strong>Check Number : </strong><span t-field="o.check_id.number"/>
+                         </div>
+                        <!-- Check Date -->
+                        <div class="col-3 bm-2"   t-if="o.check_id.issue_date">
+                            <p><strong>Check Issue Date : </strong><span t-field="o.check_id.issue_date"/></p>
+                         </div>
+                        <div class="col-3 bm-2" t-if="o.check_id.payment_date" >
+                           <strong>Check  Payment  Date : </strong><span t-field="o.check_id.payment_date"/>
+                        </div>
+                        <div class="col-3 bm-2" t-if="o.check_id.owner_name" >
+                           <strong>Check Owner Name : </strong><span t-field="o.check_id.owner_name"/>
+                        </div>
+                           <div class="col-3 bm-2" t-if="o.check_id.owner_vat" >
+                           <strong>Check Owner Vat : </strong><span t-field="o.check_id.owner_vat"/>
+                        </div>
+                    </t>    
+                </div>    
+        
+                
+         <!-- Remarks -->       
+        <h3 style="margin-top:10px;"><strong>Remarks</strong></h3>  
+         <textarea cols="150" rows="10" style="border:solid 2px black;">
+         </textarea> 
+                
+       <!-- if check and invoice line-->         
+        <h2 style="font-weight:bold;margin-top:30px;">Jounral Entity Datails</h2>
+         <t t-if="o.move_line_ids">
+            <div class="row">   
+             <table class="table" style="width:100%;border-collapse: collapse;">
+                            <thead style="border: 2px solid black;">
+                                <tr style="border-bottom: 2px solid black;">
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Jounral Entity </td>
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Account</td>
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Debit</td>
+                                    <td style="border-right: 2px solid black;text-align:center;font-weight:bold">Credit</td>
+                                </tr>
+                            </thead>
+                            <tbody style="border: 2px solid black;">
+                                <t t-set="total_debit" t-value="0.0"/>
+                                <t t-set="total_credit" t-value="0.0"/>
+                                <t t-foreach="o.move_line_ids" t-as="move_line">
+                                    <tr style="border-bottom: 2px solid black;">
+                                        <!--Jounral Entity -->
+                                 <td style="border-right: 2px solid black;text-align:center;"> 
+                                    <span t-esc="move_line.move_id.name"/> <span t-esc="move_line.move_id.ref"/>
+                                        </td>
+                                      <!-- Account -->  
+                                    <td style="border-right: 2px solid black;text-align:center;">
+                                       <span t-esc="move_line.account_id.code"/> <span t-esc="move_line.account_id.name"/>
+                                        </td>
+                                    <!-- Debit -->    
+                                    <td style="border-right: 2px solid black;text-align:center;">
+                                       <span t-esc="move_line.debit"/>
+                                    </td>
+                               
+                                <!-- Credit -->    
+                                    <td style="border-right: 2px solid black;text-align:center;">
+                                       <span t-esc="move_line.credit"/>
+                                    </td>
+                                        <t t-set="total_debit" t-value="total_debit+move_line.credit"/>
+                                         <t t-set="total_credit" t-value="total_credit+move_line.credit"/>
+                                    </tr>      
+                              </t>
+                                 <tr>
+                                  <td colspan="2" style="border-right: 2px solid black;">Total</td>
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_debit"/></td>  
+                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="total_credit"/></td>  
+                                </tr>    
+                                    
+                            </tbody>
+                        </table>
+                </div>
+            </t> 
+       <!-- Signature--> 
+      <div style="margin-top:300px;">
+                    <div class="col-3" style="text-align:right;">
+                        <span><strong>Signature</strong></span>
+                    </div>
+             </div>    
+     </div>
+            
+        </t>
+
+    </template>
+
+    <template id="payment_receipt_layout">
+       
+       <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div t-attf-class="header o_company_#{company.id}_layout">
+            <div class="o_boxed_header">
+                <div class="row mb8">
+                    <div class="col-6">
+                        <!-- Company Logo -->
+                       <div class="row" style="margin-top:30px;">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
+                        </div>
+                        <!-- Company Address -->
+                        <div class="row" style="margin-top:30px;">
+                            <h4 class="mt0" t-field="o.company_id.report_header"/>
+                            <div name="company_address" class="mb4" style="color:grey">
+                                <span class="company_address" t-field="o.company_id.partner_id"
+                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        
+        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+            <div class="text-center">
+                
+             
+                 
+            <div style="border-top:1px solid black;border-bottom:1px solid black;">
+            <!-- Footer Info -->
+            <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
+                <!-- Phone -->
+                <div t-if="o.company_id.phone" class="col-3 bm-2">
+                     <strong style='font-size:20px;'>Phone</strong>
+                    <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
+                </div>
+                <!-- Email -->
+                <div t-if="o.company_id.email" class="col-3 bm-2">
+                     <strong style='font-size:20px;'>Email</strong>
+                    <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
+                </div>
+                <!-- Website -->
+                <div t-if="o.company_id.website" class="col-3 bm-2">
+                     <strong style='font-size:20px;'>Website</strong>
+                    <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
+                </div>
+                <!-- Sales TRN -->
+                <div t-if="o.company_id.vat" class="col-3 bm-2">
+                     <strong style='font-size:20px;'>Sales TRN</strong>
+                    <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
+                </div>
+            </div>
+            </div>
+            
+                <!-- Footer Note -->
+                <div style="margin-top:10px;">
+                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                <h2 class="text-center">Thank You for Your Business</h2>
+                </div>
+                
+            </div>
+        </div>
+       
+    </template>
+    
+    
+    <template id="report_payment_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+                <t t-call="payment_receipt_report.report_payment_receipt_document" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>
