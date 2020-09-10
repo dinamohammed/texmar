@@ -9,30 +9,6 @@ from datetime import datetime,timedelta,timezone
 from . import controllers
 
 class get(controllers.Restapi):
-     @http.route('/scan_product',type='json',auth='none',cors='*')
-     def scan_product(self,code,DevToken,UserToken,base_location=None):
-        try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                product = request.env['product.product'].search([('barcode','=',code)],limit=1)
-                info = {
-                    'name':product.name,
-                    'code':product.barcode,
-                    'price':product.list_price,
-                    'description':product.description if product.description else '' ,
-                    'stock_availability':product.virtual_available,
-                    'product_id':product.id
-                }
-                return info if product else 'no product found'
-        except AccessError:
-            return {'error':'You are not allowed to do this'}
-        
-     
      @http.route('/stores_locations',type='json',auth='none',cors='*')
      def stores_locations(self,DevToken,UserToken,base_location=None):
         result = []
@@ -56,115 +32,96 @@ class get(controllers.Restapi):
                 return result
         except AccessError:
             return 'You are not allowed to do this'
-        
-     
-     @http.route('/list_customers',type='json',auth='none',cors='*')
-     def list_customers(self,DevToken,UserToken,base_location=None):
-        result = []
-        try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                params = self.get_params(request.httprequest.url)
-                limit = params.get('limit',5)
-                offset = params.get('offset',0)
-                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset)
-                for customer in customers:
-                    vals = {
-                        'customer_name':customer.name,
-                        'mobile':customer.mobile,
-                        'email':customer.email,
-                        'customer_id':customer.id,
-                        'history' : {}
-                    }
-                    result.append(vals)
-                return result if len(result) > 0 else 'no customers found'
-        except AccessError:
-            return {'error':'You are not allowed to do this'}  
-        
     
-     @http.route('/popular_products',type='json',auth='none',cors='*')
-     def popular_products(self,DevToken,UserToken,base_location=None):
-        result = []
-        try:
+    
+    
+     @http.route('/notes',type='json',auth='none',cors='*')
+     def notes(self,DevToken,UserToken,base_location=None):
+         try:
             if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                params = self.get_params(request.httprequest.url)
-                limit = params.get('limit',5)
-                offset = params.get('offset',0)
-                
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 
-                products = request.env['product.product'].search([('company_id','=',False)],limit=limit,offset=offset)
+                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False),                                                                             ('user_id.login','=',user_info['login'])]) 
                 
-                for product in products:
-                    image = product.image_1920
-                    availability = 'In Stock' if product.virtual_available > 0 else 'Out Of Stock'
-                    result.append(self.product_info(product))
-                    
-                return result if len(result) > 0 else 'no products found'  
-        except AccessError:
-            return {'error':'You are not allowed to do this'}
-        except AccessDenied:
-            return {'error':'You are not allowed to do this'}
-            
+                notes = request.env['sale.order'].search([('state','!=','note_order'),('user_id.login','=',user_info['login'])])
+                
+                requests = request.env['sale.order.line'].search([('to_request','=',True),                                                                      ('order_id.user_id.login','=',user_info['login'])])
+                
+                result = {'draft_draft':[],'notes':[],'requests':[]}
+                
+                for req in requests:
+                    sale = request.env['sale.order'].search([('id','=',req.order_id.id)])
+                    result['requests'].append({
+                        'date':sale.date_order,
+                        'order_id':req.id,
+                        'customer_name':sale.partner_id.name,
+                        'state':sale.state,
+                        'amount':req.price_subtotal
+                    })
+                
+                for note in notes:
+                    result['notes'].append({
+                        'date':note.date_order,
+                        'order_id':note.id,
+                        'customer_name':note.partner_id.name,
+                        'state':note.state,
+                        'amount':note.amount_total
+                    })
+                
+                for draft in drafts:
+                    result['draft_draft'].append({
+                        'date':draft.date_order,
+                        'order_id':draft.id,
+                        'customer_name':draft.partner_id.name,
+                        'state':draft.state,
+                        'amount':draft.amount_total
+                    })                    
+                return result
+         
+         except AccessError:
+            return 'You are not allowed to do this'
+        
      
-     @http.route('/new_products',type='json',auth='none',cors='*')
-     def new_product(self,DevToken,UserToken,base_location=None):
-        result = []
+     @http.route('/order_details',type='json',auth='none',cors='*')
+     def order_details(self,order_id,DevToken,UserToken,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
-                params = self.get_params(request.httprequest.url)
-                limit = params.get('limit',5)
-                offset = params.get('offset',0)
-                
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                
-                exp_time = datetime.utcnow() - timedelta(days=30)
-                products = request.env['product.product'].search([('company_id','=',False),('create_date','>',exp_time)],limit=limit,offset=offset)
-                
-                for product in products:
-                    result.append(self.product_info(product))
-                    
-                return result if len(result) > 0 else 'no products found'
-            
+                sale = request.env['sale.order'].search([('id','=',int(order_id))])
+                customer = sale.partner_id
+                products = []
+                for line in sale.order_line:
+                    product = line.product_id
+                    products.append({
+                        'order_line_id':line.id,
+                        'product_id':product.id,
+                        'product_name':product.name,
+                        'product_price':line.price_unit,
+                        'product_code':product.barcode,
+                        'product_qty':line.product_uom_qty,
+                    })
+                return {
+                    'customer_name':customer.name,
+                    'mobile':customer.mobile or customer.phone,
+                    'email':customer.email or '',
+                    'customer_id':customer.id,
+                    'order_id':sale.id,
+                    'draft_name':sale.name,
+                    'amount':sale.amount_total,
+                    'products':products
+                }
+        
         except AccessError:
-            return {'error':'You are not allowed to do this'}
+            return 'You are not allowed to do this'        
      
-     @http.route('/search_products',type='json',auth='none',cors='*')
-     def search_products(self,DevToken,UserToken,keyword,base_location=None):
-        try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                products = request.env['product.product'].search([('company_id','=',False)])
-                result = []
-                for product in products:
-                    search = str(keyword).lower()
-                    code = '' if not product.default_code else product.default_code.lower()
-                    
-                    if re.search(search,product.name.lower()) != None or                                                                                                      re.search(search,code) != None:
-                        result.append(self.product_info(product))
-                        
-                return result if len(result) > 0 else 'no product found'
-                    
-                
-        except AccessError:
-            return {'error':'You are not allowed to do this'}
+

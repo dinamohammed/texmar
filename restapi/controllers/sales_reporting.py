@@ -18,11 +18,12 @@ class reporting(controllers.Restapi):
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 allowed_companies = self.prepare_allowed_companies(user_info['login'])
-                sales = request.env['sale.order'].search([('company_id','in',allowed_companies)])
-                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False)]) 
+                sales = request.env['sale.order'].search([('company_id','in',allowed_companies),                                                                                       ('user_id.login','=',user_info['login']),('state','!=','note_order'),                                                               ('due_amount','=',0)])
+                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False),                                   ('user_id.login','=',user_info['login'])]) 
                 drafts_arr = []
                 for draft in drafts:
                     drafts_arr.append({
+                        'order_id':draft.id,
                         'date':draft.date_order,
                         'customer_name':draft.partner_id.name,
                         'state':draft.state,
@@ -53,7 +54,40 @@ class reporting(controllers.Restapi):
             return {'error':'You are not allowed to do this'}
         
     
-    
+     def get_salesman_target_history(self,login,sales_sum,sales):
+        sales_teams = request.env['crm.team'].search([])
+        #geting target
+        sales_team_target = 0
+        for sales_team in sales_teams:
+            logins = [member.login for member in sales_team.member_ids]
+            if login in logins:
+                sales_team_target += sales_team.invoiced_target
+                
+        target = {
+            'date':fields.date.today(),
+            'sales_amount':sales_sum,
+            'sales_percentage':float("{0:.2f}".format((sales_sum/sales_team_target)*100)),
+            'target_amount':sales_team_target
+        }
+        
+        #getting history
+        history = []
+        for sale in sales:
+            history.append({
+                'date':sale.date_order,
+                'sales_amount':sale.amount_total
+            })
+            
+        
+        return {'target':target,'history':history}
+
+        
+        
+        
+            
+        
+     
+        
      @http.route('/sales_dashboard',type='json',auth='none',cors='*')
      def sales_dashboard(self,DevToken,UserToken,base_location=None):
         result = []
@@ -66,7 +100,7 @@ class reporting(controllers.Restapi):
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 allowed_companies = self.prepare_allowed_companies(user_info['login'])
-                sales = request.env['sale.order'].search([('company_id','in',allowed_companies)])
+                sales = request.env['sale.order'].search([('company_id','in',allowed_companies),('due_amount','=',0),                                       ('user_id.login','=',user_info['login']),('state','!=','note_order')])
 
                 #dates
                 day = fields.date.today().day 
@@ -89,100 +123,13 @@ class reporting(controllers.Restapi):
                 daily_perc = self.get_percentage(sales_yesterday_sum,sales_today_sum) if sales_today_sum > 1 else -100
                 monthly_perc = self.get_percentage(sales_last_month_sum,sales_this_month_sum) if sales_this_month_sum > 1 else -100
 
+                salesman = self.get_salesman_target_history(user_info['login'],sales_this_month_sum,sales_this_month)
                 return {'sales' : [
                             {'period' : 'daily' , 'amount': sales_today_sum , 'percentage' : float("{0:.1f}".format(daily_perc))},
                             {'period' : 'monthly' , 'amount': sales_this_month_sum , 'percentage' :float("{0:.1f}".format(monthly_perc))},
                             ],
-                                    'target' : { 'date' : '', 'sales_amount': '','sales_percentage' : '','target_amount': '' } ,
-                                    'history' :
-                                    [ {'date': '' , 'sales_amount' : '' }] ,
+                                    'target' :salesman['target'],
+                                    'history' :salesman['history'],
                         }
         except AccessError:
             return 'You are not allowed to do this'
-        
-        
-     
-     @http.route('/confirm_order',type='json',auth='none',cors='*')
-     def confirm_order(self,DevToken,UserToken,order_id,base_location=None):
-         try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                sale = request.env['sale.order'].search([('id','=',order_id)])
-                company_id = sale.company_id.id
-                company = request.env['res.company'].search([('id','=',company_id)])
-                sale.env.company = company
-                sale.action_confirm_note_order()
-                return 'order confirmed' if sale else 'sale order not found'
-         
-         except AccessError:
-            return 'You are not allowed to do this'    
-     
-    
-     @http.route('/delete_order',type='json',auth='none',cors='*')
-     def delete_order(self,DevToken,UserToken,order_id,base_location=None):
-         try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                sale = request.env['sale.order'].search([('id','=',order_id)])
-                sale.write({'state':'cancel'})
-                sale.unlink()
-                return 'order deleted' if sale else 'sale order not found'
-         
-         except AccessError:
-            return 'You are not allowed to do this'
-     
-     
-     @http.route('/notes',type='json',auth='none',cors='*')
-     def notes(self,DevToken,UserToken,base_location=None):
-         try:
-            if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
-            elif not self.authrize_user(UserToken):
-                return {'error':'invalid user token'}
-            else:
-                user_info = self.authrize_user(UserToken)
-                request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                drafts = request.env['sale.order'].search([('state','=','note_order'),('is_confirmed','=',False)]) 
-                notes = request.env['sale.order'].search([('state','!=','note_order')])
-                requests = request.env['sale.order.line'].search([('to_request','=',True)])
-                result = {'draft_draft':[],'notes':[],'requests':[]}
-                
-                for req in requests:
-                    sale = request.env['sale.order'].search([('id','=',req.order_id.id)])
-                    result['requests'].append({
-                        'date':sale.date_order,
-                        'customer_name':sale.partner_id.name,
-                        'state':sale.state,
-                        'amount':req.price_subtotal
-                    })
-                
-                for note in notes:
-                    result['notes'].append({
-                        'date':note.date_order,
-                        'customer_name':note.partner_id.name,
-                        'state':note.state,
-                        'amount':note.amount_total
-                    })
-                
-                for draft in drafts:
-                    result['draft_draft'].append({
-                        'date':draft.date_order,
-                        'customer_name':draft.partner_id.name,
-                        'state':draft.state,
-                        'amount':draft.amount_total
-                    })                    
-                return result
-         
-         except AccessError:
-            return 'You are not allowed to do this'        
-        

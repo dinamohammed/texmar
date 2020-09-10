@@ -16,11 +16,13 @@ class customers(controllers.Restapi):
           drafts_arr = []
           for draft in drafts:
                drafts_arr.append({
+               'order_id':draft.id,
                'draft_name':draft.name,
                'amount':draft.amount_total
                })
           for note in notes:
                notes_arr.append({
+               'order_id':note.id,
                'note_name':note.name,
                'amount':note.amount_total
                })
