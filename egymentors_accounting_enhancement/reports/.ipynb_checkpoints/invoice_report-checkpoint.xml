@@ -64,6 +64,7 @@
                                 <t t-set="Total_after_taxes" t-value="0.0"/>
                                 <t t-set="taxes_product" t-value="0.0"/>
                                 <t t-set="total_amount_dicount" t-value="0.0"/>
+                                <t t-set="amount_discount_product" t-value="0.0"/>
                                 <t t-foreach="o.invoice_line_ids" t-as="line">
                                     <tr>
                                         <td style="text-align:center;"><span t-esc="line.product_id.default_code"/></td>
@@ -74,19 +75,19 @@
                                         <td style="text-align:center;"><span t-esc="line.price_unit"/></td>
                                         <!-- discount for one product -->
                                         <td style="text-align:center;">
-                                            <t t-set="o.discount_rate" t-value="round(o.discount_rate,2)"/>
-                                            <span t-esc="o.discount_rate">(%%)   
+<!--                                             <t t-set="o.discount_rate" t-value="round(o.discount_rate,2)"/> -->
+                                            <span t-esc="line.discount">(%%)   
                                             </span>
                                         </td>
                                          <td style="text-align:center;">
-                                            <t t-set="amount_discount" t-value="(o.discount_rate/100)*line.price_unit*line.quantity"/>
-                                             <t t-set="amount_discount" t-value="round(amount_discount,2)"/> 
+                                            <t t-set="amount_discount_product" t-value="(line.discount/100)*line.price_subtotal"/>
+                                             <t t-set="amount_discount_product" t-value="round(amount_discount_product,2)"/> 
                                             <span t-esc="amount_discount">   
                                             </span>
                                         </td>
                                         <!-- price for product after discount -->
                                         <td style="text-align:center;">
-                                        <t t-set="final_price_oneproduct" t-value="line.price_unit-(o.discount_rate/100)*line.price_unit"/>
+                                        <t t-set="final_price_oneproduct" t-value="line.price_unit-(line.discount/100)*line.price_unit"/>
                                         <t t-set="final_price_oneproduct" t-value="round(final_price_oneproduct,2)"/> 
                                             <span t-esc="final_price_oneproduct"/></td>
                                         <!-- price total product after discount-->
