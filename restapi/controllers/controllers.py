@@ -50,7 +50,6 @@ class Restapi(http.Controller):
         return ((sale - perv_sale) / perv_sale) * 100 if perv_sale != 0 else 100
     
     def product_info(self,product):
-        image = product.image_1920
         availability = 'In Stock' if product.virtual_available > 0 else 'Out Of Stock'
         return {
             'product_id':product.id,
@@ -58,7 +57,7 @@ class Restapi(http.Controller):
             'product_code':product.default_code,
             'price':product.list_price,
             'availability':availability,
-            'image':base64.b64decode(image) if image else '',
+            'image':product.image_1920,
             }
     
     

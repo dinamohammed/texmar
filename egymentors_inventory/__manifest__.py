@@ -36,6 +36,7 @@
         'reports/return_delivery_report.xml',
         
         'views/quantity_in_words.xml',
+
     ],
     'installable': True,
     'application': True,

@@ -17,10 +17,11 @@ class reporting(controllers.Restapi):
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
                 sale = request.env['sale.order'].search([('id','=',order_id)])
-                company_id = sale.company_id.id
-                company = request.env['res.company'].search([('id','=',company_id)])
-                sale.env.company = company
-                sale.action_confirm_note_order()
+                if sale: 
+                    company_id = sale.company_id.id
+                    company = request.env['res.company'].search([('id','=',company_id)])
+                    sale.env.company = company
+                    sale.action_confirm_note_order()
                 return 'order confirmed' if sale else 'sale order not found'
          
          except AccessError:
@@ -59,7 +60,7 @@ class reporting(controllers.Restapi):
                 #get companies
                 company_id = self.prepare_allowed_companies(user_info['login'])[0]
                 company = request.env['res.company'].search([('id','=',company_id)])
-                old_sale = request.env['sale.order'].search([('partner_id.id','=',customer_id),('state','=','note_order'),('is_confirmed','=',False)])
+                old_sale = request.env['sale.order'].search([('partner_id.id','=',customer_id),('state','=','note_order'),                           ('is_confirmed','=',False)])
                 # sale order preprations
                 sale_order = request.env['sale.order']
                 sale_order.env.company = company
@@ -72,7 +73,8 @@ class reporting(controllers.Restapi):
                     sol = {
                         'product_id':product.id,
                         'product_uom_qty':qty,
-                        'order_id':old_sale.id
+                        'order_id':old_sale.id,
+                        'to_sell':True
                     }
                     old_sale['order_line'].create(sol)
                 else:
@@ -85,13 +87,33 @@ class reporting(controllers.Restapi):
                     sol = {
                         'product_id':product.id,
                         'product_uom_qty':qty,
-                        'order_id':new_sale.id
+                        'order_id':new_sale.id,
+                        'to_sell':True
                     }
                     new_sale['order_line'].create(sol)
  
                 return 'added successfully'
      
          except AccessError:
-            return 'You are not allowed to do this'     
+            return 'You are not allowed to do this'
         
         
+        
+     @http.route('/delete_product',type='json',auth='none',cors='*')
+     def delete_product(self,DevToken,UserToken,order_line_ids,base_location=None):
+        try:            
+            if self.authrize_developer(DevToken) == False:
+                return {'error':'developer token expired'}
+            elif not self.authrize_user(UserToken):
+                return {'error':'invalid user token'}
+            else:
+                user_info = self.authrize_user(UserToken)
+                request.session.authenticate(self.db,user_info['login'],user_info['password'])
+                for id in order_line_ids:
+                    line = request.env['sale.order.line'].search([('id','=',id)])
+                    line.unlink()
+                return 'deleted succesfully'
+                
+         
+        except AccessError:
+            return 'You are not allowed to do this'            
