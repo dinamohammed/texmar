@@ -67,7 +67,7 @@
                                 <td style="font-size:20px;text-align:center;">FX No. <br/> رقم فاكس </td>
                                 <td style="font-size:20px;text-align:center;">Deliver To <br/> مخزن رقم </td>
                                 <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
-                                <td style="font-size:20px;text-align:center;">Qty <br/> الكمية </td>
+                                <td style="font-size:20px;text-align:center;">Quantity <br/> الكمية </td>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,7 +181,7 @@
                     <!-- User Receiving -->
                     <div class="col-3 bm-2">
                         <strong style='font-size:20px;'>Responsible:</strong>
-                        <p style='font-size:20px;' t-field="o.sale_id and o.sale_id.user_id and o.sale_id.user_id.name" class="m-0"/>
+                        <p style='font-size:20px;'  t-field="o.purchase_id and o.purchase_id.user_id and o.purchase_id.user_id.name" class="m-0"/>
                     </div>
                     <!-- Customer Receipt -->
                     <div class="col-3 bm-2">
@@ -200,7 +200,7 @@
                                 <td style="font-size:20px;text-align:center;">FX No. <br/> رقم فاكس </td>
                                 <td style="font-size:20px;text-align:center;">Deliver To <br/> مخزن رقم </td>
                                 <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
-                                <td style="font-size:20px;text-align:center;">Qty <br/> الكمية </td>
+                                <td style="font-size:20px;text-align:center;">Quantity <br/> الكمية </td>
                             </tr>
                         </thead>
                         <tbody>
