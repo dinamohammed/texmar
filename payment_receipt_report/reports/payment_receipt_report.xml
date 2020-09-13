@@ -24,8 +24,13 @@
             <!--Vendor Reference :  -->    
                        <div class="col-3 bm-2" > 
                            <t t-if="o.partner_id.ref">
-                                <strong> Vendor Reference : <span t-field="o.partner_id.ref"/></strong>
-                             </t>  
+                               <t t-if="o.partner_type == 'customer'">
+                                   <strong> Customer Reference : <span t-field="o.partner_id.ref"/></strong>
+                               </t>
+                        <t t-if="o.partner_type == 'supplier'">
+                            <strong> Vendor Reference : <span t-field="o.partner_id.ref"/></strong>
+                               </t>
+                           </t>  
                         </div> 
                     <!-- Source: -->     
                        <div class="col-3 bm-2" t-if="o.communication">
@@ -88,6 +93,9 @@
                         <div class="col-3 bm-2">
                             <strong>Check Number : </strong><span t-field="o.check_id.number"/>
                          </div>
+                        <div class="col-3 bm-2" t-if="o.check_number">
+                            <strong>Check Number : </strong><span t-field="o.check_number"/>
+                         </div>
                         <!-- Check Date -->
                         <div class="col-3 bm-2"   t-if="o.check_id.issue_date">
                             <p><strong>Check Issue Date : </strong><span t-field="o.check_id.issue_date"/></p>
@@ -101,6 +109,9 @@
                            <div class="col-3 bm-2" t-if="o.check_id.owner_vat" >
                            <strong>Check Owner Vat : </strong><span t-field="o.check_id.owner_vat"/>
                         </div>
+                        <div class="col-3 bm-2" t-if="o.check_bank_id.name">
+                            <strong>Check Number : </strong><span t-field="o.check_bank_id.name"/>
+                         </div>
                     </t>    
                 </div>    
         
