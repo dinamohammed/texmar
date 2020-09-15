@@ -63,7 +63,7 @@
                 </div>
            <!-- if pament type is send money and payment method is issue check --> 
             <div class="row mt32 mb32" style="margin-top:3px; font-size:20px;">    
-               <t t-if="o.payment_method_id.name=='Issue Check'" >
+               <t t-if="o.payment_method_id.name=='Check22'" >
                    
                  <div class="col-3 bm-2" >
                        <t t-if="o.checkbook_id.issue_check_subtype=='deferred'"> 
