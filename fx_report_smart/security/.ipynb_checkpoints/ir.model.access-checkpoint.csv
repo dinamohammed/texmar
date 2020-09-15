@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fx_report_smart_fx_report_smart,fx_report_smart.fx_report_smart,model_fx_report_smart_fx_report_smart,base.group_user,1,1,1,1
