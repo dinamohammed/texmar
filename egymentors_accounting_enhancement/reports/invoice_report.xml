@@ -2,9 +2,17 @@
 <odoo>
 
     <template id="report_invoice_document_with_payments_new">
+        <t t-call="web.html_container">
         <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
         <t t-if="o.type == 'in_invoice'" t-call="egymentors_accounting_enhancement.vendor_bill_layout">
-                 <div class="row" style="margin-top:40px;">
+                <!-- VENDOR BILL -->
+              <!-- Header -->  
+              <div class="page">
+                    <div class="oe_structure"/>
+                     <h1>Vendor Bill <span t-field="o.name"/></h1>
+                  
+                  
+                <div class="row" style="margin-top:40px;">
                 <!-- Vendor Details -->
                 <div class="col-6">
                     <strong style='font-size:20px;'>Vendor:</strong>
@@ -16,10 +24,6 @@
                 </div>
                
             </div>
-              <!-- Header -->  
-              <div class="page">
-                    <div class="oe_structure"/>
-                     <h1>Vendor Bill <span t-field="o.name"/></h1>
            
         <!--      Info Div                      -->
               <div id="information" class="row mt32 mb32" style="margin-top:40px;">
@@ -82,7 +86,7 @@
                                          <td style="text-align:center;">
                                             <t t-set="amount_discount_product" t-value="(line.discount/100)*line.price_subtotal"/>
                                              <t t-set="amount_discount_product" t-value="round(amount_discount_product,2)"/> 
-                                            <span t-esc="amount_discount">   
+                                            <span t-esc="amount_discount_product">   
                                             </span>
                                         </td>
                                         <!-- price for product after discount -->
@@ -125,7 +129,7 @@
 
                                         <t t-set="total_qty" t-value="total_qty + line.quantity"/>
                                         <t t-set="Total_product" t-value="Total_product+total_price_product"/>
-                                        <t t-set="total_amount_dicount" t-value="total_amount_dicount+amount_discount"/>
+                                        <t t-set="total_amount_dicount" t-value="total_amount_dicount+amount_discount_product"/>
                                        <t t-set="taxe_total" t-value="taxe_total+taxes_product"/> 
                                        <t t-set="Total_after_taxes" t-value="Total_after_taxes+amount_taxes"/> 
                                     </tr>
@@ -161,7 +165,7 @@
                         </table>
                     </div> 
                   <br/>
-    <!-- Taxes Table -->
+                    <!-- Taxes Table -->
                     <h2 style="font-weight:bold">Taxes Details</h2>
                     <div class="row">
                         <table class="table" style="width:100%;border-collapse: collapse;">
@@ -261,108 +265,200 @@
                   
                 </div>
             </t>
+        
+        
+        
         <t t-elif="o.type == 'out_invoice'" t-call="egymentors_accounting_enhancement.customer_invoice_layout">
-                <div class="page" style="font-size:24px;">
+            <!-- CUSTOMER INVOICE -->                
+                    <!-- Invoice Name -->  
+                  <div class="page" style="font-size:24px;">
                     <div class="oe_structure"/>
-                    <div class="row">
-                        <div class="col-4">
-                            <p><strong>Customer Name: </strong><span t-field="o.partner_id.name"/></p>
-                            <p><strong>Source: </strong><span t-field="o.invoice_origin"/></p>
-                            <p><strong>Date: </strong><span t-field="o.invoice_date"/></p>
-                            <p><strong>Due Date: </strong><span t-field="o.invoice_date_due"/></p>
+                      
+                      <!-- Title -->
+                      <h1>Invoice <span t-field="o.name"/></h1>
+                
+                
+                    <div class="row" style="margin-top:40px;">
+                        <!-- Customer Details -->
+                        <div class="col-6">
+                            <strong style='font-size:20px;'>Customer:</strong>
+                            <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
+                            <strong style='font-size:20px;'>Customer Order: </strong><span style='font-size:20px;' t-field="o.customer_order_invoice"/>
+                            <br/>
+                            <p style='font-size:20px;' t-field="o.partner_id.street"/>
+                            <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
+                            <p style='font-size:20px;' t-field="o.partner_id.phone"/>
+                            <p style='font-size:20px;' t-field="o.partner_id.vat"/>
                         </div>
-                        <div class="col-4"><h4 t-field='o.name'/></div>
-                        <div class="col-4">
-                        
+                        <!-- Shipping Details -->
+                        <div class="col-6">
+                            <strong style='font-size:20px;'>Shipping Address:</strong>
+                            <p style='font-size:20px; font-weight:bold' t-field="o.partner_shipping_id.display_name"/>
+                            <p style='font-size:20px;' t-field="o.partner_shipping_id.street"/>
+                            <p style='font-size:20px;' t-field="o.partner_shipping_id.city"/>
+                            <p style='font-size:20px;' t-field="o.partner_shipping_id.name"/>
+                            <p style='font-size:20px;' t-field="o.partner_shipping_id.phone"/>
                         </div>
                     </div>
-
-
-
-                    <h2>Comments</h2>
-                    <div class="row" style="font-size:22px;">
-                        <table class="table" style="width:100%;border:2px solid black;border-collapse: collapse;">
-                            <thead style="border: 2px solid black;">
-                                <tr style="border-bottom: 2px solid black;">
-                                    <td style="border-right: 2px solid black;text-align:center;"> Customer Code </td>
-                                    <td style="border-right: 2px solid black;text-align:center;"> Po Number</td>
-                                    <td style="border-right: 2px solid black;text-align:center;"> Payment Terms </td>
-                                    <td style="border-right: 2px solid black;text-align:center;"> Sales Person </td>
-                                    <td style="border-right: 2px solid black;text-align:center;"> Currency </td>
-                                </tr>
-                            </thead>
-                            <tbody style="border: 2px solid black;">
-                                <tr style="border-bottom: 2px solid black;">
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="o.partner_id and o.partner_id.ref or ''"/></td>
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-esc="o.customer_order_invoice"/></td>
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="o.invoice_payment_term_id"/></td>
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="o.invoice_user_id"/></td>
-                                    <td style="border-right: 2px solid black;text-align:center;"><span t-field="o.currency_id"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
+            
+                  
+                  
+              <!-- Info Div -->
+              <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                <!-- Invocie Date -->
+                <div class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Invoice Date:</strong>
+                    <p style='font-size:20px;' t-field="o.invoice_date" t-options='{"widget":"date"}' class="m-0"/>
+                </div>
+                <!-- Due Date -->
+                <div class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Due Date:</strong>
+                    <p style='font-size:20px;' t-field="o.invoice_date_due" class="m-0"/>
+                </div>
+                <!-- Customer Code -->
+                <div class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Customer Code:</strong>
+                    <p style='font-size:20px;' t-field="o.partner_id.ref" class="m-0"/>
+                </div>
+                <!-- Salesperson -->
+                <div class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Salesperson:</strong>
+                    <p style='font-size:20px;' t-field="o.user_id" class="m-0"/>
+                </div>
+                <!-- Currency -->
+                <div class="col-3 bm-2">
+                    <strong style='font-size:20px;'>Currency:</strong>
+                    <p style='font-size:20px;' t-field="o.currency_id.name" class="m-0"/>
+                </div>
+            </div>    
+                
+                
+                
+                    <!-- Table -->
                     <div class="row">
-                        <table class="table" style="width:100%;border-collapse: collapse;">
-                            <thead style="border: 2px solid black;">
-                                <tr style="border-bottom: 2px solid black;">
-                                    <td style="border-right: 2px solid black;text-align:center;">Code </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Item Description </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Width </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Qty </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Price </td>
-                                    <td style="border-right: 2px solid black;text-align:center;">Amount </td>
+                        <table class="table" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <!-- Code -->
+                                    <td style="font-size:20px;text-align:center;">Code</td>
+                                    <!-- Description -->
+                                    <td style="font-size:20px;text-align:center;">Description</td>
+                                    <!-- Width -->
+                                    <td style="font-size:20px;text-align:center;">Width</td>
+                                    <!-- UoM -->
+                                    <td style="font-size:20px;text-align:center;">UoM</td>
+                                    <!-- Quantity -->
+                                    <td style="font-size:20px;text-align:center;">Quantity</td>
+                                    <!-- Price -->
+                                    <td style="font-size:20px;text-align:center;">Price</td>
+                                    <!-- Discount -->
+                                    <td style="font-size:20px;text-align:center;">Discount</td>
+                                    <!-- Subtotal -->
+                                    <td style="font-size:20px;text-align:center;">Subtotal</td>
+                                    <!-- Taxes -->
+                                    <td style="font-size:20px;text-align:center;">Taxes</td>
+                                    <!-- Total -->
+                                    <td style="font-size:20px;text-align:center;">Total</td>
+                                    <!-- Total -->
+                                    <td style="font-size:20px;text-align:center;">Delivery Ref</td> 
                                 </tr>
                             </thead>
-                            <tbody style="border: 2px solid black;">
+                            <tbody>
+                                <!-- Setting Totals -->
+                                <t t-set="total_qty" t-value="0.0"/>
+                                <t t-set="Total_product" t-value="0.0"/>
+                                <t t-set="Total_after_taxes" t-value="0.0"/>
+                                <t t-set="Tax_Amount" t-value="0.0"/>
+                                <t t-set="total_amount_dicount" t-value="0.0"/>
+                                <t t-set="amount_discount_product" t-value="0.0"/>
                                 <t t-foreach="o.invoice_line_ids" t-as="line">
-                                    <tr style="border-bottom: 2px solid black;">
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.name"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.texmar_width"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.quantity"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_unit"/></td>
-                                        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_subtotal"/></td>
+                                    <tr>
+                                        <!-- Code -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                        <!-- Name -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.name"/></td>
+                                        <!-- Width -->
+                                        <td style="font-size:20px;text-align:center;"><span t-field="line.product_id.texmar_width"/></td>
+                                        <!-- UoM -->
+                                        <td style="font-size:20px;text-align:center;"><span t-field="line.product_id.uom_id"/></td>
+                                        <!-- Quantity -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.quantity"/></td>
+                                        <!-- Unit Price -->
+                                         <t t-set="line.price_unit" t-value="round(line.price_unit,2)"/>
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.price_unit"/></td>
+                                        <!-- Product Discount -->
+                                         <td style="font-size:20px;text-align:center;">
+                                            <t t-set="amount_discount_product" t-value="(line.discount/100)*line.price_subtotal"/>
+                                             <t t-set="amount_discount_product" t-value="round(amount_discount_product,2)"/> 
+                                            <span style="font-size:20px;text-align:center;" t-esc="amount_discount_product"></span>
+                                        </td>
+                                        <!-- Subtotal After Discount -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.price_subtotal"/></td>
+                                        <!-- Taxes -->
+                                        <t t-set="Tax_Amount" t-value="(line.tax_ids.amount/100)*line.price_subtotal"/>
+                                        <t t-set="Tax_Amount" t-value="round(Tax_Amount,2)"/> 
+                                        <span style="font-size:20px;text-align:center;" t-esc="Tax_Amount"></span>
+                                        <!-- Total -->
+                                        <t t-set="Total_after_taxes" t-value="line.price_subtotal - Tax_Amount"/>
+                                        <t t-set="Total_after_taxes" t-value="round(Total_after_taxes,2)"/> 
+                                        <span style="font-size:20px;text-align:center;" t-esc="Total_after_taxes"></span>
+                                        
+                                        
+                                        
+                                        <!-- SETTING TOTALS -->
+                                        <t t-set="total_qty" t-value="total_qty + line.quantity"/>
+                                        <t t-set="total_amount_dicount" t-value="total_amount_dicount+amount_discount_product"/>
                                     </tr>
                                 </t>
                             </tbody>
                         </table>
-                    </div>
+                    </div> 
 
-                    <div class="row">
-                        <div class="row col-9">
-                        </div>
-                        <div class="col-3">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align:right;"><strong>Total</strong></td>
-                                        <td style="text-align:center;"><span t-field="o.amount_untaxed"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align:right;"><strong>Discount</strong></td>
-                                        <td style="text-align:center;"><span t-field="o.amount_discount"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align:right;"><strong>Subtotal</strong></td>
-                                        <td style="text-align:center;"><span t-esc="o.amount_untaxed - o.amount_discount"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align:right;"><strong>Add value tax 14%</strong></td>
-                                        <td style="text-align:center;"><span t-field="o.amount_tax"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align:right;"><strong>Total Due</strong></td>
-                                        <td style="text-align:center;"><span t-field="o.amount_total"/></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                   <div class="row">
+                    
+                    <!-- NOTES -->
+                    <div class="col-6">
+                       <h3> <strong style='text-align:left;font-size:20px;'>Total Bill </strong></h3>
+                    </div>
+                    
+                    <!-- TOTALS -->
+                    <br/>   
+                    <div class="col-6">
+                        <table class="table">
+                            <tbody>
+                                <!-- Total -->
+                                <tr>
+                                    <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
+                                    <td style="text-align:center;font-size:20px;"><span t-esc="o.amount_untaxed"/></td>
+                                </tr>
+
+                                <!-- Payment Installtion -->
+                                <tr>
+                                    <td style="text-align:left;font-size:20px;"><strong>Payment Installtion</strong></td>
+                                    <td style="text-align:center;font-size:20px;"><span t-esc="o.amount_total-o.amount_residual"/>                                     </td>
+                                </tr>
+                                <!-- Due Amount -->
+                                <tr>
+                                    <td style="text-align:left;font-size:20px;"><strong>Due Amount</strong></td>
+                                    <td style="text-align:center;font-size:20px;"><span t-esc="o.amount_residual"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                  
+                </div>
             </t>
+        
+        
+        
+        
         <t t-else="else" t-call="web.external_layout">
+            <!-- OTHER -->
+            <!-- OTHER -->
+            <!-- OTHER -->
+            <!-- OTHER -->
+            <!-- OTHER -->
                 <t t-set="o" t-value="o.with_context(lang=lang)" />
                 <t t-set="address">
                     <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
@@ -549,11 +645,107 @@
                         </p>
                     </div>
                 </div>
+            <!-- OTHER -->
+            <!-- OTHER -->
+            <!-- OTHER -->
+            <!-- OTHER -->
+            <!-- OTHER -->
+            </t>
             </t>
     </template>
-
+    
+    
+    
+    <!-- VENDOR BILL FOOTER -->
    <template id="vendor_bill_layout">
        
+       <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div t-attf-class="header o_company_#{company.id}_layout">
+            <div class="o_boxed_header">
+                <div class="row mb8">
+                    <div class="col-6">
+                        <!-- Company Logo -->
+                       <div class="row" style="margin-top:30px;">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
+                        </div>
+                        <!-- Company Address -->
+                        <div class="row" style="margin-top:30px;">
+                            <h4 class="mt0" t-field="o.company_id.report_header"/>
+                            <div name="company_address" class="mb4" style="color:grey">
+                                <span class="company_address" t-field="o.company_id.partner_id"
+                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+                
+        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+            <div class="text-center">
+                
+            <!-- Footer Info -->
+            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
+                <!-- Phone -->
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Phone: <span t-field="o.company_id.phone"/></p>
+                </div>
+                <!-- Email -->
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Email: <span t-field="o.company_id.email"/></p>
+                </div>
+                <!-- Website -->
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Website: <span t-field="o.company_id.website"/></p>
+                </div>
+                <!-- Sales TRN -->
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
+                </div>
+            </div>
+            
+                <!-- Footer Note -->
+<!--                 <div style="margin-top:10px;">
+                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                <h2 class="text-center">Thank You for Your Business</h2>
+                </div> -->
+            
+                <!-- Footer Note -->
+                <div style="margin-top:10px;">
+                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                <h2 class="text-center">Thank You for Your Business</h2>
+                </div>
+                
+            </div>
+        </div>
+       
+    </template>
+
+    
+    <!-- CUSTOMER INVOICE FOOTER -->
+    <template id="customer_invoice_layout">
        <t t-if="not o" t-set="o" t-value="doc"/>
         <t t-if="not company">
             <!-- Multicompany -->
@@ -599,31 +791,32 @@
         <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
             <div class="text-center">
                 
-            <div style="border-top:1px solid black;border-bottom:1px solid black;">
             <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="margin-top:40px;">
+            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
                 <!-- Phone -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Phone</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.phone" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Phone: <span t-field="o.company_id.phone"/></p>
                 </div>
                 <!-- Email -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Email</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.email" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Email: <span t-field="o.company_id.email"/></p>
                 </div>
                 <!-- Website -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Website</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.website" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Website: <span t-field="o.company_id.website"/></p>
                 </div>
                 <!-- Sales TRN -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                     <strong style='font-size:20px;'>Sales TRN</strong>
-                    <p style='font-size:20px;' t-field="o.company_id.vat" class="m-0"/>
+                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
+                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
                 </div>
             </div>
-            </div>
+            
+                <!-- Footer Note -->
+<!--                 <div style="margin-top:10px;">
+                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                <h2 class="text-center">Thank You for Your Business</h2>
+                </div> -->
             
                 <!-- Footer Note -->
                 <div style="margin-top:10px;">
@@ -634,82 +827,6 @@
                 
             </div>
         </div>
-       
-    </template>
-
-    <template id="customer_invoice_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header">
-                <div class="row mb8">
-                    <div class="col-6">
-                        <div class="row">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-                        </div>
-                        <div class="row" style="margin-top:30px;" >
-                            <h4 class="mt0" t-field="o.company_id.report_header"/>
-                            <div name="company_address" class="mb4">
-                                <span class="company_address" t-field="o.company_id.partner_id"
-                                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-raw="0"/>
-        </div>
-
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center" style="margin-top:15px;font-size:18px;">
-                <div class="row">
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Received by</strong></span>
-                        <span><strong>المستلم</strong></span>
-                    </div>
-                    <div class="col-9">
-                    </div>
-                </div>
-                <div class="oe_clear"/>
-                <div class="row" style="margin-bottom:50px;">
-                    <div style="width:20%;" t-if='o.name_sig'>
-                            Name :-
-                    </div>
-                    <div style="width:20%;" t-if='o.id_sig'>
-                            ID :-
-                    </div>
-                    <div style="width:20%;" t-if='o.signture_sig'>
-                            Signature :-
-                    </div>
-                    <div style="width:20%;" t-if='o.accounting_sig'>
-                            Accounting :-
-                    </div>
-                    <div style="width:20%;" t-if='o.ledger_sig'>
-                            General Ledger :-
-                    </div>
-                </div>
-                <p>Make all cheques payable to TEXMAR FABRICS برجاء ارسال الشيكات الي امر شركة تكسمار للنسيج</p>
-                <p>Bank details: NSGB national society general bank, badr city branch Egypt Texmar co.textile acc NO 15813 SWIFT-NSGBEGCXXX</p>
-                <p>If uou have any question concerning this invoice, contact our sales manager Mr. Ashraf Sayed sales, MOB. 01222123613</p>
-                <h3 class="text-center">Thank You for Your Business</h3>
-            </div>
-        </div>
-
     </template>
 
     <template id="account.report_invoice">
@@ -720,6 +837,8 @@
             </t>
         </t>
     </template>
+    
+    
 
     <template id="account.report_invoice_with_payments">
         <t t-call="web.html_container">
