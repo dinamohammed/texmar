@@ -409,7 +409,8 @@
                                         <span t-esc="Total_after_taxes"></span>
                                         </td>
                                         <!-- Delivery Ref -->
-                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.quantity"/></td>
+<!--                                         <td style="font-size:20px;text-align:center;"><span t-esc="o.stock_move_id.picking_id.name"/></td> -->
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.stock_move_ids.name"/></td>
                                         
                                         
                                         
