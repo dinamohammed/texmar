@@ -15,15 +15,5 @@
             </field>
       </record>
       
-      <record id="save_discount_account_form" model="ir.ui.view">
-        <field name="name">save.discount.account.form</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='invoice_line_ids']//field[@name='discount']" position="replace">
-                <field name="discount" string="Disc.%" groups="base.group_no_one" optional="show" force_save="1"/>
-            </xpath>
-        </field>
-      </record>
   </data>
 </odoo>
