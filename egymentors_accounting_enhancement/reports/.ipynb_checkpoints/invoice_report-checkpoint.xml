@@ -371,6 +371,7 @@
                                 <t t-set="Tax_Amount" t-value="0.0"/>
                                 <t t-set="total_amount_dicount" t-value="0.0"/>
                                 <t t-set="amount_discount_product" t-value="0.0"/>
+                                <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
                                 
                                 
                                 <t t-foreach="o.invoice_line_ids" t-as="line">
@@ -408,15 +409,14 @@
                                         <t t-set="Total_after_taxes" t-value="round(Total_after_taxes,2)"/> 
                                         <span t-esc="Total_after_taxes"></span>
                                         </td>
-                                        <!-- Delivery Ref -->
-<!--                                         <td style="font-size:20px;text-align:center;"><span t-esc="o.stock_move_id.picking_id.name"/></td> -->
                                         <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.stock_move_ids.name"/></td>
                                         
                                         
                                         
                                         <!-- SETTING TOTALS -->
                                         <t t-set="total_qty" t-value="total_qty + line.quantity"/>
-                                        <t t-set="total_amount_dicount" t-value="total_amount_dicount+amount_discount_product"/>
+                                        <t t-set="total_amount_dicount" t-value="total_amount_dicount + amount_discount_product"/>
+                                        <t t-set="subtotal_before_tax_and_discount" t-value="subtotal_before_tax_and_discount + line.price_unit"/>
                                     </tr>
                                 </t>
                             </tbody>
