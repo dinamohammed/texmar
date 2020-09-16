@@ -306,27 +306,27 @@
               <!-- Info Div -->
               <div id="information" class="row mt32 mb32" style="margin-top:40px;">
                 <!-- Invocie Date -->
-                <div class="col-3 bm-2">
+                <div class="col-2 bm-2">
                     <strong style='font-size:20px;'>Invoice Date:</strong>
                     <p style='font-size:20px;' t-field="o.invoice_date" t-options='{"widget":"date"}' class="m-0"/>
                 </div>
                 <!-- Due Date -->
-                <div class="col-3 bm-2">
+                <div class="col-2 bm-2">
                     <strong style='font-size:20px;'>Due Date:</strong>
                     <p style='font-size:20px;' t-field="o.invoice_date_due" class="m-0"/>
                 </div>
                 <!-- Customer Code -->
-                <div class="col-3 bm-2">
+                <div class="col-2 bm-2">
                     <strong style='font-size:20px;'>Customer Code:</strong>
                     <p style='font-size:20px;' t-field="o.partner_id.ref" class="m-0"/>
                 </div>
                 <!-- Salesperson -->
-                <div class="col-3 bm-2">
+                <div class="col-2 bm-2">
                     <strong style='font-size:20px;'>Salesperson:</strong>
                     <p style='font-size:20px;' t-field="o.user_id" class="m-0"/>
                 </div>
                 <!-- Currency -->
-                <div class="col-3 bm-2">
+                <div class="col-2 bm-2">
                     <strong style='font-size:20px;'>Currency:</strong>
                     <p style='font-size:20px;' t-field="o.currency_id.name" class="m-0"/>
                 </div>
@@ -371,6 +371,9 @@
                                 <t t-set="Tax_Amount" t-value="0.0"/>
                                 <t t-set="total_amount_dicount" t-value="0.0"/>
                                 <t t-set="amount_discount_product" t-value="0.0"/>
+                                <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
+                                
+                                
                                 <t t-foreach="o.invoice_line_ids" t-as="line">
                                     <tr>
                                         <!-- Code -->
@@ -388,64 +391,75 @@
                                         <td style="font-size:20px;text-align:center;"><span t-esc="line.price_unit"/></td>
                                         <!-- Product Discount -->
                                          <td style="font-size:20px;text-align:center;">
-                                            <t t-set="amount_discount_product" t-value="(line.discount/100)*line.price_subtotal"/>
+                                            <t t-set="amount_discount_product" t-value="(line.discount/100)*line.price_unit"/>
                                              <t t-set="amount_discount_product" t-value="round(amount_discount_product,2)"/> 
                                             <span style="font-size:20px;text-align:center;" t-esc="amount_discount_product"></span>
                                         </td>
                                         <!-- Subtotal After Discount -->
                                         <td style="font-size:20px;text-align:center;"><span t-esc="line.price_subtotal"/></td>
                                         <!-- Taxes -->
+                                        <td style="font-size:20px;text-align:center;">
                                         <t t-set="Tax_Amount" t-value="(line.tax_ids.amount/100)*line.price_subtotal"/>
                                         <t t-set="Tax_Amount" t-value="round(Tax_Amount,2)"/> 
-                                        <span style="font-size:20px;text-align:center;" t-esc="Tax_Amount"></span>
+                                        <span t-esc="Tax_Amount"></span>
+                                        </td>
                                         <!-- Total -->
-                                        <t t-set="Total_after_taxes" t-value="line.price_subtotal - Tax_Amount"/>
+                                        <td style="font-size:20px;text-align:center;">
+                                        <t t-set="Total_after_taxes" t-value="line.price_subtotal + Tax_Amount"/>
                                         <t t-set="Total_after_taxes" t-value="round(Total_after_taxes,2)"/> 
-                                        <span style="font-size:20px;text-align:center;" t-esc="Total_after_taxes"></span>
+                                        <span t-esc="Total_after_taxes"></span>
+                                        </td>
+                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.stock_move_ids.name"/></td>
                                         
                                         
                                         
                                         <!-- SETTING TOTALS -->
                                         <t t-set="total_qty" t-value="total_qty + line.quantity"/>
-                                        <t t-set="total_amount_dicount" t-value="total_amount_dicount+amount_discount_product"/>
+                                        <t t-set="total_amount_dicount" t-value="total_amount_dicount + amount_discount_product"/>
+                                        <t t-set="subtotal_before_tax_and_discount" t-value="subtotal_before_tax_and_discount + line.price_unit"/>
                                     </tr>
                                 </t>
                             </tbody>
                         </table>
                     </div> 
 
-                   <div class="row">
-                    
-                    <!-- NOTES -->
-                    <div class="col-6">
-                       <h3> <strong style='text-align:left;font-size:20px;'>Total Bill </strong></h3>
-                    </div>
-                    
+                      
                     <!-- TOTALS -->
-                    <br/>   
-                    <div class="col-6">
-                        <table class="table">
-                            <tbody>
-                                <!-- Total -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-esc="o.amount_untaxed"/></td>
-                                </tr>
-
-                                <!-- Payment Installtion -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;"><strong>Payment Installtion</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-esc="o.amount_total-o.amount_residual"/>                                     </td>
-                                </tr>
-                                <!-- Due Amount -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;"><strong>Due Amount</strong></td>
-                                    <td style="text-align:center;font-size:20px;"><span t-esc="o.amount_residual"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6">
+                            <table class="table">
+                                <tbody>
+                                    <!-- Subtotal -->
+                                    <tr>
+                                        <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Subtotal</strong></td>
+                                        <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
+                                    </tr>
+                                    <!-- Discount -->
+                                    <tr>
+                                        <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
+                                        <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-field="o.amount_discount"/></td>
+                                    </tr>
+                                    <!-- Total After Discount -->
+                                    <tr>
+                                        <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
+                                        <td style="text-align:right;font-size:20px;"><span t-field="o.amount_untaxed"/></td>
+                                    </tr>
+                                    <!-- Taxes -->
+                                    <tr>
+                                        <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>14 % VAT</strong></td>
+                                        <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-field="o.amount_tax"/></td>
+                                    </tr>
+                                    <!-- Total -->
+                                    <tr>
+                                        <td style="text-align:left;font-size:20px;border-top:1px solid black;border-bottom:1px solid black;"><strong>Total</strong></td>
+                                        <td style="text-align:right;font-size:20px;border-top:1px solid black;border-bottom:1px solid black;"><span t-field="o.amount_total"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
                   
                 </div>
             </t>
