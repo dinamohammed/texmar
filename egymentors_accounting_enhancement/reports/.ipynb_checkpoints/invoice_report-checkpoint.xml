@@ -306,7 +306,7 @@
               <!-- Info Div -->
               <div id="information" class="row mt32 mb32" style="margin-top:40px;">
                 <!-- Invocie Date -->
-                <div class="col-3 bm-2">
+                <div class="col-2 bm-2">
                     <strong style='font-size:20px;'>Invoice Date:</strong>
                     <p style='font-size:20px;' t-field="o.invoice_date" t-options='{"widget":"date"}' class="m-0"/>
                 </div>
@@ -390,7 +390,7 @@
                                         <td style="font-size:20px;text-align:center;"><span t-esc="line.price_unit"/></td>
                                         <!-- Product Discount -->
                                          <td style="font-size:20px;text-align:center;">
-                                            <t t-set="amount_discount_product" t-value="(line.discount/100)*line.price_subtotal"/>
+                                            <t t-set="amount_discount_product" t-value="(line.discount/100)*line.price_unit"/>
                                              <t t-set="amount_discount_product" t-value="round(amount_discount_product,2)"/> 
                                             <span style="font-size:20px;text-align:center;" t-esc="amount_discount_product"></span>
                                         </td>
@@ -404,7 +404,7 @@
                                         </td>
                                         <!-- Total -->
                                         <td style="font-size:20px;text-align:center;">
-                                        <t t-set="Total_after_taxes" t-value="line.price_subtotal - Tax_Amount"/>
+                                        <t t-set="Total_after_taxes" t-value="line.price_subtotal + Tax_Amount"/>
                                         <t t-set="Total_after_taxes" t-value="round(Total_after_taxes,2)"/> 
                                         <span t-esc="Total_after_taxes"></span>
                                         </td>
