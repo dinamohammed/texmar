@@ -16,10 +16,8 @@
                 <div class="row" style="margin-top:40px;">
                     <!-- Customer Details -->
                     <div class="col-6">
-                        <strong style='font-size:20px;'>Customer:</strong>
+                        <strong style='font-size:20px;'>Vendor:</strong>
                         <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
-                        <strong style='font-size:20px;'>Customer Order: </strong><span style='font-size:20px;' t-field="o.customer_order_delivery"/>
-                        <br/>
                         <strong style='font-size:20px;'>Reference: </strong><span style='font-size:20px;' t-field="o.partner_id.ref"/>
                         <p style='font-size:20px;' t-field="o.partner_id.street"/>
                         <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
@@ -67,8 +65,10 @@
                         <thead> 
                             <tr>
                                 <td style="font-size:20px;text-align:center;">Code <br/> كود </td>
+                                <td style="font-size:20px;text-align:center;"></td>
+                                <td style="font-size:20px;text-align:center;"></td>
                                 <td style="font-size:20px;text-align:center;">Description <br/> اسم الصنف </td>
-                                <td style="font-size:20px;text-align:center;">Treatment </td>
+                                <td style="font-size:20px;text-align:center;"></td>
                                 <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
                                 <td style="font-size:20px;text-align:center;"></td>
                                 <td style="font-size:20px;text-align:center;">Quantity <br/> الكمية </td>
@@ -81,14 +81,11 @@
                                 <tr>
                                     <!-- Code -->
                                     <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
                                     <!-- Description + Width -->
                                     <td style="font-size:20px;text-align:center;"><span t-field="line.product_id.name"/><br/><span t-esc="line.product_id.texmar_width"/></td>
-                                    <!-- Treatment -->
-                                    <t t-foreach="line.product_id.attribute_line_ids" t-as="var">
-                                        <t t-if="var.attribute_id.name == 'Treatment'">
-                                            <td style="font-size:20px;text-align:center;"><span t-esc="var.value_ids.name"/></td>
-                                        </t>
-                                    </t>
+                                    <td style="font-size:20px;text-align:center;"></td>
                                     <!-- Unit -->
                                     <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
                                     <td style="font-size:20px;text-align:center;"></td>
@@ -108,10 +105,14 @@
                                     <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;font-weight:bold;">Total</td>
                                 </tr>
                                 <!-- Total Quantity Number -->
                                 <tr>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
@@ -124,6 +125,8 @@
                                 </tr>
                                 <!-- Total Quantity Words + Unit -->
                                 <tr>
+                                    <td style="font-size:20px;text-align:center;"></td>
+                                    <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
                                     <td style="font-size:20px;text-align:center;"></td>
