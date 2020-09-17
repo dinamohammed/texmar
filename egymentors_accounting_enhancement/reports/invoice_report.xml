@@ -409,7 +409,14 @@
                                         <t t-set="Total_after_taxes" t-value="round(Total_after_taxes,2)"/> 
                                         <span t-esc="Total_after_taxes"></span>
                                         </td>
-                                        <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.stock_move_ids.name"/></td>
+                                        <!-- Delivery Ref -->
+                                        <td style="font-size:20px;text-align:center;">
+                                        <t t-foreach="line.product_id.stock_move_ids" t-as="stock">
+                                        <t t-if="o.invoice_origin == stock.origin">
+                                            <span t-esc="stock.picking_id.name"/>
+                                        </t>
+                                        </t>
+                                        </td>
                                         
                                         
                                         
