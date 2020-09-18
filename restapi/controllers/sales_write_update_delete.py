@@ -65,11 +65,11 @@ class reporting(controllers.Restapi):
                 sale_order.env.company = company
                 #get customers info
                 customer =  request.env['res.partner'].search([('id','=',customer_id)])
+                #get product
+                product =  request.env['product.product'].search([('id','=',product_id)])                
                 # check if this customer has a note order still open
-                if order_id and product_id:
+                if order_id:
                     old_sale = request.env['sale.order'].search([('id','=',order_id)])
-                    #get product
-                    product =  request.env['product.product'].search([('id','=',product_id)])
                     sol = {
                         'product_id':product.id,
                         'product_uom_qty':qty,
@@ -85,6 +85,13 @@ class reporting(controllers.Restapi):
                         'company_id':company_id,
                         'order_line':[]
                     })
+                    sol = {
+                        'product_id':product.id,
+                        'product_uom_qty':qty,
+                        'order_id':new_sale.id,
+                        'to_sell':True
+                    }
+                    new_sale['order_line'].create(sol)
                     return {'order_id':new_sale.id}
                     
                 
