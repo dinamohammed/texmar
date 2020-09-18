@@ -48,7 +48,7 @@ class reporting(controllers.Restapi):
         
      
      @http.route('/add_to_cart',type='json',auth='none',cors='*')
-     def add_to_cart(self,DevToken,UserToken,customer_id,product_id,qty,base_location=None):
+     def add_to_cart(self,DevToken,UserToken,customer_id,product_id,qty,order_id,base_location=None):
          try:            
             if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
@@ -60,16 +60,16 @@ class reporting(controllers.Restapi):
                 #get companies
                 company_id = self.prepare_allowed_companies(user_info['login'])[0]
                 company = request.env['res.company'].search([('id','=',company_id)])
-                old_sale = request.env['sale.order'].search([('partner_id.id','=',customer_id),('state','=','note_order'),                           ('is_confirmed','=',False)])
                 # sale order preprations
                 sale_order = request.env['sale.order']
                 sale_order.env.company = company
                 #get customers info
                 customer =  request.env['res.partner'].search([('id','=',customer_id)])
-                #get product
-                product =  request.env['product.product'].search([('id','=',product_id)])
                 # check if this customer has a note order still open
-                if old_sale:
+                if order_id and product_id:
+                    old_sale = request.env['sale.order'].search([('id','=',order_id)])
+                    #get product
+                    product =  request.env['product.product'].search([('id','=',product_id)])
                     sol = {
                         'product_id':product.id,
                         'product_uom_qty':qty,
@@ -77,6 +77,7 @@ class reporting(controllers.Restapi):
                         'to_sell':True
                     }
                     old_sale['order_line'].create(sol)
+                    return 'added successfully'
                 else:
                     new_sale = sale_order.create({
                         'partner_id':customer.id,
@@ -84,15 +85,9 @@ class reporting(controllers.Restapi):
                         'company_id':company_id,
                         'order_line':[]
                     })
-                    sol = {
-                        'product_id':product.id,
-                        'product_uom_qty':qty,
-                        'order_id':new_sale.id,
-                        'to_sell':True
-                    }
-                    new_sale['order_line'].create(sol)
- 
-                return 'added successfully'
+                    return {'order_id':new_sale.id}
+                    
+                
      
          except AccessError:
             return 'You are not allowed to do this'

@@ -66,7 +66,7 @@ class reporting(controllers.Restapi):
         target = {
             'date':fields.date.today(),
             'sales_amount':sales_sum,
-            'sales_percentage':float("{0:.2f}".format((sales_sum/sales_team_target)*100)),
+            'sales_percentage':float("{0:.2f}".format((sales_sum/sales_team_target)*100)) if sales_team_target > 0 else 100,
             'target_amount':sales_team_target
         }
         

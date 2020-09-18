@@ -54,7 +54,8 @@ class security(controllers.Restapi):
                         'user_id':user.id
                     })
 
-                return token
+                return {'token':token,
+                       'flag':user.user_role}
         except AccessError:
             return {'error':'You are not allowed to do this'}
         except AccessDenied:
