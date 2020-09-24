@@ -102,7 +102,7 @@ class reporting(controllers.Restapi):
         
         
      @http.route('/delete_product',type='json',auth='none',cors='*')
-     def delete_product(self,DevToken,UserToken,order_line_ids,base_location=None):
+     def delete_product(self,DevToken,UserToken,order_id,base_location=None):
         try:            
             if self.authrize_developer(DevToken) == False:
                 return {'error':'developer token expired'}
@@ -111,9 +111,8 @@ class reporting(controllers.Restapi):
             else:
                 user_info = self.authrize_user(UserToken)
                 request.session.authenticate(self.db,user_info['login'],user_info['password'])
-                for id in order_line_ids:
-                    line = request.env['sale.order.line'].search([('id','=',id)])
-                    line.unlink()
+                line = request.env['sale.order.line'].search([('id','=',order_id)])
+                line.unlink()
                 return 'deleted succesfully'
                 
          
