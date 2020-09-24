@@ -77,7 +77,10 @@ class customers(controllers.Restapi):
                 result = []
                 for customer in customers:
                     search = str(keyword).lower()
-                    if re.search(search,customer.name.lower()) != None or customer.mobile == keyword or customer.phone == keyword:   
+                    name_validation = re.search(search,customer.name.lower()) != None
+                    phone_validation = re.search(search,str(customer.phone)) != None
+                    mobile_validation =  re.search(search,str(customer.mobile)) != None
+                    if  name_validation or mobile_validation or phone_validation:   
                         history = self.get_history(customer.id)
                         result.append({
                         'customer_name':customer.name,
