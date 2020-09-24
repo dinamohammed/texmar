@@ -60,8 +60,8 @@ class get(controllers.Restapi):
                         'date':sale.date_order,
                         'order_id':req.id,
                         'customer_name':sale.partner_id.name,
-                        'state':sale.state,
-                        'amount':req.price_subtotal
+                        'state':dict(sale._fields['state'].selection).get(sale.state),
+                        'amount':req.price_subtotal,
                     })
                 
                 for note in notes:
@@ -69,7 +69,7 @@ class get(controllers.Restapi):
                         'date':note.date_order,
                         'order_id':note.id,
                         'customer_name':note.partner_id.name,
-                        'state':note.state,
+                        'state':dict(note._fields['state'].selection).get(note.state),
                         'amount':note.amount_total
                     })
                 
@@ -78,8 +78,8 @@ class get(controllers.Restapi):
                         'date':draft.date_order,
                         'order_id':draft.id,
                         'customer_name':draft.partner_id.name,
-                        'state':draft.state,
-                        'amount':draft.amount_total
+                        'state':dict(draft._fields['state'].selection).get(sale.state),
+                        'amount':draft.amount_total,
                     })                    
                 return result
          
