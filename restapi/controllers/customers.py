@@ -44,7 +44,8 @@ class customers(controllers.Restapi):
                 params = self.get_params(request.httprequest.url)
                 limit = params.get('limit',5)
                 offset = params.get('offset',0)
-                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset)
+                order_by = 'name'
+                customers = request.env['res.partner'].search([('customer_rank','=',True),('company_id','=',False)],limit=limit,offset=offset,order=order_by)
                 for customer in customers:
                     history = self.get_history(customer.id)
                     vals = {
