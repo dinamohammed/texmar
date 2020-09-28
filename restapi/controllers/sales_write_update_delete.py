@@ -118,3 +118,24 @@ class reporting(controllers.Restapi):
          
         except AccessError:
             return 'You are not allowed to do this'            
+
+     
+     @http.route('/edit_product_qty',type='json',auth='none',cors='*')
+     def edit_product_qty(self,DevToken,UserToken,order_line_id,qty,base_location=None):
+        try:            
+            if self.authrize_developer(DevToken) == False:
+                return {'error':'your session is expired , please relogin  '}
+            elif not self.authrize_user(UserToken):
+                return {'error':'invalid user token'}
+            else:
+                user_info = self.authrize_user(UserToken)
+                request.session.authenticate(self.db,user_info['login'],user_info['password'])
+                line = request.env['sale.order.line'].search([('id','=',order_line_id)])
+                line.write({
+                    "product_uom_qty":qty
+                })
+                return 'edited succesfully'
+                
+         
+        except AccessError:
+            return 'You are not allowed to do this' 
