@@ -1,0 +1,16 @@
+<odoo>
+  <data>
+      <record id="view_account_payment_cust" model="ir.ui.view">
+            <field name="name">account.payment.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group/field[@name='payment_method_id']" position="after">
+                    <field name="bank_account_number" attrs="{'invisible': [('payment_method_code', '!=', 'bank')]}"/>
+                    <field name="visa_account_number" attrs="{'invisible': [('payment_method_code', '!=', 'visa')]}"/>
+                </xpath>
+          </field>
+      </record>
+  </data>
+</odoo>

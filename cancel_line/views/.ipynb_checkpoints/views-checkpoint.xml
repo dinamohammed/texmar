@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+    <record id="sale_order_inherit" model="ir.ui.view">
+        <field name="name">sale.order.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+           <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="user_id"/>
+                <field name="team_id" kanban_view_ref="496" options="{'no_create': True}"/>
+           </xpath>
+             <xpath expr="//page[@name='other_information']/group[1]/group[1]/field[@name='user_id']" position="replace">
+
+             </xpath>
+            <xpath expr="//page[@name='other_information']/group[1]/group[1]/field[@name='team_id']" position="replace">
+
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_order_line_inherit" model="ir.ui.view">
+        <field name="name">sale.order.line.inherit</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="/tree/field[@name='salesman_id']" position="replace">
+
+            </xpath>
+
+        </field>
+    </record>
+<!--
+    <record id="texmar_weight_view" model="ir.ui.view">
+        <field name="name">texmar.weight.name</field>
+        <field name="model">texmar.weight</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+-->
+  </data>
+</odoo>

@@ -1,0 +1,47 @@
+<odoo>
+  <data>
+      <record id="sale_order_inherit" model="ir.ui.view">
+            <field name="name">sale_order_inh</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            <field name="payment_term_id" position='after'>
+              <field name="branch_customer_name" attrs="{'invisible':[('branch_customer_name','=',False)]}"/>
+              <field name="branch_customer_phone" attrs="{'invisible':[('branch_customer_phone','=',False)]}"/>
+              <field name="branch_delivery_states" attrs="{'invisible':[('branch_delivery_states','=',False)]}"/>
+              <field name="delivery_states" attrs="{'invisible':[('delivery_states','=',False)]}"/>
+              <field name="placeholder" invisible='True'/>
+            </field>
+            </field>
+      </record>
+
+        <record id="sale_order_tree_inherit" model="ir.ui.view">
+            <field name="name">sale_tree_order_inh</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="before">
+              <field name="branch_delivery_states" attrs="{'invisible':[('branch_delivery_states','=',False)]}"/>
+              <field name="delivery_states" attrs="{'invisible':[('delivery_states','=',False)]}"/>
+              <field name="branch_payment_terms" attrs="{'invisible':[('branch_payment_terms','=',False)]}" />
+            </xpath> 
+            <xpath expr="//field[@name='amount_total']" position="after">
+              <field name="return_pay"  />
+              <field name="due_amount" />
+            </xpath> 
+            </field>
+      </record>
+
+
+    <record id="view_order_line_tree_inherit8" model="ir.ui.view">
+            <field name="name">sale.order.line.tree.inherit8</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-danger">"less_validate == True"</attribute>
+                </xpath>
+            </field> 
+     </record>
+  </data>
+</odoo>

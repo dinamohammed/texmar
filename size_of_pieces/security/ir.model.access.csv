@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_size_of_pieces_size_of_pieces,size_of_pieces.size_of_pieces,model_size_of_pieces_size_of_pieces,base.group_user,1,1,1,1

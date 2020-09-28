@@ -1,0 +1,139 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* reports_tex
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-22 11:20+0000\n"
+"PO-Revision-Date: 2020-06-22 13:42+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"X-Generator: Poedit 2.2.4\n"
+"Last-Translator: \n"
+"Language: ar\n"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<b>Amount in words:</b>"
+msgstr "<b>المبلغ الإجمالي:</b>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<b>Amount:</b>"
+msgstr "<b>المبلغ:</b>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<b>Customer:</b>"
+msgstr "<b>العميل:</b>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<b>Date:</b>"
+msgstr "<b>تاريخ:</b>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<b>Label:</b>"
+msgstr "<b>بيان:</b>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<b>Vendor:</b>"
+msgstr "<b>المورد:</b>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<b>only</b>"
+msgstr "<b>فقط لا غير</b>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "<strong class=\"text-center\">Accounting guidance</strong>"
+msgstr "<strong class=\"text-center\">التوجــــــــيـــــــــه المحاســـــبـــي</strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.report_payment_receipt_document_Amount_in_words
+msgid "<strong> only</strong>"
+msgstr "<strong> فقط لا غير </strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.report_payment_receipt_document_Amount_in_words
+msgid "<strong>Amount in Words: </strong>"
+msgstr "<strong> مبلغ وقدره: </strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.report_payment_receipt_document_Amount_in_words
+msgid "<strong>Check no: </strong>"
+msgstr "<strong> رقم الشيك: </strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.report_payment_receipt_document_Amount_in_words
+msgid "<strong>Customer: </strong>"
+msgstr "<strong>العميل:</strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.report_payment_receipt_document_Amount_in_words
+msgid "<strong>Transfer No: </strong>"
+msgstr "<strong>رقم التحويل البنكي:</strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.report_payment_receipt_document_Amount_in_words
+msgid "<strong>Vendor: </strong>"
+msgstr "<strong>المورد:</strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.report_payment_receipt_document_Amount_in_words
+msgid "<strong>Visa No: </strong>"
+msgstr "<strong>رقم الفيزا :</strong>"
+
+#. module: reports_tex
+#: model:ir.model.fields,field_description:reports_tex.field_account_bank_statement_line__amount_in_words
+#: model:ir.model.fields,field_description:reports_tex.field_account_payment__amount_in_words
+msgid "Amount in Words"
+msgstr "المبلغ بالكلمات"
+
+#. module: reports_tex
+#: model:ir.model,name:reports_tex.model_account_bank_statement_line
+msgid "Bank Statement Line"
+msgstr ""
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "Cash receipt number"
+msgstr "إيصال صرف نقدية"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "Notes:"
+msgstr "البيان:"
+
+#. module: reports_tex
+#: model:ir.model,name:reports_tex.model_account_payment
+msgid "Payments"
+msgstr "المدفوعات"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "Receipt of cash number"
+msgstr "إيصال إستلام نقدية"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "Secretary of the Treasury"
+msgstr "<strong class=\"text-center\">أمـــــيــــــن الخـــزيـــــنـــــة</strong>"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "The recipient"
+msgstr "المـــســتـــلــــم"
+
+#. module: reports_tex
+#: model_terms:ir.ui.view,arch_db:reports_tex.bank_statement_line_report_doc2
+msgid "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _"
+msgstr "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _"

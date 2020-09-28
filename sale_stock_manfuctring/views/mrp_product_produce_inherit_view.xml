@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        <record id="mrp_production_form_view_inherits" model="ir.ui.view">
+            <field name="name">mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group/field[@name='bom_id']" position="after">
+                    <field name="size_of_pieces" invisible="1"/>
+                    <field name="qty_producing" invisible="1"/>
+                    <label for="size_of_pieces"/>
+                    <div class="o_row" style="display:flex">
+                        <field name="piece1"/>
+                        <field name="piece2"/>
+                        <field name="piece3"/>
+                        <field name="piece4"/>
+                        <field name="piece5"/>
+                        <field name="piece6"/>
+                        <field name="piece7"/>
+                        <field name="piece8"/>
+                        <field name="piece9"/>
+                        <field name="piece10"/>
+                        <field name="piece11"/>
+                        <field name="piece12"/>
+                        <field name="piece13"/>
+                    </div>
+                    <field name="quantity_difference" decoration-danger="size_of_pieces&lt;qty_producing"
+                       decoration-success="qty_producing==size_of_pieces"
+                       decoration-info="size_of_pieces&gt;qty_producing"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
