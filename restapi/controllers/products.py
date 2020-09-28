@@ -13,7 +13,7 @@ class products(controllers.Restapi):
      def scan_product(self,code,DevToken,UserToken,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -39,7 +39,7 @@ class products(controllers.Restapi):
         result = []
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -67,7 +67,7 @@ class products(controllers.Restapi):
         result = []
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -95,7 +95,7 @@ class products(controllers.Restapi):
      def search_products(self,DevToken,UserToken,keyword,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:

@@ -35,7 +35,7 @@ class customers(controllers.Restapi):
         result = []
         try:
             if self.authrize_developer(DevToken) == False:   
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -68,7 +68,7 @@ class customers(controllers.Restapi):
      def search_customers(self,DevToken,UserToken,keyword,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -108,7 +108,7 @@ class customers(controllers.Restapi):
      def edit_customer(self,customer_id,full_name,country_code,mobile,email,DevToken,UserToken,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}     
+                return {'error':'your session is expired , please relogin'}     
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -140,7 +140,7 @@ class customers(controllers.Restapi):
      def create_customer(self,email,full_name,country_code,mobile,DevToken,UserToken,base_location=None):
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin'}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:

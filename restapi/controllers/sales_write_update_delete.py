@@ -10,7 +10,7 @@ class reporting(controllers.Restapi):
      def confirm_order(self,DevToken,UserToken,order_id,base_location=None):
          try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin  '}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -32,7 +32,7 @@ class reporting(controllers.Restapi):
      def delete_order(self,DevToken,UserToken,order_id,base_location=None):
          try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin  '}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -51,7 +51,7 @@ class reporting(controllers.Restapi):
      def add_to_cart(self,DevToken,UserToken,customer_id,product_id,qty,order_id,base_location=None):
          try:            
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin  '}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -105,7 +105,7 @@ class reporting(controllers.Restapi):
      def delete_product(self,DevToken,UserToken,order_id,base_location=None):
         try:            
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin  '}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:

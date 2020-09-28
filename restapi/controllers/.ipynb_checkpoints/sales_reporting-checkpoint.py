@@ -11,7 +11,7 @@ class reporting(controllers.Restapi):
         result = []
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin  '}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
@@ -74,7 +74,7 @@ class reporting(controllers.Restapi):
         history = []
         for sale in sales:
             history.append({
-                'date':sale.date_order,
+                'date':sale.date_order.date(),
                 'sales_amount':sale.amount_total
             })
             
@@ -93,7 +93,7 @@ class reporting(controllers.Restapi):
         result = []
         try:
             if self.authrize_developer(DevToken) == False:
-                return {'error':'developer token expired'}
+                return {'error':'your session is expired , please relogin  '}
             elif not self.authrize_user(UserToken):
                 return {'error':'invalid user token'}
             else:
