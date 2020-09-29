@@ -1,0 +1,12 @@
+<odoo>
+  <data>
+    <record id="action_account_fx_custom_report" model="ir.actions.client">
+        <field name="name">FX report</field>
+        <field name="tag">fx_report</field>
+        <field name="context" eval="{'model': 'fx.report.smart'}"/>
+    </record>
+    <menuitem id="purchasing_fx_custom_report_menu" name="FX Report"
+              parent="purchase.purchase_report"
+              action="action_account_fx_custom_report"/>
+  </data>
+</odoo>
