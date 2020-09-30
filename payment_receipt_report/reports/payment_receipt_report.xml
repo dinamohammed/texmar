@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <!-- Page -->
-                <div class="page" style="font-size:24px">
+                <div class="page" >
                     <h3><strong>Payment Receipt: <span t-field="o.name"/></strong></h3>
                     <div class="row">
                         <div class="col-6" t-if="o.payment_date">
@@ -123,7 +123,7 @@
                         <t t-if="o.payment_method_id.name=='Received Third Check'">
                             <!-- check number-->
                             <div class="col-3 bm-2">
-                                <strong>Check Number : </strong><span t-field="o.check_id.number"/>
+                                <strong>Check Number : </strong><span t-esc="str(o.check_id.number)"/>
                             </div>
                             <!-- Check Date -->
                             <div class="col-3 bm-2"   t-if="o.check_id.issue_date">

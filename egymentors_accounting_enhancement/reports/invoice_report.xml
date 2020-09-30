@@ -44,7 +44,7 @@
                 <!-- Page -->
                 <t t-if="o.type == 'in_invoice'" >
                     <!-- VENDOR BILL -->
-                    <div class="page" style="font-size:18px">
+                    <div class="page">
                         <div class="oe_structure"/>
                         <h1>Vendor <span t-field="o.name"/></h1>
                         <div class="row" style="margin-top:40px;">
@@ -299,7 +299,7 @@
                 </t>
                 <t t-elif="o.type == 'out_invoice'">
                     <!-- CUSTOMER INVOICE -->
-                    <div class="page" style="font-size:18px;">
+                    <div class="page">
                         <div class="oe_structure"/>
 
                         <!-- Title -->
@@ -497,7 +497,7 @@
                 </t>
                 <t t-else="else">
                     <!-- OTHER -->
-                    <div class="page" style="font-size:18px;">
+                    <div class="page">
                         <h2>
                             <span t-if="o.type == 'out_invoice' and o.state == 'posted'">Invoice</span>
                             <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
