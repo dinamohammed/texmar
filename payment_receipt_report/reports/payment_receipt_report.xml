@@ -20,10 +20,11 @@
                 <!-- Header -->
                 <div class="header">
                     <!-- Company Logo -->
-                    <div class="row" >
-                        <div class="col-6">
+                   <div class="row" >
+                        <div class="col-6" style="width: 200px;height:80px;overflow:hidden;">
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
-                                 style="max-width: 350px;max-height: 100px"/>
+                                 style="width:400px;height:400px;
+                                 margin: -165px 0px 0px -120px"/>
                         </div>
                         <div class="col-6"/>
                     </div>
