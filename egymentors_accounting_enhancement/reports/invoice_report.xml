@@ -22,9 +22,10 @@
                 <div class="header">
                     <!-- Company Logo -->
                     <div class="row" >
-                        <div class="col-6">
+                        <div class="col-6" style="width: 200px;height:80px;overflow:hidden;">
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
-                                 style="max-width: 350px;max-height: 100px"/>
+                                 style="width:400px;height:400px;
+                                 margin: -165px 0px 0px -120px"/>
                         </div>
                         <div class="col-6"/>
                     </div>
@@ -43,7 +44,7 @@
                 <!-- Page -->
                 <t t-if="o.type == 'in_invoice'" >
                     <!-- VENDOR BILL -->
-                    <div class="page" style="font-size:17px">
+                    <div class="page">
                         <div class="oe_structure"/>
                         <h1>Vendor <span t-field="o.name"/></h1>
                         <div class="row" style="margin-top:40px;">
@@ -79,7 +80,7 @@
                         </div>
                         <!-- Table Products-->
                         <div class="row">
-                            <table class="table table-sm table-bordered o_main_table" style="font-size:16px">
+                            <table class="table table-sm table-bordered o_main_table">
                                 <thead>
                                     <tr class="table-active text-center">
                                         <th>Code</th>
@@ -141,7 +142,7 @@
                                                     <t t-set="one_taxe_product" t-value="one_taxe_product+(tax_id.amount/100)*total_price_product"/>
                                                     <t t-set="one_taxe_product" t-value="round(one_taxe_product,2)"/>
                                                     <t t-if="count%2==0" >
-                                                        <span class="text-nowrap" style="font-size:15px ;font-weight:bold"> , </span>
+                                                        <span class="text-nowrap" style="font-weight:bold"> , </span>
                                                         <span class="text-nowrap" style="text-align:right;" t-esc="one_taxe_product"/>
                                                         <t t-set="count" t-value="count+1"/>
                                                     </t>
@@ -200,7 +201,7 @@
                             <!-- Taxes Table -->
                             <h2 style="font-weight:bold">Taxes Details</h2>
                             <div class="row">
-                                <table class="table table-sm table-bordered o_main_table" style="font-size:16px">
+                                <table class="table table-sm table-bordered o_main_table">
                                 <thead>
                                     <tr class="table-active text-center">
                                             <th>Name Tax</th>
@@ -220,18 +221,16 @@
                                                 <td style="text-align:center;">
                                                     <span t-esc="o.invoice_line_ids.tax_ids.search([('name','=',tax_line[0])],limit=1).description"/>
                                                 </td>
-                                                <!--                                         <span t-esc="tax_line"/> -->
-                                                <!--                                      <t t-set="total_taxes" t-value="total_taxes + taxes_product_tax"/> -->
+                                                <!-- <span t-esc="tax_line"/> -->
+                                                <!-- <t t-set="total_taxes" t-value="total_taxes + taxes_product_tax"/> -->
                                                 <!-- Tax Value -->
                                                 <td style="text-align:center;"><span t-esc="tax_line[3]"/></td>
                                                 <t t-set="total_taxes" t-value="total_taxes + tax_line[1]"/>
-
                                             </tr>
                                         </t>
-
-                                        <tr>
-                                            <td colspan="2" style="font-weight:bold">Total_Taxes</td>
-                                            <td style="text-align:center;"><span t-esc="total_taxes"/></td>
+                                        <tr class="table-active text-center">
+                                            <th colspan="2">Total Taxes</th>
+                                            <th><span t-esc="total_taxes"/></th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -300,7 +299,7 @@
                 </t>
                 <t t-elif="o.type == 'out_invoice'">
                     <!-- CUSTOMER INVOICE -->
-                    <div class="page" style="font-size:14px;">
+                    <div class="page">
                         <div class="oe_structure"/>
 
                         <!-- Title -->
@@ -362,7 +361,7 @@
 
                         <!-- Table -->
                         <div class="row">
-                            <table class="table table-sm table-bordered o_main_table" style="font-size:16px">
+                            <table class="table table-sm table-bordered o_main_table">
                                 <thead>
                                     <tr class="table-active text-center">
                                         <!-- Code -->
@@ -498,7 +497,7 @@
                 </t>
                 <t t-else="else">
                     <!-- OTHER -->
-                    <div class="page" style="font-size:17px;">
+                    <div class="page">
                         <h2>
                             <span t-if="o.type == 'out_invoice' and o.state == 'posted'">Invoice</span>
                             <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
@@ -719,177 +718,6 @@
             </t>
 
         </t>
-    </template>
-
-    <!-- VENDOR BILL FOOTER -->
-    <template id="vendor_bill_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header">
-                <div class="row mb8">
-                    <div class="col-6">
-                        <!-- Company Logo -->
-                        <div class="row" style="margin-top:30px;">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
-                        </div>
-                        <!-- Company Address -->
-                        <div class="row" style="margin-top:30px;">
-                            <h4 class="mt0" t-field="o.company_id.report_header"/>
-                            <div name="company_address" class="mb4" style="color:grey">
-                                <span class="company_address" t-field="o.company_id.partner_id"
-                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 mb4">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-call="web.address_layout"/>
-            <t t-raw="0"/>
-        </div>
-
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
-                <!-- Footer Info -->
-                <div id="footer_information" class="row mt32 mb32"
-                     style="border-top:1px solid black;border-bottom:1px solid black;font-size:12px;">
-                    <!-- Phone -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Phone: <span t-field="o.company_id.phone"/></p>
-                    </div>
-                    <!-- Email -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Email: <span t-field="o.company_id.email"/></p>
-                    </div>
-                    <!-- Website -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Website: <span t-field="o.company_id.website"/></p>
-                    </div>
-                    <!-- Sales TRN -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
-                    </div>
-                </div>
-
-                <!-- Footer Note -->
-                <!--                 <div style="margin-top:10px;">
-                                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                                <h2 class="text-center">Thank You for Your Business</h2>
-                                </div> -->
-
-                <!-- Footer Note -->
-                <div style="font-size:12px;">
-                    <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                    <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                    <h2 class="text-center">Thank You for Your Business</h2>
-                </div>
-
-            </div>
-        </div>
-
-    </template>
-
-    <!-- CUSTOMER INVOICE FOOTER -->
-    <template id="customer_invoice_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header">
-                <div class="row mb8">
-                    <div class="col-6">
-                        <!-- Company Logo -->
-                        <div class="row" style="margin-top:30px;">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
-                        </div>
-                        <!-- Company Address -->
-                        <div class="row" style="margin-top:30px;">
-                            <h4 class="mt0" t-field="o.company_id.report_header"/>
-                            <div name="company_address" class="mb4" style="color:grey">
-                                <span class="company_address" t-field="o.company_id.partner_id"
-                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 mb4">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-call="web.address_layout"/>
-            <t t-raw="0"/>
-        </div>
-
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
-
-                <!-- Footer Info -->
-                <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
-                    <!-- Phone -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Phone: <span t-field="o.company_id.phone"/></p>
-                    </div>
-                    <!-- Email -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Email: <span t-field="o.company_id.email"/></p>
-                    </div>
-                    <!-- Website -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Website: <span t-field="o.company_id.website"/></p>
-                    </div>
-                    <!-- Sales TRN -->
-                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
-                        <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
-                    </div>
-                </div>
-
-                <!-- Footer Note -->
-                <!--                 <div style="margin-top:10px;">
-                                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                                <h2 class="text-center">Thank You for Your Business</h2>
-                                </div> -->
-
-                <!-- Footer Note -->
-                <div style="margin-top:10px;">
-                    <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                    <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                    <h2 class="text-center">Thank You for Your Business</h2>
-                </div>
-
-            </div>
-        </div>
     </template>
 
     <template id="account.report_invoice">
