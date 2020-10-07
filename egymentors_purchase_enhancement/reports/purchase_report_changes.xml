@@ -1,262 +1,260 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="report_purchaseorder_document_new">
-        <t t-call="egymentors_purchase_enhancement.po_layout">
-            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
-            <t t-if="o.dest_address_id">
-            </t>
-            <div class="page">
-                <div class="oe_structure"/>
-                
-            <!-- PO / RFQ Reference -->    
-            <h1 t-if="o.state == 'draft'">Request for Quotation #<span t-field="o.name"/></h1>
-            <h1 t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h1>
-            <h1 t-if="o.state in ['purchase', 'done']">Purchase Order #<span t-field="o.name"/></h1>
-            <h1 t-if="o.state == 'cancel'">Cancelled Purchase Order #<span t-field="o.name"/></h1>
-                
-            <div class="row" style="margin-top:40px;">
-                <!-- Vendor Details -->
-                <div class="col-6">
-                    <strong style='font-size:20px;'>Vendor:</strong>
-                    <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
-                    <p style='font-size:20px;' t-field="o.partner_id.street"/>
-                    <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
-                    <p style='font-size:20px;' t-field="o.partner_id.phone"/>
-                    <p style='font-size:20px;' t-field="o.partner_id.vat"/>
-                </div>
-                <!-- Shipping Details -->
-                <div class="col-6">
-                    <strong style='font-size:20px;'>Shipping Address:</strong>
-                    <p style='font-size:20px; font-weight:bold' t-field="o.picking_type_id.warehouse_id.display_name"/>
-                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
-                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
-                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
-                    <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
-                </div>
-            </div>
-                
-            <!-- Info Div -->
-            <div id="information" class="row mt32 mb32" style="margin-top:40px;">
-                <!-- FX Number -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                    <strong style='font-size:20px;'>FX Number:</strong>
-                    <p style='font-size:20px;' t-field="o.fx_num_id" class="m-0"/>
-                </div>
-                <!-- FX Purchase Representative -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                    <strong style='font-size:20px;'>Purchase Representative:</strong>
-                    <p style='font-size:20px;' t-field="o.user_id" class="m-0"/>
-                </div>
-                <!-- Order Date -->
-                <div t-if="o.date_order" class="col-3 bm-2">
-                    <strong style='font-size:20px;'>Order Date:</strong>
-                    <p style='font-size:20px;' t-field="o.date_order" t-options='{"widget":"date"}' class="m-0"/>
-                </div>
-                <!-- Currency -->
-                <div t-if="o.user_id" class="col-3 bm-2">
-                    <strong style='font-size:20px;'>Currency:</strong>
-                    <p style='font-size:20px;' t-field="o.currency_id.name" class="m-0"/>
-                </div>
-            </div>
-                
-                <!-- Table -->
-                <div class="row">
-                    <table class="table" style="width:100%">
-                        <thead>
-                            <tr>
-                                <td style="font-size:20px;text-align:center;">Code <br/> كود </td>
-                                <td style="font-size:20px;text-align:center;">Description <br/> اسم الصنف </td>
-                                <td style="font-size:20px;text-align:center;">Deliver To <br/> مخزن رقم </td>
-                                <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
-                                <td style="font-size:20px;text-align:center;">Qty <br/> الكمية </td>
-                                <td style="font-size:20px;text-align:center;">Price <br/> السعر </td>
-                                <td style="font-size:20px;text-align:center;">Discount % <br/> الخصم </td>
-                                <td style="font-size:20px;text-align:center;">Amount <br/> القيمة </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Setting Totals -->
-                            <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
-                            <t t-set="total_discount" t-value="0.0"/>
-                            <t t-set="total_after_discount" t-value="o.amount_untaxed"/>
-                            <!-- Loop Order Lines -->
-                            <t t-foreach="o.order_line" t-as="line">
-                                <!-- Computing Totals -->
-                                <!-- Subtotal Before Taxes & Discounts -->
-                                <t t-set="subtotal_before_tax_and_discount" t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_qty)"/>
-                                
-                                <tr>
-                                    <!-- Code -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
-                                    <!-- Description -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.name"/></td>
-                                    <!-- Deliver To / Location -->
-                                    <td style="font-size:20px;text-align:center;"><span t-field="o.picking_type_id"/></td>
-                                    <!-- Unit -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
-                                    <!-- Quantity -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_qty"/></td>
-                                    <!-- Price -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.price_unit"/></td>
-                                    <!-- Discount -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.discount"/></td>
-                                    <!-- Amount -->
-                                    <td style="font-size:20px;text-align:center;"><span t-field="line.price_subtotal"
-                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                            </t>
-                        </tbody>
-                    </table>
-                </div>
-                
-                
-                <!-- Totals & Notes -->
-                <div class="row" style="margin-top:20px;">
-                    
-                    <!-- NOTES -->
-                    <div class="col-6">
-                        <strong style='font-size:20px;'>Notes:</strong>
-                        <p style='font-size:15px;' t-field="o.notes"/>
-                    </div>
-                    
-                    <!-- TOTALS -->
-                    <div class="col-6">
-                        <table class="table" style="border-bottom:1px solid black;">
-                            <tbody>
-                                <!-- Subtotal -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Subtotal</strong></td>
-                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
-                                </tr>
-                                <!-- Total Discount -->
-                                <tr>
-                                    <!-- Total Discount -->
-                                    <t t-set="total_discount" t-value="total_discount + (subtotal_before_tax_and_discount - total_after_discount)"/>
-                                    <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
-                                    <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-esc="total_discount"/></td>
-                                </tr>
-                                <!-- Total After Discount -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
-                                    <td style="text-align:right;font-size:20px;"><span t-field="o.amount_untaxed"/></td>
-                                </tr>
-                                
-                                
-                                
-                                <!-- Total Taxes -->
-                                 <!-- Sum Taxes  -->
-                                <t t-foreach="o.amount_by_group" t-as="amount_by_group">
-                                    <tr>
-                                        <t t-if="len(o.order_line.filtered(lambda line: line.taxes_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
-                                            <!-- HEADING -->
-                                            <td><strong><span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
-                                            <!-- VALUE -->
-                                            <td style="text-align:right;font-size:20px;">
-                                                <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]" />
-                                            </td>
-                                        </t>
-                                        
-                                        <t t-else="">
-                                            <!-- HEADING -->
-                                            <td><strong><span class="text-nowrap" style="text-align:right;font-size:20px;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
-                                            <!-- VALUE -->
-                                            <td style="text-align:right;font-size:20px;">
-                                                <span style="text-align:right;font-size:20px;" t-esc="amount_by_group[3]"/>
-                                            </td>
-                                        </t>
-                                    </tr>
-                                </t>                                
-                                
-                                
-                                <!-- Net Amount -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Total Due</strong></td>
-                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="o.amount_total"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="oe_structure"/>
-            </div>
-        </t>
-    </template>
-    <template id="po_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header">
-                <div class="row mb8">
-                    <div class="col-6">
-                        <!-- Company Logo -->
-                       <div class="row" style="margin-top:30px;">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+                <t t-if="not o" t-set="o" t-value="doc"/>
+                <t t-if="not company">
+                    <!-- Multicompany -->
+                    <t t-if="company_id">
+                        <t t-set="company" t-value="company_id"/>
+                    </t>
+                    <t t-elif="o and 'company_id'in o">
+                        <t t-set="company" t-value="o.company_id.sudo()"/>
+                    </t>
+                    <t t-else="else">
+                        <t t-set="company" t-value="res_company"/>
+                    </t>
+                </t>
+                <!-- Header -->
+                <div class="header">
+                    <!-- Company Logo -->
+                    <div class="row" >
+                        <div class="col-6" style="width: 200px;height:80px;overflow:hidden;">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                                 style="width:400px;height:400px;
+                                 margin: -165px 0px 0px -120px"/>
                         </div>
-                        <!-- Company Address -->
-                        <div class="row" style="margin-top:30px;">
+                        <div class="col-6"/>
+                    </div>
+                    <!-- Company Address -->
+                    <div class="row">
+                        <div class="col-6">
                             <h4 class="mt0" t-field="o.company_id.report_header"/>
                             <div name="company_address" class="mb4" style="color:grey">
                                 <span class="company_address" t-field="o.company_id.partner_id"
-                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
                             </div>
                         </div>
+                        <div class="col-6"/>
                     </div>
-                    <div class="col-6 mb4">
+                </div>
+                <!-- Page -->
+                <div class="page">
+                    <div class="oe_structure"/>
+
+                    <!-- PO / RFQ Reference -->
+                    <h1 t-if="o.state == 'draft'">Request for Quotation #<span t-field="o.name"/></h1>
+                    <h1 t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h1>
+                    <h1 t-if="o.state in ['purchase', 'done']">Purchase Order #<span t-field="o.name"/></h1>
+                    <h1 t-if="o.state == 'cancel'">Cancelled Purchase Order #<span t-field="o.name"/></h1>
+
+                    <div class="row" style="margin-top:40px;">
+                        <!-- Vendor Details -->
+                        <div class="col-6">
+                            <strong >Vendor:</strong>
+                            <p t-field="o.partner_id.name"/>
+                            <p t-field="o.partner_id.street"/>
+                            <p t-field="o.partner_id.country_id.name"/>
+                            <p t-field="o.partner_id.phone"/>
+                            <p t-field="o.partner_id.vat"/>
+                        </div>
+                        <!-- Shipping Details -->
+                        <div class="col-6">
+                            <strong >Shipping Address:</strong>
+                            <p t-field="o.picking_type_id.warehouse_id.display_name"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-call="web.address_layout"/>
-            <t t-raw="0"/>
-        </div>
+                    <!-- Info Div -->
+                    <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                        <!-- FX Number -->
+                        <div t-if="o.user_id" class="col-3 bm-2">
+                            <strong >FX Number:</strong>
+                            <p t-field="o.fx_num_id" class="m-0"/>
+                        </div>
+                        <!-- FX Purchase Representative -->
+                        <div t-if="o.user_id" class="col-3 bm-2">
+                            <strong >Purchase Representative:</strong>
+                            <p t-field="o.user_id" class="m-0"/>
+                        </div>
+                        <!-- Order Date -->
+                        <div t-if="o.date_order" class="col-3 bm-2">
+                            <strong >Order Date:</strong>
+                            <p t-field="o.date_order" t-options='{"widget":"date"}' class="m-0"/>
+                        </div>
+                        <!-- Currency -->
+                        <div t-if="o.user_id" class="col-3 bm-2">
+                            <strong >Currency:</strong>
+                            <p t-field="o.currency_id.name" class="m-0"/>
+                        </div>
+                    </div>
 
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
-                
-            <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
-                <!-- Phone -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Phone: <span t-field="o.company_id.phone"/></p>
-                </div>
-                <!-- Email -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Email: <span t-field="o.company_id.email"/></p>
-                </div>
-                <!-- Website -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Website: <span t-field="o.company_id.website"/></p>
-                </div>
-                <!-- Sales TRN -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
-                </div>
-            </div>
-            
-                <!-- Footer Note -->
-<!--                 <div style="margin-top:10px;">
-                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                <h2 class="text-center">Thank You for Your Business</h2>
-                </div> -->
-                
-            </div>
-        </div>
+                    <!-- Table -->
+                    <div class="row">
+                        <table class="table table-sm table-bordered o_main_table">
+                            <thead>
+                                <tr class="table-active text-center">
+                                    <th>Code <br/> كود </th>
+                                    <th>Description <br/> اسم الصنف </th>
+                                    <th>Deliver To <br/> مخزن رقم </th>
+                                    <th>Unit <br/> الوحده </th>
+                                    <th>Qty <br/> الكمية </th>
+                                    <th>Price <br/> السعر </th>
+                                    <th>Discount % <br/> الخصم </th>
+                                    <th>Amount <br/> القيمة </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Setting Totals -->
+                                <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
+                                <t t-set="total_discount" t-value="0.0"/>
+                                <t t-set="total_after_discount" t-value="o.amount_untaxed"/>
+                                <!-- Loop Order Lines -->
+                                <t t-foreach="o.order_line" t-as="line">
+                                    <!-- Computing Totals -->
+                                    <!-- Subtotal Before Taxes & Discounts -->
+                                    <t t-set="subtotal_before_tax_and_discount" t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_qty)"/>
 
+                                    <tr>
+                                        <!-- Code -->
+                                        <td style="text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                        <!-- Description -->
+                                        <td style="text-align:center;"><span t-esc="line.product_id.name"/></td>
+                                        <!-- Deliver To / Location -->
+                                        <td style="text-align:center;"><span t-field="o.picking_type_id"/></td>
+                                        <!-- Unit -->
+                                        <td style="text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
+                                        <!-- Quantity -->
+                                        <td style="text-align:center;"><span t-esc="line.product_qty"/></td>
+                                        <!-- Price -->
+                                        <td style="text-align:center;"><span t-esc="line.price_unit"/></td>
+                                        <!-- Discount -->
+                                        <td style="text-align:center;"><span t-esc="line.discount"/></td>
+                                        <!-- Amount -->
+                                        <td style="text-align:center;"><span t-field="line.price_subtotal"
+                                                                             t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!-- Totals & Notes -->
+                    <div class="row" style="margin-top:20px;">
+
+                        <!-- NOTES -->
+                        <div class="col-6">
+                            <strong >Notes:</strong>
+                            <p t-field="o.notes"/>
+                        </div>
+
+                        <!-- TOTALS -->
+                        <div class="col-6">
+                            <table class="table" style="border-bottom:1px solid black;">
+                                <tbody>
+                                    <!-- Subtotal -->
+                                    <tr>
+                                        <td style="text-align:left;border-top:1px solid black;"><strong>Subtotal</strong></td>
+                                        <td style="text-align:right;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
+                                    </tr>
+                                    <!-- Total Discount -->
+                                    <tr>
+                                        <!-- Total Discount -->
+                                        <t t-set="total_discount" t-value="total_discount + (subtotal_before_tax_and_discount - total_after_discount)"/>
+                                        <td style="text-align:left;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
+                                        <td style="text-align:right;border-bottom:1px solid black;"><span t-esc="total_discount"/></td>
+                                    </tr>
+                                    <!-- Total After Discount -->
+                                    <tr>
+                                        <td style="text-align:left;"><strong>Total</strong></td>
+                                        <td style="text-align:right;"><span t-field="o.amount_untaxed"/></td>
+                                    </tr>
+
+
+
+                                    <!-- Total Taxes -->
+                                    <!-- Sum Taxes  -->
+                                    <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                        <tr>
+                                            <t t-if="len(o.order_line.filtered(lambda line: line.taxes_id)) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                <!-- HEADING -->
+                                                <td><strong><span class="text-nowrap" style="text-align:right;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
+                                                <!-- VALUE -->
+                                                <td style="text-align:right;">
+                                                    <span style="text-align:right;" t-esc="amount_by_group[3]" />
+                                                </td>
+                                            </t>
+
+                                            <t t-else="">
+                                                <!-- HEADING -->
+                                                <td><strong><span class="text-nowrap" style="text-align:right;" t-esc="amount_by_group[0]" t-options='{"widget": "tax-group-custom-field", "nolabel": "1", "colspan": "2"}'/></strong></td>
+                                                <!-- VALUE -->
+                                                <td style="text-align:right;">
+                                                    <span style="text-align:right;" t-esc="amount_by_group[3]"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+
+
+                                    <!-- Net Amount -->
+                                    <tr>
+                                        <td style="text-align:left;border-top:1px solid black;"><strong>Total Due</strong></td>
+                                        <td style="text-align:right;border-top:1px solid black;"><span t-esc="o.amount_total"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="oe_structure"/>
+                </div>
+                <!-- footer -->
+                <div class="footer">
+                    <!-- Footer Info -->
+                    <div id="footer_information" class="row mt32 mb32 text-center"
+                         style="border-top:1px solid black;border-bottom:1px solid black;font-size:14px;">
+                        <!-- Phone -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Phone: <span t-field="o.company_id.phone"/></p>
+                        </div>
+                        <!-- Email -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Email: <span t-field="o.company_id.email"/></p>
+                        </div>
+                        <!-- Website -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Website: <span t-field="o.company_id.website"/></p>
+                        </div>
+                        <!-- Sales TRN -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
+                        </div>
+                    </div>
+
+                    <!-- Footer Note -->
+                    <!--                 <div style="margin-top:10px;">
+                                    <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                                    <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                                    <h2 class="text-center">Thank You for Your Business</h2>
+                                    </div> -->
+
+                    <!-- Footer Note -->
+                    <div style="font-size:14px;" class="text-center">
+                        <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                        <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                        <h2 class="text-center">Thank You for Your Business</h2>
+                    </div>
+
+                </div>
+            </t>
+        </t>
     </template>
     <template id="purchase.report_purchaseorder">
         <t t-call="web.html_container">

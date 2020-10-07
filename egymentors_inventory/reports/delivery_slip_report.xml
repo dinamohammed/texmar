@@ -2,281 +2,313 @@
 <odoo>
 
     <template id="stock.report_delivery_document">
-        <t t-call="web.html_container">
+        <t t-call="web.basic_layout">
             <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
-            <t t-if="o.picking_type_id.code == 'incoming' " t-call="egymentors_inventory.receipt_order_layout">
-            <!-- INCOMING -->
-                <div class="page" style="font-size:24px;">
-                    <div class="oe_structure"/>
-                    
-                    <!-- Delivery Reference -->    
-                    <h1><span t-field="o.name"/></h1>
-                    
-                <div class="row" style="margin-top:40px;">
-                    <!-- Vendor Details -->
-                    <div class="col-6">
-                        <strong style='font-size:20px;'>Vendor:</strong>
-                        <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.street"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.phone"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.vat"/>
+            <t t-if="not o" t-set="o" t-value="doc"/>
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+            <!-- Header -->
+            <div class="header">
+                <!-- Company Logo -->
+                <div class="row" >
+                    <div class="col-6" style="width: 200px;height:80px;overflow:hidden;">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                             style="width:400px;height:400px;
+                                 margin: -165px 0px 0px -120px"/>
                     </div>
-                    <!-- Shipping Details -->
-                    <div class="col-6">
-                        <strong style='font-size:20px;'>Shipping Address:</strong>
-                        <p style='font-size:20px; font-weight:bold' t-field="o.picking_type_id.warehouse_id.display_name"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
-                    </div>
+                    <div class="col-6"/>
                 </div>
-                
-                <!-- Info Div -->
-                <div id="information" class="row mt32 mb32" style="margin-top:40px;">
-                    <!-- Shipping Date -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Shipping Date:</strong>
-                        <p style='font-size:20px;' t-field="o.scheduled_date" t-options='{"widget":"date"}' class="m-0"/>
-                    </div>
-                    <!-- Location -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Location:</strong>
-                        <p style='font-size:20px;' t-field="o.location_dest_id" class="m-0"/>
-                    </div>
-                    <!-- User Receiving -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Responsible:</strong>
-                        <p style='font-size:20px;' t-field="o.purchase_id and o.purchase_id.user_id and o.purchase_id.user_id.name" class="m-0"/>
-                    </div>
-                    <!-- Vendor Receipt -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Vendor Receipt:</strong>
-                        <p style='font-size:20px;' t-field="o.vendor_receipt" class="m-0"/>
-                    </div>
-                </div>                    
-
-                <!-- Table -->
+                <!-- Company Address -->
                 <div class="row">
-                    <table class="table" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <td style="font-size:20px;text-align:center;">Code <br/> كود </td>
-                                <td style="font-size:20px;text-align:center;">Description <br/> اسم الصنف </td>
-                                <td style="font-size:20px;text-align:center;">FX No. <br/> رقم فاكس </td>
-                                <td style="font-size:20px;text-align:center;">Deliver To <br/> مخزن رقم </td>
-                                <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
-                                <td style="font-size:20px;text-align:center;">Quantity <br/> الكمية </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-set="total_qty" t-value="0.0"/>
-                            <!-- Loop Order Lines -->
-                            <t t-foreach="o.move_ids_without_package" t-as="line">
-                                <tr>
-                                    <!-- Code -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
-                                    <!-- Description -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.name"/></td>
-                                    <!-- FX No. -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.fx_num_id and line.fx_num_id.name or ''"/></td>
-                                    <!-- Deliver To / Location -->
-                                    <td style="font-size:20px;text-align:center;"><span t-field="o.picking_type_id"/></td>
-                                    <!-- Unit -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
-                                    <!-- Quantity -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom_qty"/></td>
-                                    
-                                    <!-- Quantity Total -->
-                                    <t t-set="total_qty" t-value="line.product_uom_qty + total_qty"/>
+                    <div class="col-6">
+                        <h4 class="mt0" t-field="o.company_id.report_header"/>
+                        <div name="company_address" class="mb4" style="color:grey">
+                            <span class="company_address" t-field="o.company_id.partner_id"
+                                  t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                        </div>
+                    </div>
+                    <div class="col-6"/>
+                </div>
+            </div>
+            <!-- Page -->
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+            <t t-if="o.picking_type_id.code == 'incoming' ">
+                <!-- INCOMING -->
+                <div class="page" >
+                    <div class="oe_structure"/>
+
+                    <!-- Delivery Reference -->
+                    <h1><span t-field="o.name"/></h1>
+
+                    <div class="row" style="margin-top:40px;">
+                        <!-- Vendor Details -->
+                        <div class="col-6">
+                            <strong >Vendor:</strong>
+                            <p style='font-weight:bold' t-field="o.partner_id.name"/>
+                            <p t-field="o.partner_id.street"/>
+                            <p t-field="o.partner_id.country_id.name"/>
+                            <p t-field="o.partner_id.phone"/>
+                            <p t-field="o.partner_id.vat"/>
+                        </div>
+                        <!-- Shipping Details -->
+                        <div class="col-6">
+                            <strong >Shipping Address:</strong>
+                            <p style='font-weight:bold' t-field="o.picking_type_id.warehouse_id.display_name"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
+                        </div>
+                    </div>
+
+                    <!-- Info Div -->
+                    <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                        <!-- Shipping Date -->
+                        <div class="col-3 bm-2">
+                            <strong >Shipping Date:</strong>
+                            <p t-field="o.scheduled_date" t-options='{"widget":"date"}' class="m-0"/>
+                        </div>
+                        <!-- Location -->
+                        <div class="col-3 bm-2">
+                            <strong >Location:</strong>
+                            <p t-field="o.location_dest_id" class="m-0"/>
+                        </div>
+                        <!-- User Receiving -->
+                        <div class="col-3 bm-2">
+                            <strong >Responsible:</strong>
+                            <p t-field="o.purchase_id and o.purchase_id.user_id and o.purchase_id.user_id.name" class="m-0"/>
+                        </div>
+                        <!-- Vendor Receipt -->
+                        <div class="col-3 bm-2">
+                            <strong >Vendor Receipt:</strong>
+                            <p t-field="o.vendor_receipt" class="m-0"/>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="row">
+                        <table class="table table-sm table-bordered o_main_table">
+                            <thead>
+                                <tr class="table-active text-center">
+                                    <th >Code <br/> كود </th>
+                                    <th >Description <br/> اسم الصنف </th>
+                                    <th >FX No. <br/> رقم فاكس </th>
+                                    <th >Deliver To <br/> مخزن رقم </th>
+                                    <th >Unit <br/> الوحده </th>
+                                    <th >Quantity <br/> الكمية </th>
                                 </tr>
-                            </t>
+                            </thead>
+                            <tbody>
+                                <t t-set="total_qty" t-value="0.0"/>
+                                <!-- Loop Order Lines -->
+                                <t t-foreach="o.move_ids_without_package" t-as="line">
+                                    <tr>
+                                        <!-- Code -->
+                                        <td style="text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                        <!-- Description -->
+                                        <td style="text-align:center;"><span t-esc="line.product_id.name"/></td>
+                                        <!-- FX No. -->
+                                        <td style="text-align:center;"><span t-esc="line.fx_num_id and line.fx_num_id.name or ''"/></td>
+                                        <!-- Deliver To / Location -->
+                                        <td style="text-align:center;"><span t-field="o.picking_type_id"/></td>
+                                        <!-- Unit -->
+                                        <td style="text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
+                                        <!-- Quantity -->
+                                        <td style="text-align:center;"><span t-esc="line.product_uom_qty"/></td>
+
+                                        <!-- Quantity Total -->
+                                        <t t-set="total_qty" t-value="line.product_uom_qty + total_qty"/>
+                                    </tr>
+                                </t>
                                 <!-- QUANTITY TOTAL -->
-                                
+
                                 <!-- Total Heading -->
                                 <tr>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;font-weight:bold;">Total</td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;font-weight:bold;">Total</td>
                                 </tr>
                                 <!-- Total Quantity Number -->
                                 <tr>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;">
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;">
                                         <span t-esc="total_qty"/>
                                         <span t-esc="o.move_ids_without_package.product_uom.name"/>
                                     </td>
                                 </tr>
                                 <!-- Total Quantity Words + Unit -->
                                 <tr>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;">
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;">
                                         <span t-esc="o.qty_in_words"/>
                                         <span t-esc="o.move_ids_without_package.product_uom.name"/>
                                     </td>
                                 </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </t>
-            
-            
-            
-            <t t-elif="o.picking_type_id.code == 'outgoing'" t-call="egymentors_inventory.delivery_order_layout">
+            <t t-elif="o.picking_type_id.code == 'outgoing'">
                 <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
                 <!-- OUTGOING -->
-                <div class="page" style="font-size:24px;">
+                <div class="page">
                     <div class="oe_structure"/>
-                    
-                    <!-- Delivery Reference -->    
-                    <h1><span t-field="o.name"/></h1>
-                    
-                <div class="row" style="margin-top:40px;">
-                    <!-- Customer Details -->
-                    <div class="col-6">
-                        <strong style='font-size:20px;'>Customer:</strong>
-                        <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.street"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.phone"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.vat"/>
-                    </div>
-                    <!-- Shipping Details -->
-                    <div class="col-6">
-                        <strong style='font-size:20px;'>Shipping Address:</strong>
-                        <p style='font-size:20px; font-weight:bold' t-field="o.picking_type_id.warehouse_id.display_name"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
-                        <p style='font-size:20px;' t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
-                    </div>
-                </div>
-                
-                <!-- Info Div -->
-                <div id="information" class="row mt32 mb32" style="margin-top:40px;">
-                    <!-- Shipping Date -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Shipping Date:</strong>
-                        <p style='font-size:20px;' t-field="o.scheduled_date" t-options='{"widget":"date"}' class="m-0"/>
-                    </div>
-                    <!-- Location -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Location:</strong>
-                        <p style='font-size:20px;' t-field="o.location_dest_id" class="m-0"/>
-                    </div>
-                    <!-- User Receiving -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Responsible:</strong>
-                        <p style='font-size:20px;'  t-field="o.purchase_id and o.purchase_id.user_id and o.purchase_id.user_id.name" class="m-0"/>
-                    </div>
-                    <!-- Customer Receipt -->
-                    <div class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Customer Receipt:</strong>
-                        <p style='font-size:20px;' t-field="o.customer_order_delivery" class="m-0"/>
-                    </div>
-                </div>                    
 
-                <!-- Table -->
-                <div class="row">
-                    <table class="table" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <td style="font-size:20px;text-align:center;">Code <br/> كود </td>
-                                <td style="font-size:20px;text-align:center;">Description <br/> اسم الصنف </td>
-                                <td style="font-size:20px;text-align:center;">FX No. <br/> رقم فاكس </td>
-                                <td style="font-size:20px;text-align:center;">Deliver To <br/> مخزن رقم </td>
-                                <td style="font-size:20px;text-align:center;">Unit <br/> الوحده </td>
-                                <td style="font-size:20px;text-align:center;">Quantity <br/> الكمية </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-set="total_qty" t-value="0.0"/>
-                            <!-- Loop Order Lines -->
-                            <t t-foreach="o.move_ids_without_package" t-as="line">
-                                <tr>
-                                    <!-- Code -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.default_code"/></td>
-                                    <!-- Description -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_id.name"/></td>
-                                    <!-- FX No. -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.fx_num_id and line.fx_num_id.name or ''"/></td>
-                                    <!-- Deliver To / Location -->
-                                    <td style="font-size:20px;text-align:center;"><span t-field="o.picking_type_id"/></td>
-                                    <!-- Unit -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
-                                    <!-- Quantity -->
-                                    <td style="font-size:20px;text-align:center;"><span t-esc="line.product_uom_qty"/></td>
-                                    
-                                    <!-- Quantity Total -->
-                                    <t t-set="total_qty" t-value="line.product_uom_qty + total_qty"/>
+                    <!-- Delivery Reference -->
+                    <h1><span t-field="o.name"/></h1>
+
+                    <div class="row" style="margin-top:40px;">
+                        <!-- Customer Details -->
+                        <div class="col-6">
+                            <strong >Customer:</strong>
+                            <p style='font-weight:bold' t-field="o.partner_id.name"/>
+                            <p t-field="o.partner_id.street"/>
+                            <p t-field="o.partner_id.country_id.name"/>
+                            <p t-field="o.partner_id.phone"/>
+                            <p t-field="o.partner_id.vat"/>
+                        </div>
+                        <!-- Shipping Details -->
+                        <div class="col-6">
+                            <strong >Shipping Address:</strong>
+                            <p style='font-weight:bold' t-field="o.picking_type_id.warehouse_id.display_name"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.street"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.city"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.country_id.name"/>
+                            <p t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
+                        </div>
+                    </div>
+
+                    <!-- Info Div -->
+                    <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                        <!-- Shipping Date -->
+                        <div class="col-3 bm-2">
+                            <strong >Shipping Date:</strong>
+                            <p t-field="o.scheduled_date" t-options='{"widget":"date"}' class="m-0"/>
+                        </div>
+                        <!-- Location -->
+                        <div class="col-3 bm-2">
+                            <strong >Location:</strong>
+                            <p t-field="o.location_dest_id" class="m-0"/>
+                        </div>
+                        <!-- User Receiving -->
+                        <div class="col-3 bm-2">
+                            <strong >Responsible:</strong>
+                            <p  t-field="o.purchase_id and o.purchase_id.user_id and o.purchase_id.user_id.name" class="m-0"/>
+                        </div>
+                        <!-- Customer Receipt -->
+                        <div class="col-3 bm-2">
+                            <strong >Customer Receipt:</strong>
+                            <p t-field="o.customer_order_delivery" class="m-0"/>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="row">
+                        <table class="table table-sm table-bordered o_main_table">
+                            <thead>
+                                <tr class="table-active text-center">
+                                    <th>Code <br/> كود </th>
+                                    <th>Description <br/> اسم الصنف </th>
+                                    <th>FX No. <br/> رقم فاكس </th>
+                                    <th>Deliver To <br/> مخزن رقم </th>
+                                    <th>Unit <br/> الوحده </th>
+                                    <th>Quantity <br/> الكمية </th>
                                 </tr>
-                            </t>
+                            </thead>
+                            <tbody>
+                                <t t-set="total_qty" t-value="0.0"/>
+                                <!-- Loop Order Lines -->
+                                <t t-foreach="o.move_ids_without_package" t-as="line">
+                                    <tr>
+                                        <!-- Code -->
+                                        <td style="text-align:center;"><span t-esc="line.product_id.default_code"/></td>
+                                        <!-- Description -->
+                                        <td style="text-align:center;"><span t-esc="line.product_id.name"/></td>
+                                        <!-- FX No. -->
+                                        <td style="text-align:center;"><span t-esc="line.fx_num_id and line.fx_num_id.name or ''"/></td>
+                                        <!-- Deliver To / Location -->
+                                        <td style="text-align:center;"><span t-field="o.picking_type_id"/></td>
+                                        <!-- Unit -->
+                                        <td style="text-align:center;"><span t-esc="line.product_uom and line.product_uom.name or ''"/></td>
+                                        <!-- Quantity -->
+                                        <td style="text-align:center;"><span t-esc="line.product_uom_qty"/></td>
+
+                                        <!-- Quantity Total -->
+                                        <t t-set="total_qty" t-value="line.product_uom_qty + total_qty"/>
+                                    </tr>
+                                </t>
                                 <!-- QUANTITY TOTAL -->
-                                
+
                                 <!-- Total Heading -->
                                 <tr>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;font-weight:bold;">Total</td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;font-weight:bold;">Total</td>
                                 </tr>
                                 <!-- Total Quantity Number -->
                                 <tr>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;">
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;">
                                         <span t-esc="total_qty"/>
                                         <span t-esc="o.move_ids_without_package.product_uom.name"/>
                                     </td>
                                 </tr>
                                 <!-- Total Quantity Words + Unit -->
                                 <tr>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;"></td>
-                                    <td style="font-size:20px;text-align:center;">
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;">
                                         <span t-esc="o.qty_in_words"/>
                                         <span t-esc="o.move_ids_without_package.product_uom.name"/>
                                     </td>
                                 </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </t>
-            
-            
-            
-            <t t-else="else" t-call="web.external_layout">
+            <t t-else="else" >
                 <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
                 <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
                 <t t-if="partner" name="partner_header">
                     <t t-set="address">
                         <div t-esc="partner"
-                        t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
-                   </t>
+                             t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+                    </t>
                 </t>
 
                 <div class="page">
@@ -295,7 +327,7 @@
                             </t>
                             <t t-if="o.state != 'done'">
                                 <p t-field="o.scheduled_date" t-options='{"widget": "date"}'/>
-                           </t>
+                            </t>
                         </div>
                     </div>
                     <table class="table table-sm" t-if="o.state!='done'" name="stock_move_table">
@@ -360,232 +392,44 @@
                     </p>
                 </div>
             </t>
-         </t>
-    </template>
+            <!-- footer -->
+            <div class="footer">
+                <!-- Footer Info -->
+                <div id="footer_information" class="row mt32 mb32 text-center"
+                     style="border-top:1px solid black;border-bottom:1px solid black;font-size:14px;">
+                    <!-- Phone -->
+                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                        <p>Phone: <span t-field="o.company_id.phone"/></p>
+                    </div>
+                    <!-- Email -->
+                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                        <p>Email: <span t-field="o.company_id.email"/></p>
+                    </div>
+                    <!-- Website -->
+                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                        <p>Website: <span t-field="o.company_id.website"/></p>
+                    </div>
+                    <!-- Sales TRN -->
+                    <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                        <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
+                    </div>
+                </div>
 
-    
-    <!-- INCOMING -->
-    <template id="receipt_order_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header">
-                <div class="row mb8">
-                    <div class="col-6">
-                        <!-- Company Logo -->
-                       <div class="row" style="margin-top:30px;">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
-                        </div>
-                        <!-- Company Address -->
-                        <div class="row" style="margin-top:30px;">
-                            <h4 class="mt0" t-field="o.company_id.report_header"/>
-                            <div name="company_address" class="mb4" style="color:grey">
-                                <span class="company_address" t-field="o.company_id.partner_id"
-                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 mb4">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-call="web.address_layout"/>
-            <t t-raw="0"/>
-        </div>
-
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
-                
-                
-                    <p>All supplied products are under revision and inspection for 15 days from delivery جميع البضائع المورده تحت الفحص و الاستلام لمدة 15 يوم</p>
-                <div class="row" style="margin-top:25px;margin-bottom:25px;">
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Received by</strong></span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Store Keeper</strong></span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Security</strong></span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Purchase Accounting</strong></span>
-                    </div>
-                </div>
-                <div class="oe_clear"/>
-                <div class="row" style="margin-top:60px;margin-bottom:20px;">
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                </div>
-                
-            <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
-                <!-- Phone -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Phone: <span t-field="o.company_id.phone"/></p>
-                </div>
-                <!-- Email -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Email: <span t-field="o.company_id.email"/></p>
-                </div>
-                <!-- Website -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Website: <span t-field="o.company_id.website"/></p>
-                </div>
-                <!-- Sales TRN -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
-                </div>
-            </div>
-            
                 <!-- Footer Note -->
-<!--                 <div style="margin-top:10px;">
-                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                <h2 class="text-center">Thank You for Your Business</h2>
-                </div> -->
-                
-            </div>
-        </div>
+                <!--                 <div style="margin-top:10px;">
+                                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                                <h2 class="text-center">Thank You for Your Business</h2>
+                                </div> -->
 
-    </template>
-    
-    
-    <!-- OUTGOING -->
-    <template id="delivery_order_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header">
-                <div class="row mb8">
-                    <div class="col-6">
-                        <!-- Company Logo -->
-                       <div class="row" style="margin-top:30px;">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
-                        </div>
-                        <!-- Company Address -->
-                        <div class="row" style="margin-top:30px;">
-                            <h4 class="mt0" t-field="o.company_id.report_header"/>
-                            <div name="company_address" class="mb4" style="color:grey">
-                                <span class="company_address" t-field="o.company_id.partner_id"
-                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 mb4">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-call="web.address_layout"/>
-            <t t-raw="0"/>
-        </div>
-
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
-                
-                
-                    <p>All supplied products are under revision and inspection for 15 days from delivery جميع البضائع المورده تحت الفحص و الاستلام لمدة 15 يوم</p>
-                <div class="row" style="margin-top:25px;margin-bottom:25px;">
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Received by</strong></span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Store Keeper</strong></span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Security</strong></span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span><strong>Purchase Accounting</strong></span>
-                    </div>
-                </div>
-                <div class="oe_clear"/>
-                <div class="row" style="margin-top:60px;margin-bottom:20px;">
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                    <div class="col-3" style="text-align:center;">
-                        <span>-------------------</span>
-                    </div>
-                </div>
-                
-            <!-- Footer Info -->
-            <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
-                <!-- Phone -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Phone: <span t-field="o.company_id.phone"/></p>
-                </div>
-                <!-- Email -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Email: <span t-field="o.company_id.email"/></p>
-                </div>
-                <!-- Website -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Website: <span t-field="o.company_id.website"/></p>
-                </div>
-                <!-- Sales TRN -->
-                <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                    <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
-                </div>
-            </div>
-            
                 <!-- Footer Note -->
-<!--                 <div style="margin-top:10px;">
-                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                <h2 class="text-center">Thank You for Your Business</h2>
-                </div> -->
-                
+                <div style="font-size:14px;" class="text-center">
+                    <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                    <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                    <h2 class="text-center">Thank You for Your Business</h2>
+                </div>
+
             </div>
-        </div>
-
-
+        </t>
     </template>
-
 </odoo>
