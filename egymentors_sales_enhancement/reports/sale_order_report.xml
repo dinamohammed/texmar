@@ -2,261 +2,259 @@
 <odoo>
 
     <template id="report_saleorder_document_new">
-        <t t-set="o" t-value="doc.with_context(lang=doc.partner_id.lang)" />
-        <t t-call="egymentors_sales_enhancement.sale_order_layout">
-            <div class="page" style="font-size:24px;">
-                <div class="oe_structure"/>
-
-                <!-- SO / SQ Reference -->
-                <h1 t-if="o.state == 'draft'">Quotation #<span t-field="o.name"/></h1>
-                <h1 t-if="o.state in ['sent']">Sales Order #<span t-field="o.name"/></h1>
-                <h1 t-if="o.state in ['sale', 'done']">Sales Order #<span t-field="o.name"/></h1>
-                <h1 t-if="o.state == 'cancel'">Cancelled Sales Order #<span t-field="o.name"/></h1>
-
-                <div class="row" style="margin-top:40px;">
-                    <!-- Customer Details -->
-                    <div class="col-6">
-                        <strong style='font-size:20px;'>Customer:</strong>
-                        <p style='font-size:20px; font-weight:bold' t-field="o.partner_id.name"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.street"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.country_id.name"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.phone"/>
-                        <p style='font-size:20px;' t-field="o.partner_id.vat"/>
-                    </div>
-                    <!-- Shipping Details -->
-                    <div class="col-6">
-                        <strong style='font-size:20px;'>Shipping Address:</strong>
-                        <p style='font-size:20px; font-weight:bold' t-field="o.partner_shipping_id.display_name"/>
-                        <p style='font-size:20px;' t-field="o.partner_shipping_id.street"/>
-                        <p style='font-size:20px;' t-field="o.partner_shipping_id.city"/>
-                        <p style='font-size:20px;' t-field="o.partner_shipping_id.name"/>
-                        <p style='font-size:20px;' t-field="o.partner_shipping_id.phone"/>
-                    </div>
-                </div>
-
-                <!-- Info Div -->
-                <div id="information" class="row mt32 mb32" style="margin-top:40px;">
-                    <!-- Order Date -->
-                    <div t-if="o.date_order" class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Order Date:</strong>
-                        <p style='font-size:20px;' t-field="o.date_order" t-options='{"widget":"date"}' class="m-0"/>
-                    </div>
-                    <!-- Saleperson -->
-                    <div t-if="o.user_id" class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Saleperson</strong>
-                        <p style='font-size:20px;' t-field="o.user_id" class="m-0"/>
-                    </div>
-                    <!-- Customer Order -->
-                    <div t-if="o.user_id" class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Customer Order</strong>
-                        <p style='font-size:20px;' t-field="o.customer_order" class="m-0"/>
-                    </div>
-                    <!-- Currency -->
-                    <div t-if="o.user_id" class="col-3 bm-2">
-                        <strong style='font-size:20px;'>Currency:</strong>
-                        <p style='font-size:20px;' t-field="o.currency_id.name" class="m-0"/>
-                    </div>
-                </div>
-                <div>
-                    <strong style='font-size:20px;'>Subject: Offer</strong>
-                    <p style='font-size:20px;'>We have the pleasure to manufacture and supply upholstery and Curtain fabrics for your project. As per approved fabrics scheme and out offer specifications as follows,</p>
-                </div>
-
-                <!-- Table -->
-                <div class="row">
-                    <table class="table" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <td style="font-size:20px;text-align:center;">Code </td>
-                                <td style="font-size:20px;text-align:center;">Description </td>
-                                <td style="font-size:20px;text-align:center;">Product Image </td>
-                                <td style="font-size:20px;text-align:center;">Treatment </td>
-                                <td style="font-size:20px;text-align:center;">Quantity </td>
-                                <td style="font-size:20px;text-align:center;">Unit Price </td>
-                                <td style="font-size:20px;text-align:center;">Discount </td>
-                                <td style="font-size:20px;text-align:center;">Amount </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Setting Totals -->
-                            <t t-set="total_untaxed" t-value="0"/>
-                            <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
-                            <t t-foreach="o.order_line" t-as="line">
-                                <!-- Computing Totals -->
-                                <!-- Subtotal Before Taxes & Discounts -->
-                                <t t-set="subtotal_before_tax_and_discount"
-                                   t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_uom_qty)"/>
-                                <tr>
-                                    <!-- Code -->
-                                    <td style="font-size:20px;text-align:center;">
-                                        <span t-esc="line.product_id.default_code"/>
-                                    </td>
-                                    <!-- Description + Width -->
-                                    <td style="font-size:20px;text-align:center;">
-                                        <span t-field="line.product_id.name"/><br/><span t-esc="line.product_id.texmar_width"/>
-                                    </td>
-                                    <!-- Product Image -->
-                                    <td style="font-size:20px;text-align:center;">
-                                        <span t-field="line.product_id.image_128"
-                                              t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}"/>
-                                    </td>
-                                    <!-- Treatment -->
-                                    <t t-foreach="line.product_id.attribute_line_ids" t-as="var">
-                                        <t t-if="var.attribute_id.name == 'Treatment'">
-                                            <td style="font-size:20px;text-align:center;"><span t-esc="var.value_ids.name"/></td>
-                                        </t>
-                                    </t>
-                                    <!-- Quantity -->
-                                    <td style="font-size:20px;text-align:center;">
-                                        <span t-esc="line.product_uom_qty"/>
-                                    </td>
-                                    <!-- Unit Price -->
-                                    <td style="font-size:20px;text-align:center;">
-                                        <span t-esc="line.price_unit"/>
-                                    </td>
-                                    <!-- Discount -->
-                                    <td style="font-size:20px;text-align:center;">
-                                        <span t-esc="line.discount"/>
-                                    </td>
-                                    <!-- Amount -->
-                                    <td style="font-size:20px;text-align:center;">
-                                        <span t-esc="line.price_subtotal"/>
-                                    </td>
-                                    <t t-set="total_untaxed" t-value="total_untaxed + line.price_subtotal"/>
-                                </tr>
-                            </t>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- TOTALS -->
-                <div class="row">
-                    <div class="col-6">
-                    </div>
-                    <div class="col-6">
-                        <table class="table">
-                            <tbody>
-                                <!-- Subtotal -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;"><strong>Subtotal</strong></td>
-                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
-                                </tr>
-                                <!-- Discount -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
-                                    <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-field="o.amount_discount"/></td>
-                                </tr>
-                                <!-- Total After Discount -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;"><strong>Total</strong></td>
-                                    <td style="text-align:right;font-size:20px;"><span t-field="o.amount_untaxed"/></td>
-                                </tr>
-                                <!-- Taxes -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;border-bottom:1px solid black;"><strong>14 % VAT</strong></td>
-                                    <td style="text-align:right;font-size:20px;border-bottom:1px solid black;"><span t-field="o.amount_tax"/></td>
-                                </tr>
-                                <!-- Total -->
-                                <tr>
-                                    <td style="text-align:left;font-size:20px;border-top:1px solid black;border-bottom:1px solid black;"><strong>Total</strong></td>
-                                    <td style="text-align:right;font-size:20px;border-top:1px solid black;border-bottom:1px solid black;"><span t-field="o.amount_total"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Show Specs & Conditions Template based on Selection -->
-                <div style='margin-top:100px;'>
-                    <p style='font-size:20px;font-weight:bold;'>Offer Specifications and Conditions :-</p>
-                    <div class="row">
-                        <p style='font-size:20px;' t-if="o.template_selection == 'template_one'" t-raw="o.specs_conditions_1"/>
-                        <p style='font-size:20px;' t-if="o.template_selection == 'template_two'" t-raw="o.specs_conditions_2"/>
-                        <p style='font-size:20px;' t-if="o.template_selection == 'template_three'" t-raw="o.specs_conditions_3"/>
-                        <p style='font-size:20px;' t-if="o.template_selection == 'template_four'" t-raw="o.specs_conditions_4"/>
-                    </div>
-                </div>
-            </div>
-        </t>
-    </template>
-
-    <template id="sale_order_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
-        <t t-if="not company">
-            <!-- Multicompany -->
-            <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
-            </t>
-            <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-        </t>
-
-        <div t-attf-class="header o_company_#{company.id}_layout">
-            <div class="o_boxed_header">
-                <div class="row mb8">
-                    <div class="col-6">
-                        <!-- Company Logo -->
-                        <div class="row" style="margin-top:30px;">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" style="max-width: 300px; max-height: 250px;"/>
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+                <t t-if="not o" t-set="o" t-value="doc"/>
+                <t t-if="not company">
+                    <!-- Multicompany -->
+                    <t t-if="company_id">
+                        <t t-set="company" t-value="company_id"/>
+                    </t>
+                    <t t-elif="o and 'company_id' in o">
+                        <t t-set="company" t-value="o.company_id.sudo()"/>
+                    </t>
+                    <t t-else="else">
+                        <t t-set="company" t-value="res_company"/>
+                    </t>
+                </t>
+                <!-- Header -->
+                <div class="header">
+                    <!-- Company Logo -->
+                    <div class="row" >
+                        <div class="col-6" style="width: 200px;height:80px;overflow:hidden;">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                                 style="width:400px;height:400px;
+                                 margin: -165px 0px 0px -120px"/>
                         </div>
-                        <!-- Company Address -->
-                        <div class="row" style="margin-top:30px;">
+                        <div class="col-6"/>
+                    </div>
+                    <!-- Company Address -->
+                    <div class="row">
+                        <div class="col-6">
                             <h4 class="mt0" t-field="o.company_id.report_header"/>
                             <div name="company_address" class="mb4" style="color:grey">
                                 <span class="company_address" t-field="o.company_id.partner_id"
                                       t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-6 mb4">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-            <t t-call="web.address_layout"/>
-            <t t-raw="0"/>
-        </div>
-
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
-            <div class="text-center">
-
-                <!-- Footer Info -->
-                <div id="footer_information" class="row mt32 mb32" style="border-top:1px solid black;border-bottom:1px solid black;">
-                    <!-- Phone -->
-                    <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                        <p>Phone: <span t-field="o.company_id.phone"/></p>
-                    </div>
-                    <!-- Email -->
-                    <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                        <p>Email: <span t-field="o.company_id.email"/></p>
-                    </div>
-                    <!-- Website -->
-                    <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                        <p>Website: <span t-field="o.company_id.website"/></p>
-                    </div>
-                    <!-- Sales TRN -->
-                    <div class="col-3 bm-2" style="margin-top:10px;margin-bottom:10px;">
-                        <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
+                        <div class="col-6"/>
                     </div>
                 </div>
+                <!-- Page -->
+                <div class="page">
+                    <div class="oe_structure"/>
 
-                <!-- Footer Note -->
-                <!--                 <div style="margin-top:10px;">
-                                <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
-                                <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
-                                <h2 class="text-center">Thank You for Your Business</h2>
-                                </div> -->
+                    <!-- SO / SQ Reference -->
+                    <h1 t-if="o.state == 'draft'">Quotation #<span t-field="o.name"/></h1>
+                    <h1 t-if="o.state in ['sent']">Sales Order #<span t-field="o.name"/></h1>
+                    <h1 t-if="o.state in ['sale', 'done']">Sales Order #<span t-field="o.name"/></h1>
+                    <h1 t-if="o.state == 'cancel'">Cancelled Sales Order #<span t-field="o.name"/></h1>
 
-            </div>
-        </div>
+                    <div class="row" style="margin-top:40px;">
+                        <!-- Customer Details -->
+                        <div class="col-6">
+                            <strong>Customer:</strong>
+                            <p style=' font-weight:bold' t-field="o.partner_id.name"/>
+                            <p t-field="o.partner_id.street"/>
+                            <p t-field="o.partner_id.country_id.name"/>
+                            <p t-field="o.partner_id.phone"/>
+                            <p t-field="o.partner_id.vat"/>
+                        </div>
+                        <!-- Shipping Details -->
+                        <div class="col-6">
+                            <strong>Shipping Address:</strong>
+                            <p style=' font-weight:bold' t-field="o.partner_shipping_id.display_name"/>
+                            <p t-field="o.partner_shipping_id.street"/>
+                            <p t-field="o.partner_shipping_id.city"/>
+                            <p t-field="o.partner_shipping_id.name"/>
+                            <p t-field="o.partner_shipping_id.phone"/>
+                        </div>
+                    </div>
 
+                    <!-- Info Div -->
+                    <div id="information" class="row mt32 mb32" style="margin-top:40px;">
+                        <!-- Order Date -->
+                        <div t-if="o.date_order" class="col-3 bm-2">
+                            <strong>Order Date:</strong>
+                            <p t-field="o.date_order" t-options='{"widget":"date"}' class="m-0"/>
+                        </div>
+                        <!-- Saleperson -->
+                        <div t-if="o.user_id" class="col-3 bm-2">
+                            <strong>Saleperson</strong>
+                            <p t-field="o.user_id" class="m-0"/>
+                        </div>
+                        <!-- Customer Order -->
+                        <div t-if="o.user_id" class="col-3 bm-2">
+                            <strong>Customer Order</strong>
+                            <p t-field="o.customer_order" class="m-0"/>
+                        </div>
+                        <!-- Currency -->
+                        <div t-if="o.user_id" class="col-3 bm-2">
+                            <strong>Currency:</strong>
+                            <p t-field="o.currency_id.name" class="m-0"/>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Subject: Offer</strong>
+                        <p>We have the pleasure to manufacture and supply upholstery and Curtain fabrics for your project. As per approved fabrics scheme and out offer specifications as follows,</p>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="row">
+                        <table class="table table-sm table-bordered o_main_table">
+                            <thead>
+                                <tr class="table-active text-center">
+                                    <th>Code </th>
+                                    <th>Description </th>
+                                    <th>Product Image </th>
+                                    <th>Treatment </th>
+                                    <th>Quantity </th>
+                                    <th>Unit Price </th>
+                                    <th>Discount </th>
+                                    <th>Amount </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Setting Totals -->
+                                <t t-set="total_untaxed" t-value="0"/>
+                                <t t-set="subtotal_before_tax_and_discount" t-value="0.0"/>
+                                <t t-foreach="o.order_line" t-as="line">
+                                    <!-- Computing Totals -->
+                                    <!-- Subtotal Before Taxes & Discounts -->
+                                    <t t-set="subtotal_before_tax_and_discount"
+                                       t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_uom_qty)"/>
+                                    <tr>
+                                        <!-- Code -->
+                                        <td style="text-align:center;">
+                                            <span t-esc="line.product_id.default_code"/>
+                                        </td>
+                                        <!-- Description + Width -->
+                                        <td style="text-align:center;">
+                                            <span t-field="line.product_id.name"/><br/><span t-esc="line.product_id.texmar_width"/>
+                                        </td>
+                                        <!-- Product Image -->
+                                        <td style="text-align:center;">
+                                            <span t-field="line.product_id.image_128"
+                                                  t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}"/>
+                                        </td>
+                                        <!-- Treatment -->
+                                        <t t-foreach="line.product_id.attribute_line_ids" t-as="var">
+                                            <t t-if="var.attribute_id.name == 'Treatment'">
+                                                <td style="text-align:center;"><span t-esc="var.value_ids.name"/></td>
+                                            </t>
+                                        </t>
+                                        <!-- Quantity -->
+                                        <td style="text-align:center;">
+                                            <span t-esc="line.product_uom_qty"/>
+                                        </td>
+                                        <!-- Unit Price -->
+                                        <td style="text-align:center;">
+                                            <span t-esc="line.price_unit"/>
+                                        </td>
+                                        <!-- Discount -->
+                                        <td style="text-align:center;">
+                                            <span t-esc="line.discount"/>
+                                        </td>
+                                        <!-- Amount -->
+                                        <td style="text-align:center;">
+                                            <span t-esc="line.price_subtotal"/>
+                                        </td>
+                                        <t t-set="total_untaxed" t-value="total_untaxed + line.price_subtotal"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- TOTALS -->
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6">
+                            <table class="table">
+                                <tbody>
+                                    <!-- Subtotal -->
+                                    <tr>
+                                        <td style="text-align:left;border-top:1px solid black;"><strong>Subtotal</strong></td>
+                                        <td style="text-align:right;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
+                                    </tr>
+                                    <!-- Discount -->
+                                    <tr>
+                                        <td style="text-align:left;border-bottom:1px solid black;"><strong>Total Discount</strong></td>
+                                        <td style="text-align:right;border-bottom:1px solid black;"><span t-field="o.amount_discount"/></td>
+                                    </tr>
+                                    <!-- Total After Discount -->
+                                    <tr>
+                                        <td style="text-align:left;"><strong>Total</strong></td>
+                                        <td style="text-align:right;"><span t-field="o.amount_untaxed"/></td>
+                                    </tr>
+                                    <!-- Taxes -->
+                                    <tr>
+                                        <td style="text-align:left;border-bottom:1px solid black;"><strong>14 % VAT</strong></td>
+                                        <td style="text-align:right;border-bottom:1px solid black;"><span t-field="o.amount_tax"/></td>
+                                    </tr>
+                                    <!-- Total -->
+                                    <tr>
+                                        <td style="text-align:left;border-top:1px solid black;border-bottom:1px solid black;"><strong>Total</strong></td>
+                                        <td style="text-align:right;border-top:1px solid black;border-bottom:1px solid black;"><span t-field="o.amount_total"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Show Specs & Conditions Template based on Selection -->
+                    <div style='margin-top:100px;'>
+                        <p style='font-weight:bold;'>Offer Specifications and Conditions :-</p>
+                        <div class="row">
+                            <p t-if="o.template_selection == 'template_one'" t-raw="o.specs_conditions_1"/>
+                            <p t-if="o.template_selection == 'template_two'" t-raw="o.specs_conditions_2"/>
+                            <p t-if="o.template_selection == 'template_three'" t-raw="o.specs_conditions_3"/>
+                            <p t-if="o.template_selection == 'template_four'" t-raw="o.specs_conditions_4"/>
+                        </div>
+                    </div>
+                </div> 
+                <!-- footer -->
+                <div class="footer">
+                    <!-- Footer Info -->
+                    <div id="footer_information" class="row mt32 mb32 text-center"
+                         style="border-top:1px solid black;border-bottom:1px solid black;font-size:14px;">
+                        <!-- Phone -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Phone: <span t-field="o.company_id.phone"/></p>
+                        </div>
+                        <!-- Email -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Email: <span t-field="o.company_id.email"/></p>
+                        </div>
+                        <!-- Website -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Website: <span t-field="o.company_id.website"/></p>
+                        </div>
+                        <!-- Sales TRN -->
+                        <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                            <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
+                        </div>
+                    </div>
+
+                    <!-- Footer Note -->
+                    <!--                 <div style="margin-top:10px;">
+                                    <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                                    <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                                    <h2 class="text-center">Thank You for Your Business</h2>
+                                    </div> -->
+
+                    <!-- Footer Note -->
+                    <div style="font-size:14px;" class="text-center">
+                        <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                        <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                        <h2 class="text-center">Thank You for Your Business</h2>
+                    </div>
+
+                </div>
+            </t>
+        </t>
     </template>
-
     <template id="sale.report_saleorder">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
