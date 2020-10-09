@@ -426,13 +426,13 @@
                                             <td style="text-align:center;">
                                                 <t t-set="Tax_Amount" t-value="(line.tax_ids.amount/100)*line.price_subtotal"/>
                                                 <t t-set="Tax_Amount" t-value="round(Tax_Amount,2)"/>
-                                                <span t-esc="Tax_Amount"></span>
+                                                <span t-esc="Tax_Amount"/>
                                             </td>
                                             <!-- Total -->
                                             <td style="text-align:center;">
                                                 <t t-set="Total_after_taxes" t-value="line.price_subtotal + Tax_Amount"/>
                                                 <t t-set="Total_after_taxes" t-value="round(Total_after_taxes,2)"/>
-                                                <span t-esc="Total_after_taxes"></span>
+                                                <span t-esc="Total_after_taxes"/>
                                             </td>
                                             <!-- Delivery Ref -->
                                             <td style="text-align:center;">
@@ -487,6 +487,11 @@
                                         <tr>
                                             <td style="text-align:left;border-top:1px solid black;border-bottom:1px solid black;"><strong>Total</strong></td>
                                             <td style="text-align:right;border-top:1px solid black;border-bottom:1px solid black;"><span t-field="o.amount_total"/></td>
+                                        </tr>
+                                        <!-- Due Amount -->
+                                        <tr>
+                                            <td style="text-align:left;border-top:1px solid black;border-bottom:1px solid black;"><strong>Due Amount</strong></td>
+                                            <td style="text-align:right;border-top:1px solid black;border-bottom:1px solid black;"><span t-field="o.amount_residual"/></td>
                                         </tr>
                                     </tbody>
                                 </table>
