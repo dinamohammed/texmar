@@ -66,6 +66,7 @@
                         <table class="table table-sm table-bordered o_main_table">
                             <thead>
                                 <tr class="table-active text-center">
+                                    <th>N.</th>
                                     <th>Picking Reference</th>
                                     <th>Barcode</th>
                                     <th>Status</th>
@@ -73,7 +74,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <t t-set="count" t-value="0"/>
                                 <tr t-foreach="o.picking_ids" t-as="pick" class="text-center">
+                                    <t t-set="count" t-value="count+1"/>
+                                    <td>
+                                        <span t-esc="count"/>
+                                    </td>
                                     <td>
                                         <span t-field="pick.name"/>
                                     </td>
@@ -130,7 +136,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <t t-set="i" t-value="0"/>
                                     <tr t-foreach="loc_move_line" t-as="move_operation" class="text-center">
+                                        <t t-set="i" t-value="count+1"/>
+                                        <td>
+                                            <span t-esc="i"/>
+                                        </td>
                                         <td class="text-left">
                                             <span t-field="move_operation.display_name"/>
                                         </td>
