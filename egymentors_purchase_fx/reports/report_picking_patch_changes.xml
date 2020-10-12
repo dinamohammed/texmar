@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="egymentors_purchase_fx.report_picking_batch_document">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-if="not o" t-set="o" t-value="doc"/>
+                    <t t-if="not company">
+                        <!-- Multicompany -->
+                        <t t-if="company_id">
+                            <t t-set="company" t-value="company_id"/>
+                        </t>
+                        <t t-elif="o and 'company_id' in o">
+                            <t t-set="company" t-value="o.company_id.sudo()"/>
+                        </t>
+                        <t t-else="else">
+                            <t t-set="company" t-value="res_company"/>
+                        </t>
+                    </t>
+                    <!-- Header -->
+                    <div class="header">
+                        <!-- Company Logo -->
+                        <div class="row" >
+                            <div class="col-6" style="width: 200px;height:80px;overflow:hidden;">
+                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                                     style="width:400px;height:400px;
+                                 margin: -165px 0px 0px -120px"/>
+                            </div>
+                            <div class="col-6"/>
+                        </div>
+                        <!-- Company Address -->
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 class="mt0" t-field="o.company_id.report_header"/>
+                                <div name="company_address" class="mb4" style="color:grey">
+                                    <span class="company_address" t-field="o.company_id.partner_id"
+                                          t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                                </div>
+                            </div>
+                            <div class="col-6"/>
+                        </div>
+                    </div>
+
+                    <t t-set="move_line_ids" t-value="o.picking_ids.mapped('move_line_ids')"/>
+                    <t t-set="has_package" t-value="move_line_ids.filtered('result_package_id')" groups="stock.group_tracking_lot"/>
+                    <t t-set="has_serial_number" t-value="move_line_ids.filtered('lot_id')" groups="stock.group_production_lot"/>
+                    <t t-set="has_barcode" t-value="move_line_ids.mapped('product_id').filtered('barcode')"/>
+                    <t t-set="locations" t-value="move_line_ids.mapped('location_id')"/>
+                    <!-- Page -->
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-6">
+                                <h3>Summary: <span t-field="o.name"/></h3>
+                                <div t-if="o.user_id">
+                                    <strong>Responsible:</strong>
+                                    <span t-field="o.user_id"/>
+                                </div>
+                            </div>
+                            <div class="col-3"/>
+                            <div class="col-3">
+                                <strong>Lines Count:</strong>
+                                <span t-esc="len(o.picking_ids)"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <table class="table table-sm table-bordered o_main_table">
+                            <thead>
+                                <tr class="table-active text-center">
+                                    <th>Picking Reference</th>
+                                    <th>Barcode</th>
+                                    <th>Status</th>
+                                    <th>Scheduled Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.picking_ids" t-as="pick" class="text-center">
+                                    <td>
+                                        <span t-field="pick.name"/>
+                                    </td>
+                                    <td>
+                                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;quiet=%s' % ('Code128', pick.name, 400, 100, 0)" style="width:200px;height:50px" alt="Barcode"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="pick.state"/>
+                                    </td>
+                                    <td >
+                                        <span t-field="pick.scheduled_date"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="page-break-after: always;"/>
+                        <t t-foreach="locations" t-as="location">
+                            <t t-set="loc_move_line" t-value="move_line_ids.filtered(lambda x: x.location_id==location)"/>
+                            <t t-set="products" t-value="loc_move_line.mapped('product_id')"/>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3><span t-field="o.name"/></h3>
+                                    <div t-if="o.user_id">
+                                        <strong>Responsible:</strong>
+                                        <span t-field="o.user_id"/>
+                                    </div><br/>
+                                    <h4><strong>To take from: <span t-field="location.display_name"/></strong></h4>
+                                </div>
+                                <div class="col-3"/>
+                                <div class="col-3">
+                                    <strong>Lines Count:</strong>
+                                    <span t-esc="len(loc_move_line)"/>
+                                </div>
+                            </div>
+                            <table class="table table-sm table-bordered o_main_table">
+                                <thead>
+                                    <tr class="table-active text-center">
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th width="15%">To</th>
+                                        <th width="15%">Customer</th>
+                                        <th width="15%">Picking</th>
+                                        <th>Source Document</th>
+                                        <th>Size Of Pieces</th>
+                                        <th t-if="has_serial_number" width="15%">
+                                            <strong>Lot/Serial Number</strong>
+                                        </th>
+                                        <th t-if="has_barcode" width="15%" class="text-center">
+                                            <strong>Product Barcode</strong>
+                                        </th>
+                                        <th t-if="has_package" width="15%">
+                                            <strong>Package</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="loc_move_line" t-as="move_operation" class="text-center">
+                                        <td class="text-left">
+                                            <span t-field="move_operation.display_name"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="not has_package">
+                                                <t t-if="any(move_operation.filtered(lambda l: l.state == 'done'))">
+                                                    <span t-esc="sum(move_operation.mapped('qty_done'))"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span t-esc="sum(move_operation.mapped('product_uom_qty'))"/>
+                                                </t>
+                                            </t>
+                                            <t t-if="has_package">
+                                                <span t-esc="sum(move_operation.mapped('qty_done'))"/>
+                                            </t>
+                                            <span t-field="move_operation.uom_id" groups="move_operation.group_uom"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="move_operation.mapped('location_dest_id').display_name"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="move_operation.picking_id.partner_id"
+                                                  t-esc="move_operation.picking_id.partner_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="move_operation.mapped('picking_id').display_name"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="move_operation.picking_id" t-esc="move_operation.picking_id.origin"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="move_operation.move_id.size_of_pieces"/>
+                                        </td>
+                                        <td t-if="has_serial_number and (move_operation.lot_id or move_operation.lot_name)" class="text-center h6" width="15%">
+                                            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1' % ('Code128', move_operation.lot_id.name, 600, 100)" style="width:100%;height:35px;" alt="Barcode"/>
+                                        </td>
+                                        <td width="15%" t-if="has_barcode">
+                                            <span t-if="move_operation.product_id and move_operation.product_id.barcode">
+                                                <img t-if="len(move_operation.product_id.barcode) == 13" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', move_operation.product_id.barcode, 600, 100)" style="width:100%;height:35px" alt="Barcode"/>
+                                                <img t-elif="len(move_operation.product_id.barcode) == 8" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN8', move_operation.product_id.barcode, 600, 100)" style="width:100%;height:35px" alt="Barcode"/>
+                                                <img t-else="" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move_operation.product_id.barcode, 600, 100)" style="width:100%;height:35px" alt="Barcode"/>
+
+                                            </span>
+                                        </td>
+                                        <td t-if="has_package" width="15%">
+                                            <span t-field="move_operation.package_id"/>
+                                            <t t-if="move_operation.result_package_id">
+                                                → <span t-field="move_operation.result_package_id"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p style="page-break-after: always;"/>
+                        </t>
+                    </div>
+                    <!-- footer -->
+                    <div class="footer">
+                        <!-- Footer Info -->
+                        <div id="footer_information" class="row mt32 mb32 text-center"
+                             style="border-top:1px solid black;border-bottom:1px solid black;font-size:14px;">
+                            <!-- Phone -->
+                            <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                                <p>Phone: <span t-field="o.company_id.phone"/></p>
+                            </div>
+                            <!-- Email -->
+                            <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                                <p>Email: <span t-field="o.company_id.email"/></p>
+                            </div>
+                            <!-- Website -->
+                            <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                                <p>Website: <span t-field="o.company_id.website"/></p>
+                            </div>
+                            <!-- Sales TRN -->
+                            <div class="col-3 bm-2" style="margin-top:5px;margin-bottom:5px;">
+                                <p>Sales TRN: <span t-field="o.company_id.vat"/></p>
+                            </div>
+                        </div>
+
+                        <!-- Footer Note -->
+                        <!--                 <div style="margin-top:10px;">
+                                        <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                                        <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                                        <h2 class="text-center">Thank You for Your Business</h2>
+                                        </div> -->
+
+                        <!-- Footer Note -->
+                        <div style="font-size:14px;" class="text-center">
+                            <p>if you have any questions concerning this invoice, contact our sales manager Mr. Mohamed Radwan, mob. 01223248892</p>
+                            <p>Allowed refund or change within 30 days from invoice date يحق الارتجاع أو الاستبدال في خلال 30 يوم من تاريخ الفاتورة</p>
+                            <h2 class="text-center">Thank You for Your Business</h2>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+        <template id="stock_picking_batch.report_picking_batch">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="egymentors_purchase_fx.report_picking_batch_document"/>
+                </t>
+            </t>
+        </template>
+        <!-- Declear report and it's page size-->
+        <record id="picking_patch_paperformat" model="report.paperformat">
+            <field name="name">Picking Patch Paper Format</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">45</field>
+            <field name="header_spacing">43</field>
+            <field name="margin_bottom">40</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="dpi">110</field>
+        </record>
+        <report
+                string="Batch Transfer"
+                id="stock_picking_batch.action_report_picking_batch"
+                model="stock.picking.batch"
+                report_type="qweb-pdf"
+                menu="False"
+                name="stock_picking_batch.report_picking_batch"
+                file="stock_picking_batch.report_picking_batch"
+                paperformat="egymentors_purchase_fx.picking_patch_paperformat"
+
+        />
+    </data>
+</odoo>
