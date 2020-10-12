@@ -35,8 +35,10 @@
         'data/inventory_adjustment_data.xml',
         'data/po_type_data.xml',
         'data/sale_order_shedual_action.xml',
+        
         'security/ir.model.access.csv',
         'security/sale_order_security.xml',
+        
         'wizard/cancel_reason_view.xml',
         'wizard/stock_pickings_filtered_view.xml',
         #'wizard/mrp_product_produce_view_changes.xml',
@@ -51,6 +53,7 @@
         'reports/sale_report_changes.xml',
         'reports/account_report_changes.xml',
         'reports/purchase_report_changes.xml',
+        'reports/report_picking_patch_changes.xml',
 
 
     ],
