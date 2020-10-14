@@ -20,8 +20,14 @@ class reporting(controllers.Restapi):
                 if sale: 
                     company_id = sale.company_id.id
                     company = request.env['res.company'].search([('id','=',company_id)])
+                    #ensuring that there is parent_id in the company to avoid error
+                    if not(company.parent_id):
+                        parent_company_id = request.env['res.company'].search([('company_registry','!=',False)]) #the main company
+                        company.parent_id = parent_company_id 
+                        
                     sale.env.company = company
                     sale.action_confirm_note_order()
+                    
                 return 'order confirmed' if sale else 'sale order not found'
          
          except AccessError:
