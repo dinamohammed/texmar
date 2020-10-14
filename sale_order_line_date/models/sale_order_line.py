@@ -13,6 +13,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     commitment_date = fields.Datetime("Delivery Date")
+#     discount = fields.Float(string='Discount (%)', digits='Discount', default=0.0)
 
     def write(self, vals):
         # Force commitment date only if all lines are on the same sale order
