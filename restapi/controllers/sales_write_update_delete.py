@@ -76,14 +76,17 @@ class reporting(controllers.Restapi):
                 # check if this customer has a note order still open
                 if order_id:
                     old_sale = request.env['sale.order'].search([('id','=',order_id)])
-                    sol = {
-                        'product_id':product.id,
-                        'product_uom_qty':qty,
-                        'order_id':old_sale.id,
-                        'to_sell':True
-                    }
-                    old_sale['order_line'].create(sol)
-                    return 'added successfully'
+                    if old_sale:  
+                        sol = {
+                            'product_id':product.id,
+                            'product_uom_qty':qty,
+                            'order_id':old_sale.id,
+                            'to_sell':True
+                        }
+                        old_sale['order_line'].create(sol)
+                        return 'added successfully'
+                    else:
+                        return 'order not found'
                 else:
                     new_sale = sale_order.create({
                         'partner_id':customer.id,
