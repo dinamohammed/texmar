@@ -78,7 +78,7 @@ class get(controllers.Restapi):
                         'date':draft.date_order,
                         'order_id':draft.id,
                         'customer_name':draft.partner_id.name,
-                        'state':dict(draft._fields['state'].selection).get(sale.state),
+                        'state':dict(draft._fields['state'].selection).get(draft.state),
                         'amount':draft.amount_total,
                     })                    
                 return result
