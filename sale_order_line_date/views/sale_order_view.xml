@@ -15,6 +15,10 @@
             <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
                 <field name="commitment_date"/>
             </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="replace">
+                <field name="discount" string="Disc.%" groups="product.group_discount_per_so_line" optional="show" readonly="1"/>
+
+            </xpath>
         </field>
     </record>
 

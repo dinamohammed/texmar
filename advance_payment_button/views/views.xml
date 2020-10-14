@@ -9,7 +9,17 @@
            <field name="inherit_id" ref="so_po_advance_payment_app.view_sale_order_inherit"/>
            <field name="arch" type="xml">
                 <xpath expr="//header/button[@name='set_sale_advance_payment']" position="attributes">
-                   <attribute name="attrs"> {'invisible': [('state', 'not in', ['draft','sent','sale'])]} </attribute>
+                   <attribute name="attrs"> {'invisible': [('state', 'not in', ['sent','sale'])]} </attribute>
+               </xpath>
+           </field>
+       </record>
+        <record id="view_advance_form_inherit_button_purchase" model="ir.ui.view">
+           <field name="name">advance.form.inherit.button.purchase</field>
+           <field name="model">purchase.order</field>
+           <field name="inherit_id" ref="so_po_advance_payment_app.purchase_order_form_inherit"/>
+           <field name="arch" type="xml">
+                <xpath expr="//button[@name='set_purchase_advance_payment']" position="attributes">
+                   <attribute name="attrs"> {'invisible': [('state', 'not in', ['sent','purchase'])]} </attribute>
                </xpath>
            </field>
        </record>

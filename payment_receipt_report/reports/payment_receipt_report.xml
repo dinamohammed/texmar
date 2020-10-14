@@ -146,13 +146,13 @@
                     </textarea>
                     <br/>
                     <!-- if check and invoice line-->
-                    <h2 style="font-weight:bold;margin-top:30px; ">Journal Entity Details</h2>
+                    <h2 style="font-weight:bold;margin-top:30px; ">Journal Entry Details</h2>
                     <t t-if="o.move_line_ids">
                         <div class="row">
                             <table class="table table-sm table-bordered o_main_table">
                                 <thead>
                                     <tr class="table-active text-center">
-                                        <th>Journal Entity </th>
+                                        <th>Journal Entry </th>
                                         <th>Account</th>
                                         <th>Debit</th>
                                         <th>Credit</th>
