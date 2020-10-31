@@ -165,6 +165,7 @@ class SaleOrder(models.Model):
     
     @api.model
     def create(self, vals):
+        seq_date = None
         # if company has parent ie its a Branch
         if self.env.company.parent_id:
             if vals.get('name', _('New')) == _('New'):
