@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import Warning,ValidationError
 # Ahmed Salama Code Start ---->
 
 
@@ -11,6 +11,7 @@ class MrpProductionInherit(models.Model):
 	
 	@api.model
 	def create(self, values):
+		raise ValidationError('ssa')
 		if values.get('origin'):
 			so_name = '/' in values.get('origin') and values.get('origin').split('/')[0] or values.get('origin')
 			order_id = self.env['sale.order'].search([('name', '=', so_name)])
