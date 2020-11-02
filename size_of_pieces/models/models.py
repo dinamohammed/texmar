@@ -27,4 +27,4 @@ class StockPicking(models.Model):
 
     
 
-    
+   
