@@ -16,12 +16,11 @@ class ResPartnerInherit(models.Model):
             
     # Only numbers and 11 (16 including spaces) digits only
     def onchange_mobile(self):
-        raise ValidationError(_("WARNING: Please Enter a Valid 11 Digit Mobile Number"))
         if self.mobile:
             mobile_trimed_space = self.mobile.replace(" ", "")
             print("Number withou space: ", mobile_trimed_space, len(mobile_trimed_space))
             if len(mobile_trimed_space) != 11:
-                raise ValidationError(_("WARNING: Please Enter a Valid 11 Digit Mobile Number"))
+                raise ValidationError(_("WARNING: Please Enter a Valid 11 Digit Moobile Number"))
             digits = [' ', '+', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
             for i in list(self.mobile):
                 if i not in digits:
