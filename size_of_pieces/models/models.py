@@ -22,3 +22,5 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     size_of_pieces = fields.Char(string='Size of Pieces', store=True)
+
+    
