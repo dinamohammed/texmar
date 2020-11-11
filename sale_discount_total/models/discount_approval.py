@@ -35,14 +35,14 @@ class sale_discount(models.Model):
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='draft')
 
-    # def action_confirm(self):
-    #     if self.company_id.so_double_validation == 'two_step':
-    #         discount = len(self.order_line) and\
-    #                    sum(line.discount for line in self.order_line) / len(self.order_line) or 0.0
-    #         if self.company_id.so_double_validation_limit and discount > self.company_id.so_double_validation_limit:
-    #             self.state = 'waiting'
-    #             return True
-    #     super(sale_discount, self).action_confirm()
+    def action_confirm(self):
+        if self.company_id.so_double_validation == 'two_step':
+            discount = len(self.order_line) and\
+                       sum(line.discount for line in self.order_line) / len(self.order_line) or 0.0
+            if self.company_id.so_double_validation_limit and discount > self.company_id.so_double_validation_limit:
+                self.state = 'waiting'
+                return True
+        super(sale_discount, self).action_confirm()
 
     def action_approve(self):
         super(sale_discount, self).action_confirm()

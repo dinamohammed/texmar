@@ -9,7 +9,7 @@
     'description': """
 """,
     'version': '10.0',
-    'depends': ['sale_management', 'stock', 'sales_custome'],
+    'depends': ['sale_management', 'stock', 'sales_custome', 'sale_discount_total'],
     'data': [
         'reports/reports.xml',
         'reports/sale_order_report.xml',
