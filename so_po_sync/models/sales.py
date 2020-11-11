@@ -5,6 +5,7 @@ from odoo.exceptions import ValidationError,UserError
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class so_po_sync(models.Model):
     _inherit = 'sale.order'
     
