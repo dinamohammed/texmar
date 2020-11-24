@@ -6,6 +6,7 @@
            <field name="default" eval="True" />
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
+
             <field name="margin_top">45</field>
             <field name="header_spacing">43</field>
             <field name="margin_bottom">40</field>
@@ -13,6 +14,7 @@
             <field name="margin_right">7</field>
             <field name="header_line" eval="False" />
             <field name="dpi">110</field>
+
         </record>
 
         <report

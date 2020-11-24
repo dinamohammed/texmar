@@ -45,6 +45,7 @@
                 <div class="page">
                     <div class="oe_structure"/>
 
+
                     <!-- SO / SQ Reference -->
                     <h1 t-if="o.state == 'draft'">Quotation #<span t-field="o.name"/></h1>
                     <h1 t-if="o.state in ['sent']">Sales Order #<span t-field="o.name"/></h1>
@@ -122,6 +123,7 @@
                                 <t t-foreach="o.order_line" t-as="line">
                                     <!-- Computing Totals -->
                                     <!-- Subtotal Before Taxes & Discounts -->
+
                                     <t t-set="subtotal_before_tax_and_discount"
                                        t-value="subtotal_before_tax_and_discount + (line.price_unit * line.product_uom_qty)"/>
                                     <tr>
@@ -166,6 +168,7 @@
                             </tbody>
                         </table>
                     </div>
+
                     <!-- TOTALS -->
                     <div class="row">
                         <div class="col-6">
@@ -175,6 +178,7 @@
                                 <tbody>
                                     <!-- Subtotal -->
                                     <tr>
+
                                         <td style="text-align:left;border-top:1px solid black;"><strong>Subtotal</strong></td>
                                         <td style="text-align:right;border-top:1px solid black;"><span t-esc="subtotal_before_tax_and_discount"/></td>
                                     </tr>
@@ -203,6 +207,7 @@
                         </div>
                     </div>
 
+
                     <!-- Show Specs & Conditions Template based on Selection -->
                     <div style='margin-top:100px;'>
                         <p style='font-weight:bold;'>Offer Specifications and Conditions :-</p>
@@ -212,6 +217,8 @@
                             <p t-if="o.template_selection == 'template_three'" t-raw="o.specs_conditions_3"/>
                             <p t-if="o.template_selection == 'template_four'" t-raw="o.specs_conditions_4"/>
                         </div>
+                    </div>
+                    <div class="col-6 mb4">
                     </div>
                 </div>
                 <!-- footer -->
