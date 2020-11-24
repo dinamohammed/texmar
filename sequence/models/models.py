@@ -188,8 +188,8 @@ class SaleOrder(models.Model):
             result = super(SaleOrder, self).create(vals)
             
         else:
+            seq_date = None
             if vals.get('name', _('New')) == _('New'):
-                seq_date = None
                 if 'date_order' in vals:
                     seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(vals['date_order']))
                 if 'company_id' in vals:
