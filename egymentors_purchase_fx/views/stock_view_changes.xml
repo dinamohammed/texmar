@@ -89,7 +89,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//group" position="inside">
                     <filter string="Vendor Receipt" name="vendor_receipt" context="{'group_by': 'vendor_receipt'}"/>
-<!--                     <filter string="FX No." name="fx_num_id" context="{'group_by': 'fx_num_id'}"/> -->
+                    <filter string="FX No." name="fx_pick_num_id" context="{'group_by': 'fx_pick_num_id'}"/>
                 </xpath>
             </field>
         </record>

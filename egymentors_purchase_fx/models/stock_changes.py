@@ -44,7 +44,7 @@ class StockPickingInherit(models.Model):
     _inherit = 'stock.picking'
 
     vendor_receipt = fields.Char("Vendor Receipt")
-    fx_pick_num_id = fields.Many2one(related='move_ids_without_package.fx_num_id')
+    fx_pick_num_id = fields.Many2one(related='move_ids_without_package.fx_num_id',store=True)
     cancel_reason_id = fields.Many2one(
         'cancel.reason',
         string='Reason')
