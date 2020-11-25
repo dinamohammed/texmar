@@ -22,40 +22,40 @@
 
    <template id="add_field_product_label" inherit_id="egymentors_accounting_enhancement.report_invoice_document_with_payments_new">
         <xpath expr="//div[4]/table/thead/tr/td[1]" position="after">
-         <td style="border-right: 2px solid black;text-align:center;">اسم الصنف</td>  
+         <td style="border-right: 2px ;text-align:center;">اسم الصنف</td>  
         </xpath>  
-       
+       <!-- solid black -->
          <xpath expr="//div[4]/table/thead/tr/td[6]" position="after">
-         <td style="border-right: 2px solid black;text-align:center;">القيمة الاجمالية</td>  
+         <td style="border-right: 2px ;text-align:center;">القيمة الاجمالية</td>  
         </xpath>  
        
         <xpath expr="//div[4]/table/thead/tr/td[7]" position="after">
-         <td style="border-right: 2px solid black;text-align:center;">قيمة الضريبة</td>  
+         <td style="border-right: 2px ;text-align:center;">قيمة الضريبة</td>  
         </xpath> 
        
         <xpath expr="//div[4]/table/tbody/t/tr/td[1]" position="after">
-          <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.product_id.name"/></td> 
+          <td style="border-right: 2px ;text-align:center;"><span t-esc="line.product_id.name"/></td> 
         </xpath>
                
        <xpath expr="//div[4]/table/tbody/t/tr/td[6]" position="after">
-         <td style="border-right: 2px solid black;text-align:center;"><span t-esc="line.price_subtotal"/></td>
+         <td style="border-right: 2px ;text-align:center;"><span t-esc="line.price_subtotal"/></td>
         </xpath>
        
         <xpath expr="//div[4]/table/tbody/t/tr/td[7]" position="after">
          <t t-set="tax_value_line" t-value="round(line.total_with_tax - line.price_subtotal,2)"/>   
-         <td style="border-right: 2px solid black;text-align:center;"><span t-esc="tax_value_line"/></td>
+         <td style="border-right: 2px ;text-align:center;"><span t-esc="tax_value_line"/></td>
         </xpath>
        
        <xpath expr="//div[4]/table/tbody/tr/td[2]" position="after">
-          <td style="border-right: 2px solid black;;"></td>
-        <td style="border-right: 2px solid black;"></td>
-        <td style="border-right: 2px solid black;"></td>  
+          <td style="border-right: 2px ;;"></td>
+        <td style="border-right: 2px ;"></td>
+        <td style="border-right: 2px ;"></td>  
        </xpath>
        
        <!-- update الخصم على قيمه الصنف الواحد  -->
     <xpath expr="//div[4]/table/tbody/t/tr/td[6]" position="replace">
         <t t-set="pre" t-value="round((o.discount_rate/100)*(line.price_unit*line.quantity),2)"/>
-        <td style="border-right: 2px solid black;text-align:center;"><span t-esc="pre"/></td>
+        <td style="border-right: 2px ;text-align:center;"><span t-esc="pre"/></td>
         </xpath>
        
     </template>
