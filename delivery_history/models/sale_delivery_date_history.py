@@ -8,7 +8,7 @@ class SaleDeliveryDateHistory(models.Model):
     _name = "sale.delivery.date.history"
     
     
-    sale_order_line_ids = fields.Many2one('sale.order.line', string='Sale Order Lines')
+    sale_order_line_ids = fields.Many2one('sale.order.line', string='Sale Order Lines', store = True)
     delivery_date = fields.Date('Delivery Date', store = True)
     editing_date = fields.Date('Editing Date', default = datetime.date.today(), required = True)
     
