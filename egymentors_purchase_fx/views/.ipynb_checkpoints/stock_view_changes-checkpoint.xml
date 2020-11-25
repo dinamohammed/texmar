@@ -72,16 +72,17 @@
                 </xpath>
             </field>
         </record>
-        <!--        <record id="vpicktree_inherit" model="ir.ui.view">-->
-        <!--            <field name="name">stock.picking.tree.inherit</field>-->
-        <!--            <field name="model">stock.picking</field>-->
-        <!--            <field name="inherit_id" ref="stock.vpicktree"/>-->
-        <!--            <field name="arch" type="xml">-->
-        <!--                <xpath expr="//field[@name='name']" position="after">-->
-        <!--                    <field name="fx_num_id"/>-->
-        <!--                </xpath>-->
-        <!--            </field>-->
-        <!--        </record>-->
+        <record id="vpicktree_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.tree.inherit10</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="fx_pick_num_id"/>
+                </xpath>
+            </field>
+        </record>
+            
         <record id="view_picking_internal_search_inherit" model="ir.ui.view">
             <field name="name">stock.picking.internal.search</field>
             <field name="model">stock.picking</field>
