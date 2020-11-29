@@ -11,9 +11,10 @@ class SaleOrderLine(models.Model):
     
     @api.onchange('line_delivery_date')
     def onchange_delivery_date(self):
-        self.env['sale.delivery.date.history'].create({'sale_order_line_ids': self.ids[0],
-            'delivery_date': self.line_delivery_date,
-            'editing_date': datetime.date.today(),})
+        if self.line_delivery_date:
+            self.env['sale.delivery.date.history'].create({'sale_order_line_ids': self.ids[0],
+                'delivery_date': self.line_delivery_date,
+                'editing_date': datetime.date.today(),})
         
     
     def action_view_history_delivery(self):
