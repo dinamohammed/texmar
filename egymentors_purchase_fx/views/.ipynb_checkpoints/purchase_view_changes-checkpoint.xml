@@ -67,7 +67,7 @@
                     <field name="serial_number" readonly="1"/>
                 </xpath>
                 <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="after">
-                        <field name="fx_num_id"/>
+                        <field name="fx_num_id" readonly="1"/>
                 </xpath>
                 <xpath expr="//field[@name='order_line']//tree" position="inside">
                     <field name="line_status" readonly="0"/>
@@ -118,7 +118,7 @@
                 </xpath>
                 <xpath expr="//filter[@name='order_date']" position="after">
                     <filter string="Order Status" name="order_status" domain="[]" context="{'group_by': 'order_status'}"/>
-                    <!--    <filter string="FX No." name="fx_num_id" domain="[]" context="{'group_by': 'fx_num_id'}"/>-->
+                    <filter string="FX No." name="fx_num_id" domain="[]" context="{'group_by': 'fx_num_id'}"/>
                 </xpath>
 
             </field>

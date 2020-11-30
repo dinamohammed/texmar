@@ -28,7 +28,7 @@ class PurchaseOrderType(models.Model):
 class PurchaseOrderInherit(models.Model):
     _inherit = 'purchase.order'
 
-    fx_num_id = fields.Many2one(related='order_line.fx_num_id',store=True)
+    fx_num_id = fields.Many2one('fx.number', "Fx No.")
 
     po_type_id = fields.Many2one('purchase.order.type', "PO Type")
     order_status = fields.Selection([('open', 'Open'),
@@ -83,7 +83,7 @@ class PurchaseOrderLineInherit(models.Model):
 
     line_status = fields.Selection([('open', 'Open'),
                                     ('closed', 'Closed')], "Status", default='open')
-    fx_num_id = fields.Many2one('fx.number', "Fx No.")
+    fx_num_id = fields.Many2one(related='order_id.fx_num_id',store=True)
 
     def write(self, vals):
         """
