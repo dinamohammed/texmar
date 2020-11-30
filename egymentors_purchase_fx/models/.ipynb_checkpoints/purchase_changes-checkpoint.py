@@ -28,7 +28,7 @@ class PurchaseOrderType(models.Model):
 class PurchaseOrderInherit(models.Model):
     _inherit = 'purchase.order'
 
-    fx_num_id = fields.Many2one(related='order_line.fx_num_id')
+    fx_num_id = fields.Many2one(related='order_line.fx_num_id',store=True)
 
     po_type_id = fields.Many2one('purchase.order.type', "PO Type")
     order_status = fields.Selection([('open', 'Open'),
