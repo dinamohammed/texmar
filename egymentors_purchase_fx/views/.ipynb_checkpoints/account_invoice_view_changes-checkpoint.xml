@@ -17,6 +17,12 @@
                             attrs="{'invisible': ['|',('state', '=', 'draft'),('type', 'not in', ('out_invoice', 'in_invoice','out_refund', 'in_refund'))]}"/>
                </xpath>
 
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="fx_num_id" readonly='1'/>
+                </xpath>
+               <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                    <field name="fx_num_id" invisible='1'/>
+                </xpath>
            </field>
        </record>
 

@@ -7,7 +7,7 @@ from odoo.exceptions import Warning
 class AccountInvoiceInherit(models.Model):
     _inherit = 'account.move'
     
-    fx_num_id = fields.Many2one(related='order_id.fx_num_id',store=True)
+    fx_num_id = fields.Many2one(related='invoice_line_ids.fx_num_id',store=True)
 
     def action_print(self):
         return self.env.ref('account.account_invoices').report_action(self)
@@ -16,3 +16,7 @@ class AccountInvoiceInherit(models.Model):
         return self.env.ref('account.account_invoices_without_payment').report_action(self)
 
 # Ahmed Salama Code End.
+class AccountInvoiceLineInherit(models.Model):
+    _inherit = 'account.move.line'
+    
+    fx_num_id = fields.Many2one('fx.number','FX No.')
