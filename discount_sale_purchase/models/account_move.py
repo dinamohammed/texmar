@@ -92,14 +92,7 @@ class AccountInvoice(models.Model):
                 if move.type == 'entry' or line.account_id.user_type_id.type in ('receivable', 'payable'):
                     total_residual += line.amount_residual
                     total_residual_currency += line.amount_residual_currency
-
-            total = total_untaxed + total_tax
-            total_currency = total_untaxed_currency + total_tax_currency
-
-            if move.type == 'entry' or move.is_outbound():
-                sign = 1
-            else:
-                sign = -1
+            
                 ###### Add discount ####
             amount_discount = 0.0
             if move.discount_type :
@@ -110,6 +103,13 @@ class AccountInvoice(models.Model):
                     amount_discount = total_untaxed*(move.discount_rate/100)
                     total_untaxed = total_untaxed*((100-move.discount_rate)/100)
             self._get_discount_amount_lines()
+            total = total_untaxed + total_tax
+            total_currency = total_untaxed_currency + total_tax_currency
+
+            if move.type == 'entry' or move.is_outbound():
+                sign = 1
+            else:
+                sign = -1
             move.amount_untaxed = sign * (total_untaxed_currency if len(currencies) == 1 else total_untaxed)
             move.amount_tax = sign * (total_tax_currency if len(currencies) == 1 else total_tax)
             move.amount_total = sign * (total_currency if len(currencies) == 1 else total)
