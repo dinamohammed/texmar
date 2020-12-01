@@ -31,7 +31,7 @@ class SaleOrder(models.Model):
 #                 })            
                     
         ###### Here we create only Total Lines of Discount ##########
-        
+   #@api.onchange('order_line.discount','order_line.price_subtotal'     
     @api.onchange('order_line')
     def _get_discount_lines(self):
         for order in self:
@@ -95,11 +95,11 @@ class SaleOrder(models.Model):
                                       digits=dp.get_precision('Account'), track_visibility='always')
     
     
-#     def _prepare_invoice(self,):
-#         invoice_vals = super(SaleOrder, self)._prepare_invoice()
-#         invoice_vals.update({
-#             'discount_type': self.discount_type,
-#             'discount_rate': self.discount_rate,
-#         })
-#         return invoice_vals
+    def _prepare_invoice(self):
+        invoice_vals = super(SaleOrder, self)._prepare_invoice()
+        invoice_vals.update({
+            'discount_type': self.discount_type,
+            'discount_rate': self.discount_rate,
+        })
+        return invoice_vals
 
