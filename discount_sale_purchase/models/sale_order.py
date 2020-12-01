@@ -2,7 +2,7 @@
 
 from odoo import models, fields, api
 import odoo.addons.decimal_precision as dp
-
+from odoo.exceptions import ValidationError
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -24,12 +24,11 @@ class SaleOrder(models.Model):
                 elif order.discount_type == 'percent':
                     amount_discount = amount_untaxed*(order.discount_rate/100)
                     amount_untaxed = amount_untaxed*((100-order.discount_rate)/100)
-        order.update({
-                'amount_untaxed': amount_untaxed,
-                'amount_discount': amount_discount,
-                'amount_total': amount_untaxed + order.amount_tax,
-            })
-            
+                order.update({
+                    'amount_untaxed': amount_untaxed,
+                    'amount_discount': amount_discount,
+                    'amount_total': amount_untaxed + order.amount_tax,
+                })            
                     
         ###### Here we create only Total Lines of Discount ##########
         
@@ -62,8 +61,7 @@ class SaleOrder(models.Model):
     
 ############################# ADD Amounts already available in sales module ######################
     
-    @api.onchange('amount_untaxed')
-    @api.depends('order_line.price_total','amount_untaxed')
+    @api.depends('order_line.price_total')
     def _amount_all(self):
         """
         Compute the total amounts of the SO.
