@@ -97,7 +97,7 @@ class AccountInvoice(models.Model):
             amount_discount = 0.0
             if move.discount_type :
                 if move.discount_type == 'amount':
-                    total_untaxed = total_untaxed - move.discount_rate
+                    total_untaxed = total_untaxed + move.discount_rate
                     amount_discount = move.discount_rate
                 elif move.discount_type == 'percent':
                     amount_discount = total_untaxed*(move.discount_rate/100)
@@ -110,6 +110,7 @@ class AccountInvoice(models.Model):
                 sign = 1
             else:
                 sign = -1
+            move.amount_discount = abs(amount_discount)
             move.amount_untaxed = sign * (total_untaxed_currency if len(currencies) == 1 else total_untaxed)
             move.amount_tax = sign * (total_tax_currency if len(currencies) == 1 else total_tax)
             move.amount_total = sign * (total_currency if len(currencies) == 1 else total)
