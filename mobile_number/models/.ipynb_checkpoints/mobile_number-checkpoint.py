@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, Warning
 
 
 class ResPartnerInherit(models.Model):
@@ -31,5 +31,6 @@ class ResPartnerInherit(models.Model):
     @api.constrains('mobile')
     def mobile_unique_constrain(self):
         for partner in self:
-            if partner.ref and self.env['res.partner'].search_count([('mobile', '=', partner.mobile)]) > 1:
-                raise Warning(_("WARNING: Another Contact with this Mobile Number Already Exists"))
+            if partner.mobile:
+                if partner.ref and self.env['res.partner'].search_count([('mobile', '=', partner.mobile)]) > 1:
+                    raise Warning(_("WARNING: Another Contact with this Mobile Number Already Exists"))
