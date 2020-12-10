@@ -34,3 +34,12 @@ class ResPartnerInherit(models.Model):
             if partner.mobile:
                 if partner.ref and self.env['res.partner'].search_count([('mobile', '=', partner.mobile)]) > 1:
                     raise Warning(_("WARNING: Another Contact with this Mobile Number Already Exists"))
+
+                    
+    
+    @api.constrains('phone')
+    def phone_unique_constrain(self):
+        for partner in self:
+            if partner.phone:
+                if partner.ref and self.env['res.partner'].search_count([('phone', '=', partner.phone)]) > 1:
+                    raise Warning(_("WARNING: Another Contact with this Phone Number Already Exists"))
