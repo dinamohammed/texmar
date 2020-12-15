@@ -27,7 +27,7 @@ class SaleOrderInherit(models.Model):
 	stop_cancel_at = fields.Datetime("Stop Cancel", compute='compute_stop_cancel_at')
 	
 	display_name = fields.Char("Order", compute='get_display_name')
-    so_type_id = fields.Many2one('sale.order.type', "SO Type")
+	so_type_id = fields.Many2one('sale.order.type', "SO Type")
 	
 	@api.onchange('name', 'client_order_ref')
 	def get_display_name(self):
