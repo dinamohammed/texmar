@@ -6,5 +6,5 @@ from odoo import models, fields, api
 class AccountMove(models.Model):
     _inherit = 'account.move'
     
-    custom_template_id = fields.Many2one('Template')
+    custom_template_id = fields.Many2one('custom.template',string = "Template")
     
