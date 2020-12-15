@@ -63,7 +63,7 @@
                         <field name="client_order_ref" placeholder="Customer Reference" readonly="0"/>
                     </div>
                 </xpath>
-                <xpath expr="//field[@name='print_image']" position="after">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="so_type_id"/>
                 </xpath>
 
