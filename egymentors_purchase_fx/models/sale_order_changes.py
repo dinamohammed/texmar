@@ -196,8 +196,8 @@ class SaleOrderLineInherit(models.Model):
     
 	def _purchase_service_prepare_order_values(self, supplierinfo):
         	values = super(SaleOrderLineInherit, self)._purchase_service_prepare_order_values(supplierinfo)
-			if self.order_id.po_type_id:
-				values['po_type_id'] = self.order_id.po_type_id
+		if self.order_id.po_type_id:
+			values['po_type_id'] = self.order_id.po_type_id
         	return values
 
 
