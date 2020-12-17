@@ -197,7 +197,7 @@ class SaleOrderLineInherit(models.Model):
 		values = super(SaleOrderLineInherit, self)._purchase_service_prepare_order_values(supplierinfo)
 		if self.order_id.po_type_id:
 			values['po_type_id'] = self.order_id.po_type_id.id
-        	return values
+		return values
 
 
 
