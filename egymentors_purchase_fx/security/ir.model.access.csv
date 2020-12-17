@@ -20,5 +20,3 @@ access_stock_picking_filter_portal,cancel.reason,model_stock_picking_filter,base
 access_stock_move_grade_user,cancel.reason user,model_stock_move_grade,stock.group_stock_user,1,1,1,1
 access_stock_move_grade_manager,cancel.reason manager,model_stock_move_grade,stock.group_stock_manager,1,1,1,1
 access_stock_move_grade_portal,cancel.reason,model_stock_move_grade,base.group_portal,1,0,0,0
-
-access_sale_order_type,sale.order.type.user,model_sale_order_type,base.group_user,1,1,1,1
