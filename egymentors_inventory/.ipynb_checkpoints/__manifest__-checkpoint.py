@@ -20,7 +20,7 @@
 #################################################################################
 
 {
-    'name': "EgyMentors Inventory Enhancement[ercac]",
+    'name': "EgyMentors Inventory Enhancement",
     'author': 'EgyMentors, Ahmed Salama',
     'category': 'Inventory',
     'summary': """Inventory Enhancement""",
@@ -29,13 +29,14 @@
     'description': """
 """,
     'version': '10.0',
-    'depends': ['base', 'stock', 'purchase', 'report_xlsx', 'purchase_discount', 'egymentors_product_code', 'sales_custome'],
+    'depends': ['base', 'stock', 'purchase', 'purchase_requisition', 'report_xlsx', 'purchase_discount',
+                'egymentors_product_code', 'sales_custome'],
     'data': [
-        'reports/reports.xml',
-        'reports/delivery_slip_report.xml',
-        'reports/return_delivery_report.xml',
-        
-        'views/quantity_in_words.xml',
+        'data/inventory_adjustment_data.xml',
+    
+        # 'views/res_config_view_changes.xml',
+        'views/stock_inventory_view_changes.xml',
+        # 'views/stock_picking_view.xml',
     ],
     'installable': True,
     'application': True,

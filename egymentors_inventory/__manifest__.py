@@ -29,7 +29,8 @@
     'description': """
 """,
     'version': '10.0',
-    'depends': ['base', 'stock'],
+    'depends': ['base', 'stock', 'purchase', 'purchase_requisition', 'report_xlsx', 'purchase_discount',
+                'egymentors_product_code', 'sales_custome'],
     'data': [
         'data/inventory_adjustment_data.xml',
     
