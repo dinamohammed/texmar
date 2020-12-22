@@ -193,12 +193,28 @@ class SaleOrderLineInherit(models.Model):
 		if procurements:
 			self.env['procurement.group'].run(procurements)
 		return True
+	
 	def _purchase_service_prepare_order_values(self, supplierinfo):
-		values = super(SaleOrderLineInherit, self)._purchase_service_prepare_order_values(supplierinfo)
-		if self.order_id.po_type_id:
-			values['po_type_id'] = self.order_id.po_type_id.id
-		return values
-
+		""" Returns the values to create the purchase order from the current SO line.
+		:param supplierinfo: record of product.supplierinfo
+		:rtype: dict
+		"""
+		self.ensure_one()
+		partner_supplier = supplierinfo.name
+		fiscal_position_id = self.env['account.fiscal.position'].sudo().with_contex_prepare_procurement_valuest(company_id=self.company_id.id).get_fiscal_position(partner_supplier.id)
+		date_order = self._purchase_get_date_order(supplierinfo)
+		return {
+			'partner_id': partner_supplier.id,
+			'partner_ref': partner_supplier.ref,
+			'company_id': self.company_id.id,
+			'currency_id': partner_supplier.property_purchase_currency_id.id or self.env.company.currency_id.id,
+			'dest_address_id': self.order_id.partner_shipping_id.id,
+			'origin': self.order_id.name,
+			'payment_term_id': partner_supplier.property_supplier_payment_term_id.id,
+			'date_order': date_order,
+			'fiscal_position_id': fiscal_position_id,
+			'po_type_id': po_type_id.id,
+		}
 
 
 
