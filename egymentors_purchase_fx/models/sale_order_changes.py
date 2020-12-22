@@ -3,6 +3,7 @@ from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
 from odoo.osv import expression
 from odoo.tools import float_compare
+from odoo.exceptions import UserError
 
 
 # Ahmed Salama Code Start ---->
@@ -203,6 +204,7 @@ class SaleOrderLineInherit(models.Model):
 		partner_supplier = supplierinfo.name
 		fiscal_position_id = self.env['account.fiscal.position'].sudo().with_contex_prepare_procurement_valuest(company_id=self.company_id.id).get_fiscal_position(partner_supplier.id)
 		date_order = self._purchase_get_date_order(supplierinfo)
+		raise UserError(("PR name %s") %self.order_id.po_type_id.name)
 		return {
 			'partner_id': partner_supplier.id,
 			'partner_ref': partner_supplier.ref,
