@@ -213,7 +213,7 @@ class SaleOrderLineInherit(models.Model):
 			'payment_term_id': partner_supplier.property_supplier_payment_term_id.id,
 			'date_order': date_order,
 			'fiscal_position_id': fiscal_position_id,
-			'po_type_id': po_type_id.id,
+			'po_type_id': self.order_id.po_type_id.id,
 		}
 
 
