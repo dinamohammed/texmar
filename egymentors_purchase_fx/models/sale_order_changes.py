@@ -204,7 +204,7 @@ class SaleOrderLineInherit(models.Model):
 		partner_supplier = supplierinfo.name
 		fiscal_position_id = self.env['account.fiscal.position'].sudo().with_contex_prepare_procurement_valuest(company_id=self.company_id.id).get_fiscal_position(partner_supplier.id)
 		date_order = self._purchase_get_date_order(supplierinfo)
-		raise ValidationError('PO Type %s' %self.order_id.po_type_id.id)
+# 		raise ValidationError('PO Type %s' %self.order_id.po_type_id.id)
 		return {
 			'partner_id': partner_supplier.id,
 			'partner_ref': partner_supplier.ref,
