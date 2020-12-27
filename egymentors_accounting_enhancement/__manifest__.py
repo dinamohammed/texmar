@@ -9,7 +9,7 @@
     'description': """
 """,
     'version': '10.0',
-    'depends': ['account', 'sale_discount_total', 'purchase_discount','account'],
+    'depends': ['base','account',  'purchase_discount', 'sales_custome'],
     'data': [
         'reports/reports.xml',
         'reports/invoice_report.xml',

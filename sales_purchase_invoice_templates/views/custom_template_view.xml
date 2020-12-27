@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+      <record id="view_custom_template_form" model="ir.ui.view">
+            <field name="name">custom.template.form</field>
+            <field name="model">custom.template</field>
+            <field name="arch" type="xml">
+                <form string="Custom Template Form">
+                    <group>
+                        <field name="name"/>
+                        <field name="template_id"/>
+                        <field name="template_info"/>
+                    </group>
+                </form>
+            </field>
+    </record>
+    <record id="view_custom_template_tree" model="ir.ui.view">
+            <field name="name">custom.template.tree</field>
+            <field name="model">custom.template</field>
+            <field name="arch" type="xml">
+                <tree string="Custom Template Tree">
+                    <field name="name"/>
+                    <field name="template_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="open_module_tree_custom_template" model="ir.actions.act_window">
+            <field name="name">Custom Template</field>
+            <field name="res_model">custom.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a Custom Template
+              </p><p>
+                Create a Custom Template
+              </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_sale_config_custom_template"
+                action="open_module_tree_custom_template"
+                parent="sale.menu_sale_config"
+                sequence="7"
+                groups="base.group_user"/>
+    
+  </data>
+</odoo>

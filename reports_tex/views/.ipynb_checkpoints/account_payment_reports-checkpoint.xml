@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <template id="report_payment_receipt_document_Amount_in_words" inherit_id="account.report_payment_receipt_document">    
+            <xpath expr="//div[hasclass('row','mb64')]/div[1]" position="after">
+               <div class="row mt64 " t-if="o.amount_in_words" style="font-size: 22px !important;">
+                   <strong>Amount in Words: </strong>
+                   <span t-field="o.amount_in_words"/>
+               </div>
+            </xpath>
+            <xpath expr="//div[hasclass('row','mt64')]" position="inside">
+            <style>
+            .page{
+                font-size:100px !important
+                font-weight: 900;
+            }
+            </style>
+             <div class="col-6" t-if="o.check_id" style="font-size: 14px !important;">
+                   <strong>Check no: </strong>
+                   <span t-field="o.check_id"/>
+            </div>
+             <div class="col-6" t-if="o.bank_account_number">
+                        <strong>Transfer No: </strong><span t-field="o.bank_account_number"/>
+                </div>
+                <div class="col-6" t-if="o.visa_account_number">
+                        <strong>Visa No: </strong><span t-field="o.visa_account_number"/>
+                </div>
+            </xpath>
+             <xpath expr="//div[@class='row']" position="replace">
+                    <div class="col-6" t-if="o.partner_type">
+                        <t t-if="o.partner_type == 'customer'">
+                            <strong>Customer: </strong>
+                        </t>
+                        <t t-if="o.partner_type == 'supplier'">
+                            <strong>Vendor: </strong>
+                        </t><span t-field="o.partner_id"/>
+                    </div>
+            </xpath>
+            <xpath expr="//table" position="replace">
+            </xpath>
+        </template> 
+    </data>
+</odoo>

@@ -7,9 +7,25 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+            <!-- TEMPLATE SELECTION -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                 <field name="template_selection"/>
+            </xpath>
+            <!-- EDITABLE TEMPLATES -->
             <xpath expr="//notebook/page[@name='other_information']" position="after">
                 <page name="specs_conditions_page" string="Specifications and Conditions">
-                    <field name="specs_conditions" widget="html"/>
+                    <!-- TEMPLATE 1 -->
+                    <h1><label for="specs_conditions_1"/></h1>
+                    <field name="specs_conditions_1" widget="html"/>
+                    <!-- TEMPLATE 2 -->
+                    <h1><label for="specs_conditions_2"/></h1>
+                    <field name="specs_conditions_2" widget="html"/>
+                    <!-- TEMPLATE 3 -->
+                    <h1><label for="specs_conditions_3"/></h1>
+                    <field name="specs_conditions_3" widget="html"/>
+                    <!-- TEMPLATE 4 -->
+                    <h1><label for="specs_conditions_4"/></h1>
+                    <field name="specs_conditions_4" widget="html"/>
                 </page>
             </xpath>
           </field>
