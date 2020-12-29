@@ -99,6 +99,7 @@ class SaleOrderInherit(models.Model):
 		res = super(SaleOrderInherit, self).action_confirm()
 		for rec in self:
 			rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
+			rec.picking_ids.move_ids_without_package.write({'fx_num_id': rec.fx_num_id.id})
 		return res
 	
 class SaleOrderLineInherit(models.Model):
