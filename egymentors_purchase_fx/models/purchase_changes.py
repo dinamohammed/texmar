@@ -14,6 +14,10 @@ from odoo.exceptions import UserError
 class FxNumber(models.Model):
     _name = 'fx.number'
     _description = "FX Number"
+    
+    _sql_constraints = [
+        ('fx_uniq', 'unique (name)', "This FX number already exists."),
+    ]
 
     name = fields.Char(required=1)
     fx_type = fields.Selection([('fx_type', 'FX'),
