@@ -147,7 +147,7 @@ class SaleOrderLineInherit(models.Model):
 		if self.line_delivery_date:
 			values['date_planned'] = self.line_delivery_date
 		if self.order_id.fx_num_id:
-			values['fx_num_id'] = self.order_id.fx_num_id.id
+			values['fx_pick_num_id'] = self.order_id.fx_num_id.id
 		return values
 	
 	def _action_launch_stock_rule(self, previous_product_uom_qty=False):
