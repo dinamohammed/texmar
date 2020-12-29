@@ -65,7 +65,7 @@
                 </xpath>
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="po_type_id"/>
-<!--                     <field name="fx_num_id"/> -->
+                    <field name="fx_num_id"/>
                 </xpath>
 
             </field>
