@@ -94,8 +94,13 @@ class SaleOrderInherit(models.Model):
 			
 			result.append((so.id, name))
 		return result
-
-
+	
+	def action_confirm(self):
+		res = super(SaleOrderInherit, self).action_confirm()
+		for rec in self:
+			rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
+		return res
+	
 class SaleOrderLineInherit(models.Model):
 	_inherit = 'sale.order.line'
 	
