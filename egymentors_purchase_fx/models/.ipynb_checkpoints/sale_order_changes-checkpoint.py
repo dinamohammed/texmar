@@ -3,15 +3,16 @@ from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
 from odoo.osv import expression
 from odoo.tools import float_compare
+from odoo.exceptions import ValidationError
 
 
 # Ahmed Salama Code Start ---->
 
-class SaleOrderType(models.Model):
-    _name = 'sale.order.type'
-    _description = "PO Type"
+# class SaleOrderType(models.Model):
+#     _name = 'sale.order.type'
+#     _description = "PO Type"
 
-    name = fields.Char(required=1)
+#     name = fields.Char(required=1)
 
 
 
@@ -27,7 +28,8 @@ class SaleOrderInherit(models.Model):
 	stop_cancel_at = fields.Datetime("Stop Cancel", compute='compute_stop_cancel_at')
 	
 	display_name = fields.Char("Order", compute='get_display_name')
-    so_type_id = fields.Many2one('sale.order.type', "SO Type")
+	po_type_id = fields.Many2one('purchase.order.type', "PO Type")
+#     fx_num_id = fields.Many2one('fx.number', "Fx No.")
 	
 	@api.onchange('name', 'client_order_ref')
 	def get_display_name(self):
@@ -193,6 +195,30 @@ class SaleOrderLineInherit(models.Model):
 		if procurements:
 			self.env['procurement.group'].run(procurements)
 		return True
+	
+	def _purchase_service_prepare_order_values(self, supplierinfo):
+		""" Returns the values to create the purchase order from the current SO line.
+		:param supplierinfo: record of product.supplierinfo
+		:rtype: dict
+		"""
+		self.ensure_one()
+		partner_supplier = supplierinfo.name
+		fiscal_position_id = self.env['account.fiscal.position'].sudo().with_contex_prepare_procurement_valuest(company_id=self.company_id.id).get_fiscal_position(partner_supplier.id)
+		date_order = self._purchase_get_date_order(supplierinfo)
+# 		raise ValidationError('PO Type %s' %self.order_id.po_type_id.id)
+		return {
+			'partner_id': partner_supplier.id,
+			'partner_ref': partner_supplier.ref,
+			'company_id': self.company_id.id,
+			'currency_id': partner_supplier.property_purchase_currency_id.id or self.env.company.currency_id.id,
+			'dest_address_id': self.order_id.partner_shipping_id.id,
+			'origin': self.order_id.name,
+			'payment_term_id': partner_supplier.property_supplier_payment_term_id.id,
+			'date_order': date_order,
+			'fiscal_position_id': fiscal_position_id,
+			'po_type_id': self.order_id.po_type_id.id,
+		}
+
 
 
 # Ahmed Salama Code End.
