@@ -29,7 +29,7 @@ class SaleOrderInherit(models.Model):
 	
 	display_name = fields.Char("Order", compute='get_display_name')
 	po_type_id = fields.Many2one('purchase.order.type', "PO Type")
-#     fx_num_id = fields.Many2one('fx.number', "Fx No.")
+	fx_num_id = fields.Many2one('fx.number', "Fx No.")
 	
 	@api.onchange('name', 'client_order_ref')
 	def get_display_name(self):
@@ -217,6 +217,7 @@ class SaleOrderLineInherit(models.Model):
 			'date_order': date_order,
 			'fiscal_position_id': fiscal_position_id,
 			'po_type_id': self.order_id.po_type_id.id,
+			'fx_num_id': self.order_id.fx_num_id.id,
 		}
 
 
