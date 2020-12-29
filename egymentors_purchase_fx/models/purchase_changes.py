@@ -40,18 +40,18 @@ class PurchaseOrderInherit(models.Model):
     order_status = fields.Selection([('open', 'Open'),
                                      ('closed', 'Closed')], "Order Status", default='open')
     serial_number = fields.Char("Serial Number")
-
-    # @api.model
-    # def _prepare_picking(self):
-    #     """
-    #     Append fx_num_id To sent Data for picking
-    #     # purchase_line_id
-    #     :return:
-    #     """
-    #     res = super(PurchaseOrderInherit, self)._prepare_picking()
-    #     if self.fx_num_id:
-    #         res['fx_num_id'] = self.fx_num_id.id
-    #     return res
+    
+    @api.model
+    def _prepare_picking(self):
+        """
+        Append fx_num_id To sent Data for picking
+        # purchase_line_id
+        :return:
+        """
+        res = super(PurchaseOrderInherit, self)._prepare_picking()
+        if self.fx_num_id:
+            res['fx_num_id'] = self.fx_num_id.id
+            return res
 
     @api.model
     def create(self, vals):
