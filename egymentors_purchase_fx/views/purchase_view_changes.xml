@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <tree string="Fx Number" editable="bottom">
                     <field name="name"/>
-<!--                     <field name="fx_type"/> -->
+                    <field name="fx_type"/>
                 </tree>
             </field>
         </record>
