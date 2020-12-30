@@ -29,15 +29,21 @@
                         <group attrs="{'invisible':[('category_type','!=','fabric')]}">
                             <group>
                                 <field name="landry_code_id"/>
-                                <field name="texmar_width" attrs="{'required':[('category_type','=','fabric')]}"/>
-                                <field name="repeat_id" attrs="{'required':[('category_type','=','fabric')]}"/>
-                                <field name="composition_id" attrs="{'required':[('category_type','=','fabric')]}"/>
+                                <field name="texmar_width"/>
+                                <field name="repeat_id" />
+                                <field name="composition_id"/>
                                 <field name="abrasion"/>
                             </group>
+                            <!-- attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+-->
                             <group>
                                 <field name="category_id"/>
-                                <field name="texmar_weight" widget="many2many_tags" attrs="{'required':[('category_type','=','fabric')]}"/>
-                                <field name="texmar_weight_2" widget="many2many_tags" attrs="{'required':[('category_type','=','fabric')]}"/>
+                                <field name="texmar_weight" widget="many2many_tags"/>
+                                <field name="texmar_weight_2" widget="many2many_tags"/>
                                 <field name="collection_id" widget="many2many_tags"/>
                                 <field name="collection_id_2" widget="many2many_tags"/>
                                 <field name="fabric_type_id"/>
@@ -49,11 +55,17 @@
                         </group>
                         <group attrs="{'invisible':[('category_type','!=','yarn')]}">
                             <group>
-                                <field name="texmar_color_id" attrs="{'required':[('category_type','=','yarn')]}"/>
-                                <field name="kind_id" attrs="{'required':[('category_type','=','yarn')]}"/>
-                                <field name="group_name_id" attrs="{'required':[('category_type','=','yarn')]}"/>
-                                <field name="group_code" attrs="{'required':[('category_type','=','yarn')]}"/>
+                                <field name="texmar_color_id"/>
+                                <field name="kind_id"/>
+                                <field name="group_name_id"/>
+                                <field name="group_code"/>
                             </group>
+                            <!-- attrs="{'required':[('category_type','=','yarn')]}"
+attrs="{'required':[('category_type','=','yarn')]}"
+attrs="{'required':[('category_type','=','yarn')]}"
+attrs="{'required':[('category_type','=','yarn')]}"
+-->
+
                             <group>
                                 <field name="pant_id"/>
                                 <field name="pant_code"/>
@@ -108,14 +120,21 @@
                     </group>
                     <group attrs="{'invisible':[('category_type','!=','fabric')]}">
                         <group>
-                            <field name="texmar_weight" attrs="{'required':[('category_type','=','fabric')]}"/>
-                            <field name="texmar_weight_2" attrs="{'required':[('category_type','=','fabric')]}"/>
-                            <field name="texmar_width" attrs="{'required':[('category_type','=','fabric')]}"/>
-                            <field name="repeat_id" attrs="{'required':[('category_type','=','fabric')]}"/>
-                            <field name="composition_id" attrs="{'required':[('category_type','=','fabric')]}"/>
+                            <field name="texmar_weight"/>
+                            <field name="texmar_weight_2"/>
+                            <field name="texmar_width"/>
+                            <field name="repeat_id"/>
+                            <field name="composition_id"/>
                             <field name="landry_code_id"/>
                             <field name="abrasion"/>
                         </group>
+                        <!-- 
+ attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+attrs="{'required':[('category_type','=','fabric')]}"
+-->
                         <group>
                             <field name="category_id"/>
 <!--                             <field name="sub_category_id"/> -->
@@ -129,11 +148,17 @@
                     </group>
                     <group attrs="{'invisible':[('category_type','!=','yarn')]}">
                         <group>
-                            <field name="texmar_color_id" attrs="{'required':[('category_type','=','yarn')]}"/>
-                            <field name="kind_id" attrs="{'required':[('category_type','=','yarn')]}"/>
-                            <field name="group_name_id" attrs="{'required':[('category_type','=','yarn')]}"/>
-                            <field name="group_code" attrs="{'required':[('category_type','=','yarn')]}"/>
+                            <field name="texmar_color_id"/>
+                            <field name="kind_id"/>
+                            <field name="group_name_id"/>
+                            <field name="group_code"/>
                         </group>
+                        <!--
+attrs="{'required':[('category_type','=','yarn')]}"
+attrs="{'required':[('category_type','=','yarn')]}"
+attrs="{'required':[('category_type','=','yarn')]}"
+attrs="{'required':[('category_type','=','yarn')]}"
+-->
                         <group>
                             <field name="pant_id"/>
                             <field name="pant_code"/>
