@@ -16,6 +16,8 @@ class FxNumber(models.Model):
     _description = "FX Number"
 
     name = fields.Char(required=1)
+#     fx_type = fields.Selection([('fx_type', 'FX'),
+#                                      ('p_type', 'P')], "FX type", default='fx_type')
 
 
 class PurchaseOrderType(models.Model):

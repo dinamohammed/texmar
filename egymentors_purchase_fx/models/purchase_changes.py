@@ -14,8 +14,14 @@ from odoo.exceptions import UserError
 class FxNumber(models.Model):
     _name = 'fx.number'
     _description = "FX Number"
+    
+    _sql_constraints = [
+        ('fx_uniq', 'unique (name)', "This FX number already exists."),
+    ]
 
     name = fields.Char(required=1)
+    fx_type = fields.Selection([('fx_type', 'FX'),
+                                ('p_type', 'P')], "FX type", default='fx_type')
 
 
 class PurchaseOrderType(models.Model):
@@ -34,18 +40,18 @@ class PurchaseOrderInherit(models.Model):
     order_status = fields.Selection([('open', 'Open'),
                                      ('closed', 'Closed')], "Order Status", default='open')
     serial_number = fields.Char("Serial Number")
-
-    # @api.model
-    # def _prepare_picking(self):
-    #     """
-    #     Append fx_num_id To sent Data for picking
-    #     # purchase_line_id
-    #     :return:
-    #     """
-    #     res = super(PurchaseOrderInherit, self)._prepare_picking()
-    #     if self.fx_num_id:
-    #         res['fx_num_id'] = self.fx_num_id.id
-    #     return res
+    
+    @api.model
+    def _prepare_picking(self):
+        """
+        Append fx_num_id To sent Data for picking
+        # purchase_line_id
+        :return:
+        """
+        res = super(PurchaseOrderInherit, self)._prepare_picking()
+        if self.fx_num_id:
+            res['fx_pick_num_id'] = self.fx_num_id.id
+            return res
 
     @api.model
     def create(self, vals):

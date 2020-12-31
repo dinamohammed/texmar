@@ -29,6 +29,7 @@ class SaleOrderInherit(models.Model):
 	
 	display_name = fields.Char("Order", compute='get_display_name')
 	po_type_id = fields.Many2one('purchase.order.type', "PO Type")
+	fx_num_id = fields.Many2one('fx.number', "Fx/Production No.")
 	
 	@api.onchange('name', 'client_order_ref')
 	def get_display_name(self):
@@ -93,8 +94,14 @@ class SaleOrderInherit(models.Model):
 			
 			result.append((so.id, name))
 		return result
-
-
+	
+	def action_confirm(self):
+		res = super(SaleOrderInherit, self).action_confirm()
+		for rec in self:
+			rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
+			rec.picking_ids.move_ids_without_package.write({'fx_num_id': rec.fx_num_id.id})
+		return res
+	
 class SaleOrderLineInherit(models.Model):
 	_inherit = 'sale.order.line'
 	
@@ -145,6 +152,8 @@ class SaleOrderLineInherit(models.Model):
 		values = super(SaleOrderLineInherit, self)._prepare_procurement_values(group_id)
 		if self.line_delivery_date:
 			values['date_planned'] = self.line_delivery_date
+# 		if self.order_id.fx_num_id:
+# 			values['fx_pick_num_id'] = self.order_id.fx_num_id.id
 		return values
 	
 	def _action_launch_stock_rule(self, previous_product_uom_qty=False):
@@ -216,6 +225,7 @@ class SaleOrderLineInherit(models.Model):
 			'date_order': date_order,
 			'fiscal_position_id': fiscal_position_id,
 			'po_type_id': self.order_id.po_type_id.id,
+			'fx_num_id': self.order_id.fx_num_id.id,
 		}
 
 

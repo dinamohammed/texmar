@@ -26,10 +26,11 @@
                 </page>
             </xpath>
             <button name="action_confirm" position="before">
-              <button class="oe_highlight" type="object" name="set_sale_advance_payment" string=" Advance Payment" icon="fa-money" attrs="{'invisible': [('state', 'not in', ['draft'])]}" groups="so_po_advance_payment_app.group_sale_advance_payment"/>
+              <button class="oe_highlight" type="object" name="set_sale_advance_payment" string=" Advance Payment" icon="fa-money" groups="so_po_advance_payment_app.group_sale_advance_payment"/>
             </button>
           </field>
     </record>
 
   </data>
 </odoo>
+<!-- attrs="{'invisible': [('state', 'not in', ['draft'])]}" -->
