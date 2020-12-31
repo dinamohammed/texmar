@@ -110,12 +110,12 @@ class PurchaseOrderLineInherit(models.Model):
                     line.order_id.write({'order_status': status})
         return True
 
-    def _prepare_stock_moves(self, picking):
-        res = super(PurchaseOrderLineInherit, self)._prepare_stock_moves(picking)
-        for line in res:
-            if self.fx_num_id:
-                line['fx_num_id'] = self.fx_num_id.id
-        return res
+#     def _prepare_stock_moves(self, picking):
+#         res = super(PurchaseOrderLineInherit, self)._prepare_stock_moves(picking)
+#         for line in res:
+#             if self.fx_num_id:
+#                 line['fx_num_id'] = self.fx_num_id.id
+#         return res
     
         # override function from purchase model to add fx_num_id
     def _prepare_account_move_line(self, move):
@@ -142,7 +142,7 @@ class PurchaseOrderLineInherit(models.Model):
             'product_id': self.product_id.id,
             'price_unit': self.price_unit,
             'quantity': qty,
-#             'fx_num_id': self.fx_num_id.id or False,
+            'fx_num_id': self.fx_num_id.id or False,
             'partner_id': move.partner_id.id,
             'analytic_account_id': self.account_analytic_id.id,
             'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
