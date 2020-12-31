@@ -54,11 +54,11 @@ class PurchaseOrderInherit(models.Model):
 #             return res
 
     def button_confirm(self):
-	vals = super(PurchaseOrderInherit, self).button_confirm()
-	for rec in self:
-		rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
-		rec.picking_ids.move_ids_without_package.write({'fx_num_id': rec.fx_num_id.id})
-	return vals
+		vals = super(PurchaseOrderInherit, self).button_confirm()
+		for rec in self:
+			rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
+			rec.picking_ids.move_ids_without_package.write({'fx_num_id': rec.fx_num_id.id})
+		return vals
 
     @api.model
     def create(self, vals):
