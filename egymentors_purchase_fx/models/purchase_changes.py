@@ -50,7 +50,7 @@ class PurchaseOrderInherit(models.Model):
         """
         res = super(PurchaseOrderInherit, self)._prepare_picking()
         if self.fx_num_id:
-            res['fx_pick_num_id'] = self.fx_num_id.id
+            res['fx_pick_num_id'] = self.fx_num_id.id or False
             return res
 
     @api.model
