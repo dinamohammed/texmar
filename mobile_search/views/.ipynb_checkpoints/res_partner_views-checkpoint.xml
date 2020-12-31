@@ -11,9 +11,9 @@
                     <attribute name="context">{'search_by_phone': True, 'search_by_mobile': True, 'search_by_email': True, 'search_by_city': True, 'search_by_function': True}</attribute>
                     <attribute name="nolabel">1</attribute>
                 </field>
-                <xpath expr="//field[@name='vat']" position="after">
+<!--                 <xpath expr="//field[@name='vat']" position="after">
                     <field name='registration_number_tax'/>
-                </xpath>
+                </xpath> -->
             </field>
         </record>
 
