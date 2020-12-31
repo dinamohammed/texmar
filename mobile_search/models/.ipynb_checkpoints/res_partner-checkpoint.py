@@ -6,7 +6,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     modified_mobile = fields.Char(string='Modified Mobile', compute='get_modified_mobile_number', store=True)
-#     registration_number_tax = fields.Char(string='Registration No.')
+    registration_number_tax = fields.Char(string='Registration No.')
 
     @api.depends('mobile')
     def get_modified_mobile_number(self):
