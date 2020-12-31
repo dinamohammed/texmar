@@ -142,7 +142,7 @@ class PurchaseOrderLineInherit(models.Model):
             'product_id': self.product_id.id,
             'price_unit': self.price_unit,
             'quantity': qty,
-            'fx_num_id': self.fx_num_id.id,
+            'fx_num_id': self.fx_num_id.id or False,
             'partner_id': move.partner_id.id,
             'analytic_account_id': self.account_analytic_id.id,
             'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
