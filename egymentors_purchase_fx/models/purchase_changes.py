@@ -70,7 +70,13 @@ class PurchaseOrderInherit(models.Model):
 
     def print_order(self):
         return self.env.ref('purchase.action_report_purchase_order').report_action(self)
-
+    
+    def button_confirm(self):
+        vals = super(PurchaseOrderInherit, self).button_confirm()
+        for rec in self:
+            rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
+            rec.picking_ids.move_ids_without_package.write({'fx_num_id': rec.fx_num_id.id})
+        return vals
 
 class PurchaseOrderLineInherit(models.Model):
     _inherit = 'purchase.order.line'
