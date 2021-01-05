@@ -12,3 +12,10 @@ class ResUsers(models.Model):
         'user_id',
         'product_category_id',
         'Allowed Categories')
+    
+    category_type = fields.Selection([('fabric', 'Fabric'),
+                                      ('yarn', 'Yarn'),
+                                      ('other', 'Other'),
+                                      ('not', 'Un-Specified')], "Category Type", default='not')
+    
+    
