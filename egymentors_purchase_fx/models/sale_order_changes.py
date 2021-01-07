@@ -25,7 +25,8 @@ class SaleOrderInherit(models.Model):
 	                                    help="Flag to show if there is related purchase order and if it's delivered")
 	has_mto = fields.Boolean(compute='_check_lines_mto')
 	hide_cancel = fields.Boolean("Hide Cancel?")
-	stop_cancel_at = fields.Datetime("Stop Cancel", compute='compute_stop_cancel_at')
+	stop_cancel_at = fields.Datetime("Stop Cancel")
+# 	compute='compute_stop_cancel_at'
 	
 	display_name = fields.Char("Order", compute='get_display_name')
 	po_type_id = fields.Many2one('purchase.order.type', "PO Type")
@@ -41,11 +42,11 @@ class SaleOrderInherit(models.Model):
 				display_name += '/' + order.client_order_ref
 			order.display_name = display_name
 	
-	@api.onchange('date_order')
-	def compute_stop_cancel_at(self):
-		for order in self:
-			order.stop_cancel_at = (order.date_order +
-			                        relativedelta(days=1)).replace(hour=7, minute=0, second=0)
+# 	@api.onchange('date_order')
+# 	def compute_stop_cancel_at(self):
+# 		for order in self:
+# 			order.stop_cancel_at = (order.date_order +
+# 			                        relativedelta(days=1)).replace(hour=7, minute=0, second=0)
 	
 	@api.model
 	def cron_stop_cancel_sale_order(self):

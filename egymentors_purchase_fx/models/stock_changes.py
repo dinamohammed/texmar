@@ -27,7 +27,7 @@ class StockMoveInherit(models.Model):
         return True
 
     virtual_available = fields.Float(related='product_id.virtual_available')
-    fx_num_id = fields.Many2one('fx.number', "Fx No.")
+    fx_num_id = fields.Many2one(related='picking_id.fx_pick_num_id',store=True)
     roll_number = fields.Text("RN")
     grade_id = fields.Many2one('stock.move.grade', "Grade")
     # = fields.Char("Pieces")
@@ -44,7 +44,7 @@ class StockPickingInherit(models.Model):
     _inherit = 'stock.picking'
 
     vendor_receipt = fields.Char("Vendor Receipt")
-    fx_pick_num_id = fields.Many2one(related='move_ids_without_package.fx_num_id',store=True)
+    fx_pick_num_id = fields.Many2one('fx.number', "Fx/Production No.")
     cancel_reason_id = fields.Many2one(
         'cancel.reason',
         string='Reason')
