@@ -13,6 +13,20 @@
             </xpath>
         </field>
     </record>
+        
+        <record model="ir.ui.view" id="view_stock_form_inherit_todraft_button_custom">
+        <field name="name">stock.picking.todraft.button.form</field>
+        <field name="model">stock.picking</field>
+        <field name="priority" eval="1"/>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/header/button[@name='button_scrap']" position="after">
+                <button name="action_todraft_stock" id="action_todraft_stock"
+                        string="To Draft" class="btn-primary" type="object"/>
+            </xpath>
+        </field>
+    </record>
+        
     </data>
 </odoo>
 <!-- attrs="{'invisible': [('state', 'in', ['sale'])]}" -->
