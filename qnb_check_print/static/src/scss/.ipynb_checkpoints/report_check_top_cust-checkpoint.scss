@@ -1,0 +1,55 @@
+.ckus_top_page_cust {
+    .ckus_check {
+        top: -0.02in;
+    }
+    .ckus_stub_1 {
+        top: 3.45in;
+    }
+    .ckus_stub_2 {
+        top: 7in;
+    }
+
+    .ckus_check .sequence_number {
+        top: 15mm;
+        left: 7.1in;
+        width: 0.7in;
+    }
+    .ckus_date {
+        top: 16mm;
+        left: 6.51in;
+        width: 40mm;
+        text-align: center;
+    }
+    .ckus_payee_name {
+        top: 29mm;
+        left: 1in;
+        width: 100mm;
+        text-align: center;
+    }
+    .ckus_amount {
+        top: 40mm;
+        left: 6.51in;
+        width: 28mm;
+        text-align: right;
+    }
+    .ckus_amount_in_word {
+        top: 40mm;
+        left: 20mm;
+        width: 81mm;
+        text-align: left;
+        font-weight: bold;
+        overflow: hidden;
+    }
+    .ckus_payee_addr {
+        top: 1.65in;
+        left: 0.85in;
+    }
+    .ckus_memo {
+        top: 40mm;
+        left: 10mm;
+        width: 80mm;
+        text-align: center;
+        font-size: 0.9em;
+        overflow: visible;
+    }
+}
