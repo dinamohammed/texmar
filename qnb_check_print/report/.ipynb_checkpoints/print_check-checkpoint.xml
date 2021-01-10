@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--         Add Template of qnb check top  -->
+        <template id="qnb_check_top" name="qnb check assets" inherit_id="l10n_us_check_printing.assets_common">
+            <xpath expr="//link[4]" position="replace">
+                <link rel="stylesheet" type="text/scss" href="/qnb_check_print/static/src/scss/report_check_top_cust.scss"/>
+            </xpath>
+        </template>
+        
+        
+<!--         Add the data qnb check only needs  -->
+        <template id="qnb_check_template" name="qnb check template" inherit_id="l10n_us_check_printing.ckus_check">
+            <xpath expr="//div[@class='ckus_check']" position="replace">
+                <div class="ckus_check">
+                    <t t-if="page['state'] == 'cancelled'">
+                        <div class="o-watermark">VOID</div>
+                    </t>
+<!--                     <div class="sequence_number" t-if="page['sequence_number']" t-esc="page['sequence_number']" /> -->
+                    <div class="ckus_date" t-esc="page['payment_date']"/>
+                    <div class="ckus_payee_name" t-esc="page['partner_name']"/>
+                    <div class="ckus_amount">
+                        <t t-esc="page['amount'].replace(o.currency_id.symbol, '')"/>
+                    </div>
+                    <div class="ckus_amount_in_word" t-esc="page['amount_in_word']"/>
+<!--                     <div class="ckus_payee_addr" t-esc="page['partner_id']" t-options='{"widget": "contact", "fields":
+                                                                                       ["address", "name"], "no_marker":
+                                                                                       True}'/> -->
+<!--                     <div class="ckus_memo" t-esc="page['memo']"/> -->
+                </div>
+            </xpath>
+        </template>
+                
+<!--         Remove tables in check print out of qnb  -->
+        <template id="print_check_top_new">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" t-foreach="o._check_get_pages()" t-as="page" 
+                         class="page article ckus_page ckus_top_page_cust">
+                <t t-call="qnb_check_print.qnb_check_template" />
+            </div>
+        </t>
+    </t>
+</template>
+    </data>
+</odoo>
+<!-- @rel='stylesheet' -->
+<!-- t-attf-style="top: {{ o.company_id.account_check_printing_margin_top }}in; left: {{ 
+                                       o.company_id.account_check_printing_margin_left }}in;" -->
