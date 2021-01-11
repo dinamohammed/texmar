@@ -5,15 +5,15 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare, float_is_zero, float_round
 from odoo.exceptions import UserError
 
-class StockPicking(models.Model):
-    _inherit = 'stock.picking'
+# class StockPicking(models.Model):
+#     _inherit = 'stock.picking'
     
-    def action_todraft_stock(self):
-        for pick in self:
-            pick.sudo().write({'state':'draft'})
+#     def action_todraft_stock(self):
+#         for pick in self:
+#             pick.sudo().write({'state':'draft'})
             
-            for move in pick.move_ids_without_package:
-                move.sudo().write({'state':'draft'})
+#             for move in pick.move_ids_without_package:
+#                 move.sudo().write({'state':'draft'})
     
     
     
