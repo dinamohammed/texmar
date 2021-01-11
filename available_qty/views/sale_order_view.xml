@@ -14,7 +14,7 @@
         </field>
     </record>
         
-        <record model="ir.ui.view" id="view_stock_form_inherit_todraft_button_custom">
+<!--         <record model="ir.ui.view" id="view_stock_form_inherit_todraft_button_custom">
         <field name="name">stock.picking.todraft.button.form</field>
         <field name="model">stock.picking</field>
         <field name="priority" eval="1"/>
@@ -25,7 +25,7 @@
                         string="To Draft" class="btn-primary" type="object"/>
             </xpath>
         </field>
-    </record>
+    </record> -->
         
     </data>
 </odoo>
