@@ -17,5 +17,10 @@ class ResUsers(models.Model):
                                       ('yarn', 'Yarn'),
                                       ('other', 'Other'),
                                       ('not', 'Un-Specified')], "Category Type", default='not')
+
     
+class ResUsers(models.Model):
+    _inherit = 'stock.picking'
     
+    category_type = fields.Selection(related='move_ids_without_package.product_id.categ_id.category_type', 
+                                     string= "Category Type",store=True)
