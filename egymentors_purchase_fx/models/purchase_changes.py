@@ -114,9 +114,9 @@ class PurchaseOrderLineInherit(models.Model):
         # override function from purchase model to add fx_num_id
     def _prepare_account_move_line(self, move):
         res = super(PurchaseOrderLineInherit, self)._prepare_account_move_line(move)
-        for line in res:
-            if self.fx_num_id:
-                line['fx_num_id'] = self.fx_num_id.id
+#         for line in res:
+        if self.fx_num_id:
+            res.write({'fx_num_id':self.fx_num_id.id})
         return res
 #     def action_view_invoice(self):
 #         '''
