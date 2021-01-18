@@ -77,6 +77,13 @@ class PurchaseOrderInherit(models.Model):
             rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
             rec.picking_ids.move_ids_without_package.write({'fx_num_id': rec.fx_num_id.id})
         return vals
+    
+    def action_view_invoice(self):
+        vals = super(PurchaseOrderInherit, self).action_view_invoice()
+        for rec in self:
+#             rec.order_line.invoice_lines.write({'fx_pick_num_id': rec.fx_num_id.id})
+            rec.order_line.invoice_lines.write({'fx_num_id': rec.fx_num_id.id})
+        return vals
 
 class PurchaseOrderLineInherit(models.Model):
     _inherit = 'purchase.order.line'
@@ -113,36 +120,12 @@ class PurchaseOrderLineInherit(models.Model):
     
         # override function from purchase model to add fx_num_id
     def _prepare_account_move_line(self, move):
-        self.ensure_one()
-        if self.product_id.purchase_method == 'purchase':
-            qty = self.product_qty - self.qty_invoiced
-        else:
-            qty = self.qty_received - self.qty_invoiced
-        if float_compare(qty, 0.0, precision_rounding=self.product_uom.rounding) <= 0:
-            qty = 0.0
+        res = super(PurchaseOrderLineInherit, self)._prepare_account_move_line(move)
+#         for line in res:
+        if self.fx_num_id:
+            res['fx_num_id'] = self.fx_num_id.id
+        return res
 
-        if self.currency_id == move.company_id.currency_id:
-            currency = False
-        else:
-            currency = move.currency_id
-
-        return {
-            'name': '%s: %s' % (self.order_id.name, self.name),
-            'move_id': move.id,
-            'currency_id': currency and currency.id or False,
-            'purchase_line_id': self.id,
-            'date_maturity': move.invoice_date_due,
-            'product_uom_id': self.product_uom.id,
-            'product_id': self.product_id.id,
-            'price_unit': self.price_unit,
-            'quantity': qty,
-            'fx_num_id': self.fx_num_id.id or False,
-            'partner_id': move.partner_id.id,
-            'analytic_account_id': self.account_analytic_id.id,
-            'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
-            'tax_ids': [(6, 0, self.taxes_id.ids)],
-            'display_type': self.display_type,
-        }
 
 
 class StockRuleInherit(models.Model):
