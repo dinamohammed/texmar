@@ -116,7 +116,7 @@ class PurchaseOrderLineInherit(models.Model):
         res = super(PurchaseOrderLineInherit, self)._prepare_account_move_line(move)
 #         for line in res:
         if self.fx_num_id:
-            res.write({'fx_num_id':self.fx_num_id.id})
+            res['fx_num_id'] = self.fx_num_id.id
         return res
 #     def action_view_invoice(self):
 #         '''
