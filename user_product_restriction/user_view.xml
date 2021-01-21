@@ -26,7 +26,7 @@
             <field name="arch" type="xml">
                
                 <xpath expr="//page[@name='extra']/group/group/field[@name='group_id']" position="after">
-                    <field name="category_type"/>
+                    <field name="category_type" readonly = "False"/>
                 </xpath>
                 
             </field>
