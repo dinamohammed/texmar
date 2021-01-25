@@ -98,7 +98,7 @@ attrs="{'required':[('category_type','=','yarn')]}"
                     <label for="default_code"/>
                     <!--class="o_row"-->
                     <div >
-                        <field name="parent_categ" style="color:blue" readonly="1"/>
+                        <field name="parent_categ_code" style="color:blue" readonly="1"/>
                         <field name="category_code" style="color:red" readonly="1"/>
                         <field name="style_code" style="color:green" readonly="1"/>
                         <field name="color_code" style="color:gray" readonly="1"/>

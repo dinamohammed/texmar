@@ -164,7 +164,7 @@ class ProductProductInherit(models.Model):
                              help="Color Code from field [Variant Color Attribute] [4 digits]")
     treatment_code = fields.Char(compute='_generate_product_code', size=2,
                                  help="Treatment Code from field [Variant Treatment Attribute] [2 digits]")
-    
+    parent_categ_code = fields.Char(related = 'parent_categ.code')
     
     @api.onchange('parent_categ', 'categ_id', 'product_tmpl_id',
                   'product_template_attribute_value_ids')
