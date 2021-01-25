@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','l10n_us_check_printing','account_check_printing','account','account_accountant','account_check'],
+    'depends': ['base','l10n_us_check_printing','account_check_printing','account','account_accountant'],
 
     # always loaded
     'data': [

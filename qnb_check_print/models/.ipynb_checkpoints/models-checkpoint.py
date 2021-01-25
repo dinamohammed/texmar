@@ -48,7 +48,8 @@ class account_payment(models.Model):
             last_printed_check = self.search([
                 ('journal_id', '=', self[0].journal_id.id),
                 ('check_number', '!=', "0")], order="check_number desc", limit=1)
-            next_check_number = self.check_id.name
+#             next_check_number = self.check_id.name
+            next_check_number = last_printed_check and int(last_printed_check.check_number) + 1 or 1
 
             return {
                 'name': _('Print Pre-numbered Checks'),
