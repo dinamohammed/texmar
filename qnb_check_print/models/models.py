@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api, fields, _
+from odoo.tools.misc import formatLang, format_date
+
+INV_LINES_PER_STUB = 9
+
 
 class res_company(models.Model):
     _inherit = "res.company"
@@ -20,6 +24,9 @@ class res_company(models.Model):
     
 class account_payment(models.Model):
     _inherit = "account.payment"
+    
+    check_owner = fields.Char(string= "Check Owner", help="Give this field a value if you dont want to view the partner name"
+                              "in check print out.")
 
     def do_print_checks(self):
         if self:
@@ -65,3 +72,23 @@ class account_payment(models.Model):
         else:
             self.filtered(lambda r: r.state == 'draft').post()
             return self.do_print_checks()
+        
+        
+    def _check_build_page_info(self, i, p):
+        multi_stub = self.company_id.account_check_printing_multi_stub
+        return {
+            'sequence_number': self.check_number if (self.journal_id.check_manual_sequencing and self.check_number != 0) else 
+            False,
+            'payment_date': format_date(self.env, self.payment_date),
+            'partner_id': self.partner_id,
+            'partner_name': self.partner_id.name,
+            'check_owner': self.check_owner,
+            'currency': self.currency_id,
+            'state': self.state,
+            'amount': formatLang(self.env, self.amount, currency_obj=self.currency_id) if i == 0 else 'VOID',
+            'amount_in_word': self._check_fill_line(self.check_amount_in_words) if i == 0 else 'VOID',
+            'memo': self.communication,
+            'stub_cropped': not multi_stub and len(self.invoice_ids) > INV_LINES_PER_STUB,
+            # If the payment does not reference an invoice, there is no stub line to display
+            'stub_lines': p,
+        }
