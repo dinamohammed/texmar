@@ -12,8 +12,10 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         company = vals.get("company_id", False)
-        if self.branch_id:
-            vals["name"] = self.env["ir.sequence"].next_by_code(self.branch_id.sequence_code) or "New"
+        branch = vals.get("branch_id", False)
+        if branch:
+            branch_2 = self.env["res.branch"].browse(branch)
+            vals["name"] = self.env["ir.sequence"].next_by_code(branch_2.sequence_code) or "New"
             return super(SaleOrder, self).create(vals)
         else:
             if company:
