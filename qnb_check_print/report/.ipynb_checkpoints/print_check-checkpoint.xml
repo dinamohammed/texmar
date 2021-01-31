@@ -18,7 +18,12 @@
                     </t>
 <!--                     <div class="sequence_number" t-if="page['sequence_number']" t-esc="page['sequence_number']" /> -->
                     <div class="ckus_date" t-esc="page['payment_date']"/>
-                    <div class="ckus_payee_name" t-esc="page['partner_name']"/>
+                    <t t-if="page['check_owner']">
+                        <div class="ckus_payee_name" t-esc="page['check_owner']"/>
+                    </t>
+                    <t t-else="">
+                        <div class="ckus_payee_name" t-esc="page['partner_name']"/>
+                    </t>
                     <div class="ckus_amount">
                         <t t-esc="page['amount'].replace(o.currency_id.symbol, '')"/>
                     </div>

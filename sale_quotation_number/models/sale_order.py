@@ -12,24 +12,30 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         company = vals.get("company_id", False)
-        if company:
-            company = self.env["res.company"].browse(company)
+        branch = vals.get("branch_id", False)
+        if branch:
+            branch_2 = self.env["res.branch"].browse(branch)
+            vals["name"] = self.env["ir.sequence"].next_by_code(branch_2.sequence_code) or "New"
+            return super(SaleOrder, self).create(vals)
         else:
-            company = self.env.company
-        if not company.keep_name_so:
-            vals["name"] = self.env["ir.sequence"].next_by_code("sale.quotation") or "/"
-        return super(SaleOrder, self).create(vals)
+            if company:
+                company = self.env["res.company"].browse(company)
+            else:
+                company = self.env.company
+            if not company.keep_name_so:
+                vals["name"] = self.env["ir.sequence"].next_by_code("sale.quotation") or "/"
+            return super(SaleOrder, self).create(vals)
 
-    def copy(self, default=None):
-        self.ensure_one()
-        if default is None:
-            default = {}
-        default["name"] = "/"
-        if self.origin and self.origin != "":
-            default["origin"] = self.origin + ", " + self.name
-        else:
-            default["origin"] = self.name
-        return super(SaleOrder, self).copy(default)
+#     def copy(self, default=None):
+#         self.ensure_one()
+#         if default is None:
+#             default = {}
+#         default["name"] = "/"
+#         if self.origin and self.origin != "":
+#             default["origin"] = self.origin + ", " + self.name
+#         else:
+#             default["origin"] = self.name
+#         return super(SaleOrder, self).copy(default)
 
     def action_confirm(self):
         for order in self:
@@ -45,3 +51,28 @@ class SaleOrder(models.Model):
                     }
                 )
         return super(SaleOrder,self).action_confirm()
+
+    
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+    
+    
+    @api.model
+    def create(self, vals):
+        if self.branch_id:
+            if vals.get('name', 'New') == 'New':
+                seq_date = None
+                if 'date_order' in vals:
+                    seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(vals['date_order']))
+                vals['name'] = self.env['ir.sequence'].next_by_code(self.branch_id.sequence_code, sequence_date=seq_date) or '/'
+            return super(PurchaseOrder, self).create(vals)
+        else:
+            if vals.get('name', 'New') == 'New':
+                seq_date = None
+                if 'date_order' in vals:
+                    seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(vals['date_order']))
+                vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order', sequence_date=seq_date) or '/'
+            return super(PurchaseOrder, self).create(vals)
+
+    

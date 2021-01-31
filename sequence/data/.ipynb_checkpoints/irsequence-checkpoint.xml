@@ -6,12 +6,23 @@
         <record id="seq_Note_Order" model="ir.sequence">
             <field name="name">Note Order</field>
             <field name="code">note.order</field>
-            <field name="prefix">NO</field>
+            <field name="prefix">NOTE</field>
             <field name="padding">5</field>
             <field name="number_next">1</field>
             <field name="number_increment">1</field>
             <field eval="False" name="company_id"/>
         </record> 
-    
+        
+        <!-- Sequences for purchase.request -->
+        <record id="seq_Note_Order_Purchase" model="ir.sequence">
+            <field name="name">Note Purchase Order</field>
+            <field name="code">purchase.note.order</field>
+            <field name="prefix">NOTE</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field eval="False" name="company_id"/>
+        </record> 
+
     </data>
 </odoo>
