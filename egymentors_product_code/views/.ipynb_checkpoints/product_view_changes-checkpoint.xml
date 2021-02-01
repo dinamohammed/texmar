@@ -30,6 +30,8 @@
                             <group>
                                 <field name="landry_code_id"/>
                                 <field name="texmar_width"/>
+<!--                                 <field name="texmar_width" groups= "base.group_system"/> 
+ options="{'no_create_edit':1, 'no_open': 1 ,'no_create':1}" -->
                                 <field name="repeat_id" />
                                 <field name="composition_id"/>
                                 <field name="abrasion"/>
@@ -123,6 +125,7 @@ attrs="{'required':[('category_type','=','yarn')]}"
                             <field name="texmar_weight"/>
                             <field name="texmar_weight_2"/>
                             <field name="texmar_width"/>
+<!--                             options="{'no_create_edit':1, 'no_open': 1 ,'no_create':1}"  -->
                             <field name="repeat_id"/>
                             <field name="composition_id"/>
                             <field name="landry_code_id"/>
