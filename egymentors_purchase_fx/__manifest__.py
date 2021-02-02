@@ -39,7 +39,7 @@
         'security/sale_order_security.xml',
         'wizard/cancel_reason_view.xml',
         'wizard/stock_pickings_filtered_view.xml',
-        'wizard/stock_move_filtered_view.xml',
+#         'wizard/stock_move_filtered_view.xml',
         #'wizard/mrp_product_produce_view_changes.xml',
 
         'views/res_partner_view_changes.xml',
