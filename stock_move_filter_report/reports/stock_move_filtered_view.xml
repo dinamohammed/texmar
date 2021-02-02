@@ -36,6 +36,8 @@
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_stock_move_filter_form"/>
         <field name="target">new</field>
+        <field name="context">{'search_default_groupby_branch_id': 1, 'search_default_groupby_date': 1, 
+            'search_default_groupby_so_po_ref': 1}</field>
     </record>
     <menuitem action="action_stock_move_filter"
               id="stock_move_filter_menu"
