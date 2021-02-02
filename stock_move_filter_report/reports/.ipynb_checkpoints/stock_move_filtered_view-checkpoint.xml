@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_move_filter_form" model="ir.ui.view">
+        <field name="name">Filter Move with Product</field>
+        <field name="model">stock.move.filter</field>
+        <field name="arch" type="xml">
+            <form string="Filter By Product">
+                <p class="oe_grey">
+                    Choose the product to filtered with:
+                </p>
+                <group>
+                    <field name="product_id"/>
+                </group>
+                <footer>
+                    <button name="action_filter"
+                            string="Filter" type="object"
+                            class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link"
+                            special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="act_product_stock_move_mentors" model="ir.actions.act_window">
+<!--             <field name="context">{'search_default_product_id': active_id, 'default_product_id': active_id}</field> -->
+            <field name="name">Moves</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_id" ref="stock.view_move_tree"/>
+        </record>
+    
+    <record id="action_stock_move_filter" model="ir.actions.act_window">
+        <field name="name">Filter Moves with Product</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.move.filter</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_stock_move_filter_form"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem action="action_stock_move_filter"
+              id="stock_move_filter_menu"
+              parent="stock.menu_stock_warehouse_mgmt" sequence="10"/>
+
+</odoo>
