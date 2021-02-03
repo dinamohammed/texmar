@@ -81,7 +81,7 @@ class ProductTemplateInherit(models.Model):
                                      string='SUB CATEGORY')
     texmar_weight_2 = fields.Many2many('texmar.weight', 'product_weight2_rel', 'product_id', 'weight_id',
                                      string='DISCONTINUED')
-    texmar_width = fields.Float("Width")
+#     texmar_width = fields.Float("Width")
     repeat_id = fields.Many2one('product.repeat', "Repeat")
     composition_id = fields.Many2one('product.composition', "Composition")
     abrasion = fields.Char("Abrasion")
@@ -105,6 +105,8 @@ class ProductTemplateInherit(models.Model):
     origin_id = fields.Many2many('product.origin', 'product_origin_rel', 'product_id', 'origin_id',
                                  string='Origin')
     under_testing_id = fields.Many2one('product.under.testing', "Under-Testing")
+    
+    texmar_width = fields.Many2one('product.width',"Width")
 
     @api.onchange('style_field')
     @api.depends('style_field')
@@ -335,4 +337,11 @@ class ProductUnderTesting(models.Model):
     _description = "Under-Testing"
     
     name = fields.Char("Under-Testing")
+    
+
+class ProductWidth(models.Model):
+    _name = 'product.width'
+    _description = "Product Width"
+    
+    name = fields.Float("Width")
 # Ahmed Salama Code End.

@@ -59,7 +59,7 @@
 
 
                 <xpath expr="//field[@name='company_id']" position="after">
-                    <field name="fx_num_id"/>
+                    <field name="fx_num_id" options="{'no_create_edit': True , 'no_open': True}"/>
                 </xpath>
 
 
