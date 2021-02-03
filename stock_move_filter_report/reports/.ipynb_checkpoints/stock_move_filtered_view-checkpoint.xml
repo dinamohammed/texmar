@@ -22,11 +22,27 @@
             </form>
         </field>
     </record>
+    
+    <record id="view_move_search_inherit444" model="ir.ui.view">
+        <field name="name">stock.move.search.inherit10</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/filter[@name='groupby_date']" position="after">
+                <filter string="Branch" name="groupby_branch_id" domain="[]"  context="{'group_by': 'branch_id'}"/>
+                <filter string="Date Day" name="groupby_date_day" domain="[]" 
+                        context="{'group_by': 'date_expected:day'}"/>
+                <filter string="SO/PO Ref" name="groupby_so_po_ref" domain="[]" context="{'group_by': 'so_po_ref'}"/>
+            </xpath>
+        </field>
+    </record>
+    
     <record id="act_product_stock_move_mentors" model="ir.actions.act_window">
-<!--             <field name="context">{'search_default_product_id': active_id, 'default_product_id': active_id}</field> -->
-            <field name="name">Moves</field>
-            <field name="res_model">stock.move</field>
-            <field name="view_id" ref="stock.view_move_tree"/>
+        <field name="name">Moves</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_id" ref="stock.view_move_tree"/>
+        <field name="context">{'search_default_groupby_branch_id': 1, 'search_default_groupby_date_day': 1, 
+            'search_default_groupby_so_po_ref': 1}</field>
         </record>
     
     <record id="action_stock_move_filter" model="ir.actions.act_window">
@@ -36,9 +52,8 @@
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_stock_move_filter_form"/>
         <field name="target">new</field>
-        <field name="context">{'search_default_groupby_branch_id': 1, 'search_default_groupby_date': 1, 
-            'search_default_groupby_so_po_ref': 1}</field>
     </record>
+    
     <menuitem action="action_stock_move_filter"
               id="stock_move_filter_menu"
               parent="stock.menu_stock_warehouse_mgmt" sequence="10"/>

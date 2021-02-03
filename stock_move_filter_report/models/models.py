@@ -6,4 +6,4 @@ from odoo import models, fields, api
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
-    so_po_ref = fields.Char(related = 'picking_id.origin',store=True)
+    so_po_ref = fields.Char(related = 'picking_id.origin', string="SO/PO Ref" ,store=True)
