@@ -47,7 +47,7 @@
                 <xpath expr="//field[@name='date_order']" position="after">
                     <field name="hide_cancel"
                            groups="egymentors_purchase_fx.group_control_sol_cancel_button"/>
-                    <field name="stop_cancel_at" readonly="1"/>
+                    <field name="stop_cancel_at"/>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="replace">
                     <button name="action_cancel"
@@ -65,7 +65,7 @@
                 </xpath>
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="po_type_id"/>
-<!--                     <field name="fx_num_id"/> -->
+                    <field name="fx_num_id" options="{'no_create_edit': True , 'no_open': True}"/>
                 </xpath>
 
             </field>

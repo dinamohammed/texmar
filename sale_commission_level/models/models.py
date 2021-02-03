@@ -6,7 +6,7 @@ from odoo import models, fields, api, _
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
-    parent_agent = fields.Many2one('res.partner',string='TL Agent')
+    parent_agent = fields.Many2one('res.partner', string='TL Agent', domain=[("agent", "=", True)])
     
 
 class SaleCommissionMixin(models.AbstractModel):
@@ -19,6 +19,6 @@ class SaleCommissionMixin(models.AbstractModel):
         vals = []
         for agent in partner.agent_ids:
             if agent.parent_agent:
-                vals.vals.append((0, 0, self._prepare_agent_vals(agent.parent_agent)))
+                vals.append((0, 0, self._prepare_agent_vals(agent.parent_agent)))
             vals.append((0, 0, self._prepare_agent_vals(agent)))
         return vals
