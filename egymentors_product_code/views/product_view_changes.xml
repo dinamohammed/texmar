@@ -102,6 +102,7 @@ attrs="{'required':[('category_type','=','yarn')]}"
                         <field name="parent_categ_code" style="color:blue" readonly="1"/>
                         <field name="category_code" style="color:red" readonly="1"/>
                         <field name="style_code" style="color:green" readonly="1"/>
+                        <span>-</span>
                         <field name="color_code" style="color:gray" readonly="1"/>
                         <field name="treatment_code" style="color:orange" readonly="1"/>
                     </div>
