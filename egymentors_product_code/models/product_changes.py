@@ -216,10 +216,14 @@ class ProductProductInherit(models.Model):
                     product.color_code = "0000"
                 if not product.treatment_code:
                     product.treatment_code = "00"
+                color_code = ""
+                for word in product.color_code.split():
+                    if word.isdigit():
+                        color_code += word
                 product.default_code = "%s%s%s-%s%s" % (categ_code, product.category_code,
-                                                   product.style_code, product.color_code, product.treatment_code)
+                                                   product.style_code, color_code, product.treatment_code)
                 product.barcode = "%s%s%s%s%s" % (categ_code, product.category_code,
-                                            product.barcode_style_code, product.color_code,product.treatment_code)
+                                            product.barcode_style_code, color_code,product.treatment_code)
             else:
                 product.default_code = ""
                 product.barcode = ""
