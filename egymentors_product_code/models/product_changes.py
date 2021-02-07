@@ -211,7 +211,7 @@ class ProductProductInherit(models.Model):
                 product.color_code = "0000"
             if not product.treatment_code:
                 product.treatment_code = "00"
-            product.default_code = "%s%s%s%s%s" % (categ_code, product.category_code,
+            product.default_code = "%s%s%s-%s%s" % (categ_code, product.category_code,
                                                    product.style_code, product.color_code, product.treatment_code)
             product.barcode = "%s%s%s%s%s" % (categ_code, product.category_code,
                                             product.barcode_style_code, product.color_code,product.treatment_code)

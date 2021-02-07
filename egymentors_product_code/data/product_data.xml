@@ -41,6 +41,14 @@
         <record id="product_category_other" model="product.category">
             <field name="name">Other</field>
         </record>
+        
+        <!--Product Weight Data-->
+        <record id="product_width_1" model="product.width">
+            <field name="name">140</field>
+        </record>
+        <record id="product_width_2" model="product.width">
+            <field name="name">280</field>
+        </record>
 
     </data>
 </odoo>
