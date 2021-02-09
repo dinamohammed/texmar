@@ -145,9 +145,15 @@ class ProductTemplateInherit(models.Model):
                 else:
                     style_code = "00000000"
                     barcode_style_code = "00000"
-            
-                template.default_code = "%s%s%s" % (parent_categ, category_code, style_code)
-                template.barcode = "%s%s%s" % (parent_categ, category_code, barcode_style_code)
+                
+                style_code2 = ""
+                if len(style_code.lstrip("0")) < 8 :        
+                    style_code2 = '0' + style_code.lstrip("0")
+                else:
+                    style_code2 = style_code.lstrip("0")
+                            
+                template.default_code = "%s%s%s" % (parent_categ, category_code, style_code2)
+                template.barcode = "%s%s%s" % (parent_categ, category_code, style_code2)
             else:
                 template.default_code = ""
                 template.barcode = ""
@@ -220,10 +226,16 @@ class ProductProductInherit(models.Model):
                 for word in product.color_code.split():
                     if word.isdigit():
                         color_code += word
+                style_code2 = ""
+                if len(product.style_code.lstrip("0")) < 8 :        
+                    style_code2 = '0' + product.style_code.lstrip("0")
+                else:
+                    style_code2 = product.style_code.lstrip("0")
+                
                 product.default_code = "%s%s%s-%s%s" % (categ_code, product.category_code,
-                                                   product.style_code, color_code, product.treatment_code)
+                                                   style_code2, color_code, product.treatment_code)
                 product.barcode = "%s%s%s%s%s" % (categ_code, product.category_code,
-                                            product.barcode_style_code, color_code,product.treatment_code)
+                                            style_code2, color_code,product.treatment_code)
             else:
                 product.default_code = ""
                 product.barcode = ""
