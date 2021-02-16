@@ -16,7 +16,7 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["sale_management"],
+    "depends": ["sale_management","branch"],
     "data": ["data/data.xml", "views/sales_config.xml"],
 }
 #"branch","purchase"
