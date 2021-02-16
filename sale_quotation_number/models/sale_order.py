@@ -22,8 +22,11 @@ class SaleOrder(models.Model):
             company = self.env["res.company"].browse(company)
         else:
             company = self.env.company
-        if not company.keep_name_so:
-            vals["name"] = self.env["ir.sequence"].next_by_code("sale.quotation") or "/"
+        if self.env.user.branch_id or self.env.user.branch_ids:
+            vals["name"] = self.env["ir.sequence"].next_by_code("note.order") or "/"
+        else:
+            if not company.keep_name_so:
+                vals["name"] = self.env["ir.sequence"].next_by_code("sale.quotation") or "/"
         return super(SaleOrder, self).create(vals)
 
 #     def copy(self, default=None):
