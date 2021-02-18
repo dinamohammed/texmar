@@ -111,7 +111,7 @@
 											<tr>
 												<td>
 												    <t t-if="val.get('date')">
-                                                        <span t-esc="val.get('date')"/>
+                                                        <span t-esc="val.get('date_d')"/>
 												    </t>
 												</td>
 												<td style="border-right:1px solid #efefef"><span t-esc="val.get('origin') or val.get('ref')"/> </td>

@@ -51,8 +51,8 @@ class dev_stock_card(models.TransientModel):
     
     def in_lines(self,product_ids):
         state = ('draft', 'cancel')
-        query = """select DATE(sm.date) as date, sm.origin as origin, sm.reference as ref, pt.name as product,\
-                  sm.product_uom_qty as in_qty, pp.id as product_id from stock_move as sm \
+        query = """select DATE(sm.date) as date, DATE(sm.date) as date_d, sm.origin as origin, pt.name as product,\
+                  sm.product_uom_qty as in_qty, sm.reference as ref, pp.id as product_id from stock_move as sm \
                   JOIN product_product as pp ON pp.id = sm.product_id \
                   JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                   where sm.date >= %s and sm.date <= %s \
@@ -81,8 +81,8 @@ class dev_stock_card(models.TransientModel):
         if self.location_id:
             m_type = 'and sm.location_id = %s'
 
-        query = """select DATE(sm.date) as date, sm.origin as origin, sm.reference as ref, pt.name as product,\
-                      sm.product_uom_qty as out_qty, pp.id as product_id \
+        query = """select DATE(sm.date) as date, DATE(sm.date) as date_d, sm.origin as origin, pt.name as product,\
+                      sm.product_uom_qty as out_qty, sm.reference as ref, pp.id as product_id \
                       from stock_move as sm JOIN product_product as pp ON pp.id = sm.product_id \
                       JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                       where sm.date >= %s and sm.date <= %s \
@@ -237,7 +237,7 @@ class dev_stock_card(models.TransientModel):
                 balance += val.get('in_qty') - val.get('out_qty')
                 t_in_qty += val.get('in_qty')
                 t_out_qty += val.get('out_qty')
-                worksheet.write(row,0, val.get('date'), text_left)
+                worksheet.write(row,0, datetime.strftime(val.get('date_d'), "%d-%m-%Y "), text_left)
                 worksheet.write(row,1, val.get('origin') or val.get('ref'), text_left)
                 worksheet.write(row,2, val.get('in_qty'), text_right)
                 worksheet.write(row,3, val.get('out_qty'), text_right)
