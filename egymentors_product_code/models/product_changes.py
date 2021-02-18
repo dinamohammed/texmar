@@ -221,7 +221,7 @@ class ProductProductInherit(models.Model):
                 if not product.color_code:
                     product.color_code = "0000"
                 if not product.treatment_code:
-                    product.treatment_code = "00"
+                    product.treatment_code = ""
                 color_code = ""
                 for word in product.color_code.split():
                     if word.isdigit():
