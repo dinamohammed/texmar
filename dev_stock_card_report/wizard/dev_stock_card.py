@@ -52,7 +52,7 @@ class dev_stock_card(models.TransientModel):
     def in_lines(self,product_ids):
         state = ('draft', 'cancel')
         query = """select DATE(sm.date) as date, DATE(sm.date) as date_d, sm.origin as origin, pt.name as product,\
-                  sm.product_uom_qty as in_qty, sm.reference as ref, pp.id as product_id from stock_move as sm \
+                  sm.product_uom_qty as in_qty, sm.reference as ref, pp.default_code as product_code, pp.id as product_id from stock_move as sm \
                   JOIN product_product as pp ON pp.id = sm.product_id \
                   JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                   where sm.date >= %s and sm.date <= %s \
@@ -82,7 +82,7 @@ class dev_stock_card(models.TransientModel):
             m_type = 'and sm.location_id = %s'
 
         query = """select DATE(sm.date) as date, DATE(sm.date) as date_d, sm.origin as origin, pt.name as product,\
-                      sm.product_uom_qty as out_qty, sm.reference as ref, pp.id as product_id \
+                      sm.product_uom_qty as out_qty, sm.reference as ref, pp.default_code as product_code, pp.id as product_id \
                       from stock_move as sm JOIN product_product as pp ON pp.id = sm.product_id \
                       JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                       where sm.date >= %s and sm.date <= %s \
@@ -221,6 +221,8 @@ class dev_stock_card(models.TransientModel):
         row+=1
         for line in lines:
             worksheet.write_merge(row,row, 0,4, line.get('product'), p_group_style)
+            row += 1
+            worksheet.write_merge(row,row, 0,4, 'This Product code is %s' %line.get('values')[0].get('product_code') , p_group_style)
             row += 1
             count = 0
             balance = 0

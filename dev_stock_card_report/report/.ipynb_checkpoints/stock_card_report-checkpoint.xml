@@ -87,6 +87,9 @@
 									    <tr>
                                     		<td class="text-left" style="background:#f7f3d4;border-bottom:1px solid black;border-top:1px solid black" colspan="11"> <span t-esc="line.get('product')"/></td>
                                     	</tr>
+                                        <tr>
+                                    		<td class="text-left" style="background:#f7f3d4;border-bottom:1px solid black;border-top:1px solid black" colspan="11"><b>This Product code is </b><span t-esc="line.get('values')[0].get('product_code')"/></td>
+                                    	</tr>
                                     	<t t-set="t_in_qty" t-value="0"/>
 										<t t-set="t_out_qty" t-value="0"/>
                                     	<t t-set="b_qty" t-value="0"/>
