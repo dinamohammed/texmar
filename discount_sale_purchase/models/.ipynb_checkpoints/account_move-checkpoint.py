@@ -19,9 +19,9 @@ class AccountInvoice(models.Model):
                 'amount_discount_line': amount_discount_line,
             })
     
-    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount Type',
+    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount Type', store = True,
                                      readonly=True, states={'draft': [('readonly', False)]}, default='percent')
-    discount_rate = fields.Float('Discount Amount', digits=(16, 2), readonly=True,
+    discount_rate = fields.Float('Discount Amount', digits=(16, 2), readonly=True, store = True,
                                  states={'draft': [('readonly', False)]})
     amount_discount = fields.Monetary(string='Discount', store=True, readonly=True, compute='_compute_amount',
                                       track_visibility='always')
@@ -37,7 +37,11 @@ class AccountInvoice(models.Model):
         'line_ids.amount_currency',
         'line_ids.amount_residual',
         'line_ids.amount_residual_currency',
-        'line_ids.payment_id.state')
+        'line_ids.payment_id.state',
+        'discount_rate',
+        'discount_type',
+        'amount_discount_line')
+    @api.onchange('discount_rate','discount_type','amount_discount_line')
     def _compute_amount(self):
 
         invoice_ids = [move.id for move in self if move.id and move.is_invoice(include_receipts=True)]
