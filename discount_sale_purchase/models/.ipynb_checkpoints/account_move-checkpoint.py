@@ -101,14 +101,19 @@ class AccountInvoice(models.Model):
             amount_discount = 0.0
             if move.discount_type :
                 if move.discount_type == 'amount':
-                    total_untaxed = total_untaxed + move.discount_rate
+                    total_untaxed = total_untaxed - move.discount_rate
                     amount_discount = move.discount_rate
+                    total_residual = total_residual + move.discount_rate
+                    total_residual_currency = total_residual_currency + move.discount_rate
                 elif move.discount_type == 'percent':
                     amount_discount = total_untaxed*(move.discount_rate/100)
                     total_untaxed = total_untaxed*((100-move.discount_rate)/100)
+                    total_residual = total_residual*((100-move.discount_rate)/100)
+                    total_residual_currency = total_residual_currency*((100-move.discount_rate)/100)
             self._get_discount_amount_lines()
             total = total_untaxed + total_tax
             total_currency = total_untaxed_currency + total_tax_currency
+            
 
             if move.type == 'entry' or move.is_outbound():
                 sign = 1
