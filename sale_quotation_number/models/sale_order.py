@@ -22,8 +22,11 @@ class SaleOrder(models.Model):
             company = self.env["res.company"].browse(company)
         else:
             company = self.env.company
-        if not company.keep_name_so:
-            vals["name"] = self.env["ir.sequence"].next_by_code("sale.quotation") or "/"
+        if self.env.user.branch_id or self.env.user.branch_ids:
+            vals["name"] = self.env["ir.sequence"].next_by_code("note.order") or "/"
+        else:
+            if not company.keep_name_so:
+                vals["name"] = self.env["ir.sequence"].next_by_code("sale.quotation") or "/"
         return super(SaleOrder, self).create(vals)
 
 #     def copy(self, default=None):
@@ -39,18 +42,21 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         for order in self:
-            if order.state in ("draft", "sent") and not order.company_id.keep_name_so:
-                if order.origin and order.origin != "":
-                    quo = order.origin + ", " + order.name
-                else:
-                    quo = order.name
-                order.sudo().write(
-                    {
-                        "origin": quo,
-                        "name": self.env["ir.sequence"].next_by_code("sale.order"),
-                    }
-                )
-        return super(SaleOrder,self).action_confirm()
+            if self.env.user.branch_id or self.env.user.branch_ids:
+                return super(SaleOrder,self).action_confirm()
+            else:
+                if order.state in ("draft", "sent") and not order.company_id.keep_name_so:
+                    if order.origin and order.origin != "":
+                        quo = order.origin + ", " + order.name
+                    else:
+                        quo = order.name
+                    order.sudo().write(
+                        {
+                            "origin": quo,
+                            "name": self.env["ir.sequence"].next_by_code("sale.order"),
+                        }
+                    )
+            return super(SaleOrder,self).action_confirm()
 
     
 

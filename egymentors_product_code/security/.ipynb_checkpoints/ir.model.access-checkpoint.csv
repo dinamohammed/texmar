@@ -17,5 +17,7 @@ access_product_origin_user,product_origin,model_product_origin,,1,1,1,1
 access_product_under_testing,product_under_testing,model_product_under_testing,,1,1,1,1
 access_texmar_weight_user,texmar_weight,model_texmar_weight,,1,1,1,1
 access_product_width_user,product_width,model_product_width,,1,1,1,1
-
+access_product_width_user,product.width user,model_product_width,stock.group_stock_user,1,1,1,1
+access_product_width_manager,product.width manager,model_product_width,stock.group_stock_manager,1,1,1,1
+access_product_width_portal,product.width,model_product_width,base.group_portal,1,0,0,0
 

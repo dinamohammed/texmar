@@ -27,6 +27,8 @@ class account_payment(models.Model):
     
     check_owner = fields.Char(string= "Check Owner", help="Give this field a value if you dont want to view the partner name"
                               "in check print out.")
+    
+    due_date_check = fields.Date("Due Date" , required=True , default = fields.Datetime.today())
 
     def do_print_checks(self):
         if self:
@@ -80,6 +82,7 @@ class account_payment(models.Model):
             'sequence_number': self.check_number if (self.journal_id.check_manual_sequencing and self.check_number != 0) else 
             False,
             'payment_date': format_date(self.env, self.payment_date),
+            'due_date_check': format_date(self.env, self.due_date_check),
             'partner_id': self.partner_id,
             'partner_name': self.partner_id.name,
             'check_owner': self.check_owner,

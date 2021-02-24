@@ -29,9 +29,8 @@
                         <group attrs="{'invisible':[('category_type','!=','fabric')]}">
                             <group>
                                 <field name="landry_code_id"/>
-                                <field name="texmar_width"/>
-<!--                                 <field name="texmar_width" groups= "base.group_system"/> 
- options="{'no_create_edit':1, 'no_open': 1 ,'no_create':1}" -->
+                                <field name="texmar_width" options="{'no_create_edit':1, 'no_open': 1 ,'no_create':1}"/>
+<!--                                 <field name="texmar_width" groups= "base.group_system"/>  -->
                                 <field name="repeat_id" />
                                 <field name="composition_id"/>
                                 <field name="abrasion"/>
@@ -103,6 +102,7 @@ attrs="{'required':[('category_type','=','yarn')]}"
                         <field name="parent_categ_code" style="color:blue" readonly="1"/>
                         <field name="category_code" style="color:red" readonly="1"/>
                         <field name="style_code" style="color:green" readonly="1"/>
+                        <span>-</span>
                         <field name="color_code" style="color:gray" readonly="1"/>
                         <field name="treatment_code" style="color:orange" readonly="1"/>
                     </div>
@@ -124,8 +124,7 @@ attrs="{'required':[('category_type','=','yarn')]}"
                         <group>
                             <field name="texmar_weight"/>
                             <field name="texmar_weight_2"/>
-                            <field name="texmar_width"/>
-<!--                             options="{'no_create_edit':1, 'no_open': 1 ,'no_create':1}"  -->
+                            <field name="texmar_width" options="{'no_create_edit':1, 'no_open': 1 ,'no_create':1}"/> 
                             <field name="repeat_id"/>
                             <field name="composition_id"/>
                             <field name="landry_code_id"/>
@@ -192,6 +191,25 @@ attrs="{'required':[('category_type','=','yarn')]}"
                 </xpath>
             </field>
         </record>
+        <record model="ir.ui.view" id="view_product_width_tree">
+            <field name="name">Product Width</field>
+            <field name="model">product.width</field>
+            <field name="arch" type="xml">
+                <tree string="Product width" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_product_width">
+            <field name="name">Product Width</field>
+            <field name="res_model">product.width</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <menuitem id="menu_product_width"
+                  parent="sale.menu_sale_config"
+                  name="Product Width"
+                  action="action_product_width"
+                  sequence="200" groups="sales_team.group_sale_manager"/>
 
     </data>
 </odoo>

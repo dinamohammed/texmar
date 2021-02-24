@@ -130,23 +130,33 @@ class ProductTemplateInherit(models.Model):
         Style Code from field [Variant Style] [8 digits]
 		"""
         for template in self:
-            if template.parent_categ and template.parent_categ.code:
-                parent_categ = template.parent_categ.code[:2]
+            if template.categ_id.category_type != 'not':
+                if template.parent_categ and template.parent_categ.code:
+                    parent_categ = template.parent_categ.code[:2]
+                else:
+                    parent_categ = "00"
+                if template.categ_id and template.categ_id.code:
+                    category_code = template.categ_id.code[:2]
+                else:
+                    category_code = "00"
+                if template.style_field:
+                    style_code = template.style_field[:8]
+                    barcode_style_code = template.style_field[-5:].lstrip("0")
+                else:
+                    style_code = "00000000"
+                    barcode_style_code = "00000"
+                
+                style_code2 = ""
+                if len(style_code.lstrip("0")) < 8 :        
+                    style_code2 = '0' + style_code.lstrip("0")
+                else:
+                    style_code2 = style_code.lstrip("0")
+                            
+                template.default_code = "%s%s%s" % (parent_categ, category_code, style_code2)
+                template.barcode = "%s%s%s" % (parent_categ, category_code, style_code2)
             else:
-                parent_categ = "00"
-            if template.categ_id and template.categ_id.code:
-                category_code = template.categ_id.code[:2]
-            else:
-                category_code = "00"
-            if template.style_field:
-                style_code = template.style_field[:8]
-                barcode_style_code = template.style_field[-5:].lstrip("0")
-            else:
-                style_code = "00000000"
-                barcode_style_code = "00000"
-            
-            template.default_code = "%s%s%s" % (parent_categ, category_code, style_code)
-            template.barcode = "%s%s%s" % (parent_categ, category_code, barcode_style_code)
+                template.default_code = ""
+                template.barcode = ""
             # raise ValidationError('afafa')
 
 class ProductProductInherit(models.Model):
@@ -183,38 +193,52 @@ class ProductProductInherit(models.Model):
         for product in self:
             color_attr = self.env.ref('product.product_attribute_2')
             treatment_attr = self.env.ref('egymentors_product_code.product_attribute_treatment')
-            if product.parent_categ and product.parent_categ.code:
-                categ_code = product.parent_categ.code[:2]
-            else:
-                categ_code  = "00"
-            if product.categ_id and product.categ_id.code:
-                product.category_code = product.categ_id.code[:2]
-            else:
-                product.category_code = "00"
-            if product.style_field:
-                product.style_code = product.style_field[:8]
-                product.barcode_style_code = product.style_field[-5:].lstrip("0")
-            else:
-                product.style_code = "00000000"
-                product.barcode_style_code = "00000"
+            if product.categ_id.category_type != 'not':
+                if product.parent_categ and product.parent_categ.code:
+                    categ_code = product.parent_categ.code[:2]
+                else:
+                    categ_code  = "00"
+                if product.categ_id and product.categ_id.code:
+                    product.category_code = product.categ_id.code[:2]
+                else:
+                    product.category_code = "00"
+                if product.style_field:
+                    product.style_code = product.style_field[:8]
+                    product.barcode_style_code = product.style_field[-5:].lstrip("0")
+                else:
+                    product.style_code = "00000000"
+                    product.barcode_style_code = "00000"
             
-            for attr_val_line in product.product_template_attribute_value_ids:
+                for attr_val_line in product.product_template_attribute_value_ids:
 
-                if attr_val_line.attribute_id == color_attr \
-                        and attr_val_line.product_attribute_value_id:
-                    product.color_code = attr_val_line.product_attribute_value_id.name[:4]
-                if attr_val_line.attribute_id == treatment_attr \
-                        and attr_val_line.product_attribute_value_id:
-                    product.treatment_code = attr_val_line.product_attribute_value_id.name[:2]
+                    if attr_val_line.attribute_id == color_attr \
+                            and attr_val_line.product_attribute_value_id:
+                        product.color_code = attr_val_line.product_attribute_value_id.name[:4]
+                    if attr_val_line.attribute_id == treatment_attr \
+                            and attr_val_line.product_attribute_value_id:
+                        product.treatment_code = attr_val_line.product_attribute_value_id.name[:2]
             
-            if not product.color_code:
-                product.color_code = "0000"
-            if not product.treatment_code:
-                product.treatment_code = "00"
-            product.default_code = "%s%s%s%s%s" % (categ_code, product.category_code,
-                                                   product.style_code, product.color_code, product.treatment_code)
-            product.barcode = "%s%s%s%s%s" % (categ_code, product.category_code,
-                                            product.barcode_style_code, product.color_code,product.treatment_code)
+                if not product.color_code:
+                    product.color_code = "0000"
+                if not product.treatment_code:
+                    product.treatment_code = ""
+                color_code = ""
+                for word in product.color_code.split():
+                    if word.isdigit():
+                        color_code += word
+                style_code2 = ""
+                if len(product.style_code.lstrip("0")) < 8 :        
+                    style_code2 = '0' + product.style_code.lstrip("0")
+                else:
+                    style_code2 = product.style_code.lstrip("0")
+                
+                product.default_code = "%s%s%s-%s%s" % (categ_code, product.category_code,
+                                                   style_code2, color_code, product.treatment_code)
+                product.barcode = "%s%s%s%s%s" % (categ_code, product.category_code,
+                                            style_code2, color_code,product.treatment_code)
+            else:
+                product.default_code = ""
+                product.barcode = ""
 
 
             
