@@ -17,10 +17,10 @@
                     <field name="check_owner" attrs="{'invisible': [('payment_method_code', '!=', 'check_printing')], 
                                                      'readonly': [('state', '!=', 'draft')]}"/>
                 </xpath>
-                <xpath expr="//field[@name='payment_date']" position="after">
+<!--                 <xpath expr="//field[@name='payment_date']" position="before">
                     <field name="due_date_check2" attrs="{'invisible': [('payment_method_code', '!=', 'check_printing')], 
                                                      'readonly': [('state', '!=', 'draft')]}"/>
-                </xpath>
+                </xpath> -->
             </field>
         </record>
   </data>
