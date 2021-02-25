@@ -17,7 +17,7 @@
                         <div class="o-watermark">VOID</div>
                     </t>
 <!--                     <div class="sequence_number" t-if="page['sequence_number']" t-esc="page['sequence_number']" /> -->
-                    <div class="ckus_date" t-esc="page['due_date_check']"/>
+                    <div class="ckus_date" t-esc="page['due_date_check2']"/>
                     <t t-if="page['check_owner']">
                         <div class="ckus_payee_name" t-esc="page['check_owner']"/>
                     </t>
