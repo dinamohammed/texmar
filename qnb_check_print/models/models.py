@@ -28,7 +28,7 @@ class account_payment(models.Model):
     check_owner = fields.Char(string= "Check Owner", help="Give this field a value if you dont want to view the partner name"
                               "in check print out.")
     
-    due_date_check = fields.Date("Due Date" , required=True , default = fields.Datetime.today())
+    due_date_check = fields.Date("Due Date" , default = fields.Datetime.today())
 
     def do_print_checks(self):
         if self:
