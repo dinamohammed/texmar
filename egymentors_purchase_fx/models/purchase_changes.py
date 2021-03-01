@@ -34,7 +34,7 @@ class PurchaseOrderType(models.Model):
 class PurchaseOrderInherit(models.Model):
     _inherit = 'purchase.order'
 
-    fx_num_id = fields.Many2one('fx.number', "Fx/Production No.")
+    fx_num_id = fields.Many2one('fx.number', "Fx/Production No.",store=True)
 
     po_type_id = fields.Many2one('purchase.order.type', "PO Type")
     order_status = fields.Selection([('open', 'Open'),
@@ -169,7 +169,7 @@ class PurchaseOrderLineInherit(models.Model):
             'move_id': move.id,
             'currency_id': currency and currency.id or False,
             'purchase_line_id': self.id,
-            'fx_num_id': self.fx_num_id.id,
+            'fx_num_id': self.order_id.fx_num_id.id,
             'date_maturity': move.invoice_date_due,
             'product_uom_id': self.product_uom.id,
             'product_id': self.product_id.id,
