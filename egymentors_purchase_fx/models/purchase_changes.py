@@ -152,9 +152,8 @@ class PurchaseOrderLineInherit(models.Model):
     
     def _prepare_account_move_line(self, move):
         res = super(PurchaseOrderLineInherit, self)._prepare_account_move_line(move)
-        for line in res:
-            if self.fx_num_id:
-                line['fx_num_id'] = self.order_id.fx_num_id.id
+        self.ensure_one()
+        res['fx_num_id'] = self.order_id.fx_num_id.id
         return res
         
 
