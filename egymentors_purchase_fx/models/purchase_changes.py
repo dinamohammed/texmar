@@ -169,7 +169,7 @@ class PurchaseOrderLineInherit(models.Model):
             'move_id': move.id,
             'currency_id': currency and currency.id or False,
             'purchase_line_id': self.id,
-            'fx_num_id': self.order_id.fx_num_id.id,
+            'fx_num_id': self.fx_num_id.id,
             'date_maturity': move.invoice_date_due,
             'product_uom_id': self.product_uom.id,
             'product_id': self.product_id.id,
