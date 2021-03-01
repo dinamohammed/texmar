@@ -110,12 +110,12 @@ class PurchaseOrderInherit(models.Model):
 #         result['context']['fx_num_id'] = self.fx_num_id
 #         return result
     
-#     def action_view_invoice(self):
-#         vals = super(PurchaseOrderInherit, self).action_view_invoice()
-#         for rec in self:
-# #             rec.order_line.invoice_lines.write({'fx_pick_num_id': rec.fx_num_id.id})
-#             rec.order_line.invoice_lines.write({'fx_num_id': rec.fx_num_id.id})
-#         return vals
+    def action_view_invoice(self):
+        vals = super(PurchaseOrderInherit, self).action_view_invoice()
+        for rec in self:
+#             rec.order_line.invoice_lines.write({'fx_pick_num_id': rec.fx_num_id.id})
+            rec.order_line.invoice_lines.write({'fx_num_id': rec.fx_num_id.id})
+        return vals
 
 class PurchaseOrderLineInherit(models.Model):
     _inherit = 'purchase.order.line'
