@@ -21,7 +21,7 @@
                     <field name="fx_num_id" readonly='1' force_save = "1"/>
                 </xpath>
                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
-                    <field name="fx_num_id" invisible='1' force_save = "1"/>
+                    <field name="fx_num_id"  force_save = "1"/>
                 </xpath>
            </field>
        </record>
