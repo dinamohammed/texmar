@@ -43,9 +43,11 @@ class AccountInvoiceInherit(models.Model):
             new_line.account_id = new_line._get_computed_account()
             new_line._onchange_price_subtotal()
             # Add fx_num_id
-            new_line.write({'fx_num_id':self.purchase_id.fx_num_id})
             new_lines += new_line
         new_lines._onchange_mark_recompute_taxes()
+        
+        for line in new_lines:
+          line.write({'fx_num_id':self.purchase_line_id.fx_num_id})
 
         # Compute invoice_origin.
         origins = set(self.line_ids.mapped('purchase_line_id.order_id.name'))
