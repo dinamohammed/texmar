@@ -19,4 +19,4 @@ class AccountInvoiceInherit(models.Model):
 class AccountInvoiceLineInherit(models.Model):
     _inherit = 'account.move.line'
     
-    fx_num_id = fields.Many2one('fx.number','FX No.')
+    fx_num_id = fields.Many2one('fx.number','FX No.', store = True)
