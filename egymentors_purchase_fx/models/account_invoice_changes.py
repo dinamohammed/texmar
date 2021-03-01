@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import Warning, ValidationError
 # Ahmed Salama Code Start ---->
 
 
@@ -47,7 +47,8 @@ class AccountInvoiceInherit(models.Model):
         new_lines._onchange_mark_recompute_taxes()
         
         for line in new_lines:
-          line.write({'fx_num_id' : line.purchase_line_id.fx_num_id.id})
+            raise ValidationError('%s'%line)
+#           line.write({'fx_num_id' : line.purchase_line_id.fx_num_id.id})
 
         # Compute invoice_origin.
         origins = set(self.line_ids.mapped('purchase_line_id.order_id.name'))
