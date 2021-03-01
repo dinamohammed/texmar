@@ -15,7 +15,8 @@ class AccountInvoiceInherit(models.Model):
         moves = super(AccountInvoiceInherit, self).create(vals_list)
         for move in moves:
             for line in move.line_ids:
-                line['fx_num_id'] = line.purchase_line_id.fx_num_id.id
+                if line.purchase_line_id:
+                    line['fx_num_id'] = line.purchase_line_id.fx_num_id.id
         return moves
 
     def action_print(self):
