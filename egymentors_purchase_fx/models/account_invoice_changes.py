@@ -47,7 +47,7 @@ class AccountInvoiceInherit(models.Model):
         new_lines._onchange_mark_recompute_taxes()
         
         for line in new_lines:
-          line['fx_num_id'] = line.purchase_line_id.fx_num_id.id
+          line.write({'fx_num_id' : line.purchase_line_id.fx_num_id.id})
 
         # Compute invoice_origin.
         origins = set(self.line_ids.mapped('purchase_line_id.order_id.name'))
