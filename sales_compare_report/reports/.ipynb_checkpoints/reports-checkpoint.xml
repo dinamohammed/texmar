@@ -1,0 +1,13 @@
+<odoo>
+  <data>
+      <report
+            string="Sales Compare Report"
+            id="purchase.action_report_sales_compare"
+            model="purchase.order"
+            report_type="qweb-pdf"
+            name="sales_compare_report.report_sales_compare"
+            file="sales_compare_report.report_sales_compare"
+            menu="True"
+        />
+  </data>
+</odoo>

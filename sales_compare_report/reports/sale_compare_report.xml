@@ -1,0 +1,28 @@
+<odoo>
+    <template id="report_sales_compare_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page"  style="font-size:30px;">
+                <h3><strong>PREPARATION</strong></h3>
+                <table class="table table-sm o_main_table">
+                        <thead>
+                            <tr>
+                                <th class="text-right"><span>Ser.</span></th>
+                                <th class="text-right"><span>Code</span></th>
+                                <th class="text-right"><span>Name</span></th>
+                                <th class="text-right"><span>Color</span></th>
+                                <th class="text-right"><span>Deliver Date</span></th>
+                                <th class="text-right"><span>Qty</span></th>
+                                <th class="text-center"><span>PO</span></th>
+                                <th class="text-center"><span>Current Year</span></th>
+                                <th class="text-center"><span>Last Years</span></th>
+                                <th class="text-center"><span>Total</span></th>
+                                <th class="text-center"><span>Request</span></th>
+                                <th class="text-center"><span>PO Qty</span></th>
+                            </tr>
+                        </thead>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>
