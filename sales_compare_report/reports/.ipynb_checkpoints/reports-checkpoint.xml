@@ -1,5 +1,20 @@
 <odoo>
   <data>
+      
+      <record id="sales_compare_paperformat" model="report.paperformat">
+            <field name="name">Sales Compare Paper Format</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">45</field>
+            <field name="margin_bottom">45</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">40</field>
+            <field name="dpi">140</field>
+        </record>
+      
       <report
             string="Sales Compare Report"
             id="purchase.action_report_sales_compare"
@@ -8,6 +23,7 @@
             name="sales_compare_report.report_sales_compare"
             file="sales_compare_report.report_sales_compare"
             menu="True"
+            paperformat="sales_compare_report.sales_compare_paperformat"
         />
   </data>
 </odoo>
