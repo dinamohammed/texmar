@@ -25,5 +25,16 @@
             menu="True"
             paperformat="sales_compare_report.sales_compare_paperformat"
         />
+      
+      <report
+              id="action_report_sales_compare_xlsx"
+              model="sale.order"
+              string="Sales Compare Report xlsx"
+              report_type="xlsx"
+              name="sales_compare_report.report_sales_compare_xlsx"
+              file="sales_compare_report.report_sales_compare_xlsx"
+              attachment_use="False"
+              menu="True"
+        />
   </data>
 </odoo>
