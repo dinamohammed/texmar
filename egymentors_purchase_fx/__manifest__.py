@@ -30,7 +30,7 @@
 """,
     'version': '10.0',
     'depends': ['sale', 'sale_stock', 'purchase_stock',
-                'account', 'stock_picking_batch', 'mrp','sale_purchase'],
+                'account', 'stock_picking_batch', 'mrp','sale_purchase','purchase'],
     'data': [
         'data/inventory_adjustment_data.xml',
         'data/po_type_data.xml',

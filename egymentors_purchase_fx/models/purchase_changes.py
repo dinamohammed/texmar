@@ -34,7 +34,7 @@ class PurchaseOrderType(models.Model):
 class PurchaseOrderInherit(models.Model):
     _inherit = 'purchase.order'
 
-    fx_num_id = fields.Many2one('fx.number', "Fx/Production No.")
+    fx_num_id = fields.Many2one('fx.number', "Fx/Production No.",store=True)
 
     po_type_id = fields.Many2one('purchase.order.type', "PO Type")
     order_status = fields.Selection([('open', 'Open'),
@@ -150,13 +150,12 @@ class PurchaseOrderLineInherit(models.Model):
                 line['fx_num_id'] = self.fx_num_id.id
         return res
     
-        # override function from purchase model to add fx_num_id
     def _prepare_account_move_line(self, move):
-        vals = super(PurchaseOrderLineInherit, self)._prepare_account_move_line(move)
-        vals["fx_num_id"] = self.fx_num_id.id
-        return vals
-
-
+        res = super(PurchaseOrderLineInherit, self)._prepare_account_move_line(move)
+        self.ensure_one()
+        res['fx_num_id'] = self.order_id.fx_num_id.id
+        return res
+        
 
 
 class StockRuleInherit(models.Model):
