@@ -9,7 +9,7 @@
                     
                     <button name="button_resume_cutting" 
                             class="btn btn-primary" 
-                            string="Start Cutting" 
+                            string="Resume Cutting" 
                             type="object"
                             groups="base.group_system"/>
                     
@@ -28,12 +28,14 @@
                             type="object"/>
                     
                     <field name="cutting_state" invisible = "1"/>
-                    
+                </xpath>
+                <xpath expr="//div[@name = 'button_box']" position="before">
+                    <div class="o_form_field o_stat_info" style="color:grey;">
+                        <field name="cutting_state" style="color:black;"/>
+                    </div>
                 </xpath>
             </field>
         </record>
   </data>
     
-<!--     attrs="{'invisible': [('cutting_state', '!=', 'not')]}"
- groups="stock.group_stock_user"-->
 </odoo>
