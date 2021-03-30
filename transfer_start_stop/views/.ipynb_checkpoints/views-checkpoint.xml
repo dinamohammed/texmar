@@ -1,0 +1,36 @@
+<odoo>
+  <data>
+      <record id="view_picking_form_inherit_cutting_status" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit.cutting_status</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    
+                    <button name="button_resume_cutting" 
+                            class="btn btn-primary" 
+                            string="Start Cutting" 
+                            type="object"
+                            groups="base.group_system"/>
+                    
+                    <button name="button_start_cutting" 
+                            class="btn btn-primary" 
+                            string="Start Cutting" 
+                            type="object"
+                            groups="stock.group_stock_user,stock.group_stock_manager"
+                            attrs="{'invisible': [('cutting_state', '!=', 'not')]}"/>
+                    
+                    <button name="button_stop_cutting" 
+                            class="btn btn-danger" 
+                            string="Stop Cutting"
+                            groups="stock.group_stock_user,stock.group_stock_manager,base.group_system"
+                            attrs="{'invisible': [('cutting_state', '!=', 'cutting')]}"
+                            type="object"/>
+                </xpath>
+            </field>
+        </record>
+  </data>
+    
+<!--     attrs="{'invisible': [('cutting_state', '!=', 'not')]}"
+ groups="stock.group_stock_user"-->
+</odoo>
