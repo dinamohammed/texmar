@@ -26,6 +26,9 @@
                             groups="stock.group_stock_user,stock.group_stock_manager,base.group_system"
                             attrs="{'invisible': [('cutting_state', '!=', 'cutting')]}"
                             type="object"/>
+                    
+                    <field name="cutting_state" invisible = "1"/>
+                    
                 </xpath>
             </field>
         </record>
