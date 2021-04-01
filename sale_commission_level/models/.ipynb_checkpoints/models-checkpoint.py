@@ -37,6 +37,7 @@ class SaleCommissionMixin(models.AbstractModel):
         return vals
     
     
+    
 class SaleOrderLineAgent(models.Model):
     _inherit = "sale.order.line.agent"
     
@@ -57,6 +58,7 @@ class SaleOrderLineAgent(models.Model):
     ################## Then TL agent gets 15 % (20% - 5%)
         team_leader_id = self.agent_id.mapped('parent_agent')
         temp_commission_id = team_leader_id.commission_id
+        temp_commission_id.not_fix_qty = temp_commission_id.fix_qty
         for line in self:
             if line.agent_id.parent_agent.id == team_leader_id.id:
                 if line.agent_id.commission_id.commission_type == "fixed":
@@ -89,6 +91,7 @@ class AccountInvoiceLineAgent(models.Model):
         
         team_leader_id = self.agent_id.mapped('parent_agent')
         temp_commission_id = team_leader_id.commission_id
+        temp_commission_id.not_fix_qty = temp_commission_id.fix_qty
         for line in self:
             if line.agent_id.parent_agent.id == team_leader_id.id:
                 if line.agent_id.commission_id.commission_type == "fixed":
@@ -106,4 +109,37 @@ class AccountInvoiceLineAgent(models.Model):
             # Refunds commissions are negative
             if line.invoice_id.type and "refund" in line.invoice_id.type:
                 line.amount = -line.amount
-        
+
+
+class SaleCommission(models.Model):
+    _inherit = "sale.commission"
+    
+    
+    not_fix_qty = fields.Float(string="Not Fixed percentage")
+
+    
+    
+class SaleCommissionLineMixin(models.AbstractModel):
+    _inherit = "sale.commission.line.mixin"
+    
+    def _get_commission_amount(self, commission, subtotal, product, quantity):
+        """Get the commission amount for the data given. It's called by
+        compute methods of children models.
+
+        This means the inheritable method for modifying the amount of the commission.
+        """
+        self.ensure_one()
+        if product.commission_free or not commission:
+            return 0.0
+        if commission.amount_base_type == "net_amount":
+            # If subtotal (sale_price * quantity) is less than
+            # standard_price * quantity, it means that we are selling at
+            # lower price than we bought, so set amount_base to 0
+            subtotal = max([0, subtotal - product.standard_price * quantity])
+        if commission.commission_type == "fixed":
+            if commission.not_fix_qty > 0:
+                return subtotal * (commission.not_fix_qty / 100.0)
+            else:
+                return subtotal * (commission.fix_qty / 100.0)
+        elif commission.commission_type == "section":
+            return commission.calculate_section(subtotal)
