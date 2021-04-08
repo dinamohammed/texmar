@@ -31,17 +31,20 @@
             <field name="arch" type="xml">
                 <xpath expr = "." position = "replace" >
                     <tree string="Purchase Order Lines" create="false">
-                        <field name="order_id"/>
                         <field name="product_reference"/>
                         <field name="product_name"/>
                         <field name="product_color"/>
-                        <field name="product_qty"/>
+                        <field name="date_planned"  widget="date"/>
                         <field name="product_qty_on_hand"/>
+                        <field name="order_id"/>
                         <field name="product_qty"/>
                         <field name="qty_received"/>
                         <field name="remaining_qty"/>
-                        <field name="state"/>
                         <field name="date_planned"  widget="date"/>
+                        <field name="state"/>
+                        <field name="product_gallery"/>
+                        <field name="product_dealer"/>
+                        <field name="product_market"/>
                 </tree>
                 </xpath>
             </field>

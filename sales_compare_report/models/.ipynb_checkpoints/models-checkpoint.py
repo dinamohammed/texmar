@@ -12,6 +12,10 @@ class PurchaseOrderLine(models.Model):
     remaining_qty = fields.Char("Remaining Qty", compute = "_return_remaining_qty", store = True)
     product_color = fields.Char("Color", compute = "_return_product_color", store = True)
     
+    product_market = fields.Integer("Market")
+    product_gallery = fields.Integer("Gallery")
+    product_dealer = fields.Integer("Dealer")
+    
     @api.depends('product_qty','qty_received')
     def _return_remaining_qty(self):
         for line in self:
