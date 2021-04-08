@@ -71,7 +71,7 @@ class ProductTemplateInherit(models.Model):
     
     placeholder = fields.Char(compute='o_change')
     parent_categ = fields.Many2one('product.category', 'Parent Category')
-    style_field = fields.Char(string="Style", size=8)
+    style_field = fields.Char(string="Style")
     # Cloths Parameters
     category_type = fields.Selection(related='categ_id.category_type')
     
@@ -146,14 +146,14 @@ class ProductTemplateInherit(models.Model):
                     style_code = "00000000"
                     barcode_style_code = "00000"
                 
-                style_code2 = ""
-                if len(style_code.lstrip("0")) < 8 :        
-                    style_code2 = '0' + style_code.lstrip("0")
-                else:
-                    style_code2 = style_code.lstrip("0")
+#                 style_code2 = ""
+#                 if len(style_code.lstrip("0")) < 8 :        
+#                     style_code2 = '0' + style_code.lstrip("0")
+#                 else:
+#                     style_code2 = style_code.lstrip("0")
                             
-                template.default_code = "%s%s%s" % (parent_categ, category_code, style_code2)
-                template.barcode = "%s%s%s" % (parent_categ, category_code, style_code2)
+                template.default_code = "%s%s-%s" % (parent_categ, category_code, style_code)
+                template.barcode = "%s%s%s" % (parent_categ, category_code, style_code)
             else:
                 template.default_code = ""
                 template.barcode = ""
@@ -162,7 +162,7 @@ class ProductTemplateInherit(models.Model):
 class ProductProductInherit(models.Model):
     _inherit = 'product.product'
     
-    style_field = fields.Char(string="Style", size=8)
+    style_field = fields.Char(string="Style")
     default_code = fields.Char(size=18)
     barcode = fields.Char(size=15)
     parent_categ = fields.Many2one('product.category', 'Parent Category')
@@ -222,20 +222,22 @@ class ProductProductInherit(models.Model):
                     product.color_code = "0000"
                 if not product.treatment_code:
                     product.treatment_code = ""
+                elif product.treatment_code == "00":
+                    product.treatment_code = ""
                 color_code = ""
                 for word in product.color_code.split():
                     if word.isdigit():
                         color_code += word
-                style_code2 = ""
-                if len(product.style_code.lstrip("0")) < 8 :        
-                    style_code2 = '0' + product.style_code.lstrip("0")
-                else:
-                    style_code2 = product.style_code.lstrip("0")
+#                 style_code2 = ""
+#                 if len(product.style_code.lstrip("0")) < 8 :        
+#                     style_code2 = '0' + product.style_code.lstrip("0")
+#                 else:
+#                     style_code2 = product.style_code.lstrip("0")
                 
-                product.default_code = "%s%s%s-%s%s" % (categ_code, product.category_code,
-                                                   style_code2, color_code, product.treatment_code)
+                product.default_code = "%s%s-%s-%s-%s" % (categ_code, product.category_code,
+                                                   product.style_field, color_code, product.treatment_code)
                 product.barcode = "%s%s%s%s%s" % (categ_code, product.category_code,
-                                            style_code2, color_code,product.treatment_code)
+                                            product.style_field, color_code,product.treatment_code)
             else:
                 product.default_code = ""
                 product.barcode = ""
