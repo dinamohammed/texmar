@@ -233,8 +233,11 @@ class ProductProductInherit(models.Model):
 #                     style_code2 = '0' + product.style_code.lstrip("0")
 #                 else:
 #                     style_code2 = product.style_code.lstrip("0")
-                
-                product.default_code = "%s%s-%s-%s-%s" % (categ_code, product.category_code,
+                if product.treatment_code == "":
+                    product.default_code = "%s%s-%s-%s" % (categ_code, product.category_code,
+                                                   product.style_field, color_code)
+                else:
+                    product.default_code = "%s%s-%s-%s-%s" % (categ_code, product.category_code,
                                                    product.style_field, color_code, product.treatment_code)
                 product.barcode = "%s%s%s%s%s" % (categ_code, product.category_code,
                                             product.style_field, color_code,product.treatment_code)
