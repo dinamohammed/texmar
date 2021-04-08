@@ -12,6 +12,7 @@ class PurchaseOrderLine(models.Model):
     remaining_qty = fields.Char("Remaining Qty", compute = "_return_remaining_qty", store = True)
     product_color = fields.Char("Color", compute = "_return_product_color", store = True)
     
+    approve_date = fields.Datetime(related = "order_id.date_approve")
     product_market = fields.Integer("Market")
     product_gallery = fields.Integer("Gallery")
     product_dealer = fields.Integer("Dealer")
