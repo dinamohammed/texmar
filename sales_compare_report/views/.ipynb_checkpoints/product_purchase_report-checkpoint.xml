@@ -34,7 +34,7 @@
                         <field name="product_reference"/>
                         <field name="product_name"/>
                         <field name="product_color"/>
-                        <field name="date_planned"  widget="date"/>
+                        <field name="approve_date"  widget="date"/>
                         <field name="product_qty_on_hand"/>
                         <field name="order_id"/>
                         <field name="product_qty"/>
