@@ -53,9 +53,9 @@
                                     <tr>
                                         <td> <span t-esc="o.location_id.name"/></td>
                                         <td>
-                                            <span t-esc="o.get_date().get('start_date')"/>
+                                            <span t-esc="o.get_date().get('start_date').strftime('%d-%m-%Y')"/>
                                             To
-                                            <span t-esc="o.get_date().get('end_date')"/>
+                                            <span t-esc="o.get_date().get('end_date').strftime('%d-%m-%Y')"/>
                                         </td>
                                         <td> <span t-esc="user.name"/> </td>
                                     </tr>
@@ -114,7 +114,7 @@
 											<tr>
 												<td>
 												    <t t-if="val.get('date')">
-                                                        <span t-esc="val.get('date_d')"/>
+                                                        <span t-esc="val.get('date_d').strftime('%d-%m-%Y')"/>
 												    </t>
 												</td>
 												<td style="border-right:1px solid #efefef"><span t-esc="val.get('origin') or val.get('ref')"/> </td>
