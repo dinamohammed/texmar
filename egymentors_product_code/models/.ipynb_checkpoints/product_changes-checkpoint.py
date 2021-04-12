@@ -141,7 +141,7 @@ class ProductTemplateInherit(models.Model):
                     category_code = "00"
                 if template.style_field:
                     style_code = template.style_field
-                    barcode_style_code = template.style_field[-5:].lstrip("0")
+                    barcode_style_code = template.style_field
                 else:
                     style_code = "00000000"
                     barcode_style_code = "00000"
