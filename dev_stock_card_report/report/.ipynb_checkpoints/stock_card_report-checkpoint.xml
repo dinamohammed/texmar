@@ -82,6 +82,12 @@
 										<th width="8%" class="text-right"> 
 										    Balance 
 										</th>
+                                        <th width="8%" class="text-right"> 
+										    Cost 
+										</th>
+                                        <th width="8%" class="text-right"> 
+										    Total 
+										</th>
 									</tr>
 									<tbody class="sale_tbody">
 									<t t-set="lines" t-value="o.get_lines()"/>
@@ -90,7 +96,8 @@
                                     		<td class="text-left" style="background:#f7f3d4;border-bottom:1px solid black;border-top:1px solid black" colspan="11"> <span t-esc="line.get('product')"/></td>
                                     	</tr>
                                         <tr>
-                                    		<td class="text-left" style="background:#f7f3d4;border-bottom:1px solid black;border-top:1px solid black" colspan="11"><b>This Product code is </b><span t-esc="line.get('values')[0].get('product_code')"/></td>
+                                    		<td class="text-left" style="background:#f7f3d4;border-bottom:1px solid black;border-top:1px solid black" colspan="11"><b>This Product code is </b>
+                                                <span t-esc="o.get_product_code(line.get('values')[0].get('product_id'))"/></td>
                                     	</tr>
                                     	<t t-set="t_in_qty" t-value="0"/>
 										<t t-set="t_out_qty" t-value="0"/>
@@ -136,6 +143,13 @@
 												</td>
 												<td class="text-right" style="border-right:1px solid #efefef">
 													<span t-esc="'%.2f'%(b_qty)"/>
+												</td>
+                                                <!-- Add product Cost -->
+                                                <td class="text-right" style="border-right:1px solid #efefef">
+													<span t-esc="o.get_product_cost(val.get('product_id'))"/>
+												</td>
+                                                <td class="text-right" style="border-right:1px solid #efefef">
+													<span t-esc="'%.2f'%(o.get_product_cost(val.get('product_id'))*b_qty)"/>
 												</td>
 											</tr>
                                     	</t>

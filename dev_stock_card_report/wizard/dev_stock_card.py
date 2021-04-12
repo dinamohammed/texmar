@@ -52,7 +52,8 @@ class dev_stock_card(models.TransientModel):
     def in_lines(self,product_ids):
         state = ('draft', 'cancel')
         query = """select DATE(sm.date) as date, DATE(sm.date) as date_d, sm.origin as origin, pt.name as product,\
-                  sm.product_uom_qty as in_qty, sm.reference as ref, pp.default_code as product_code, pp.id as product_id from stock_move as sm \
+                  sm.product_uom_qty as in_qty, sm.reference as ref, pp.id as product_id\
+                  from stock_move as sm \
                   JOIN product_product as pp ON pp.id = sm.product_id \
                   JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                   where sm.date >= %s and sm.date <= %s \
@@ -70,7 +71,7 @@ class dev_stock_card(models.TransientModel):
                 f_date = data_date.strftime('%d-%m-%Y')
             res.update({
                 'out_qty':0.0,
-                'date':f_date
+                'date':f_date,
             })
         return result
 
@@ -82,7 +83,7 @@ class dev_stock_card(models.TransientModel):
             m_type = 'and sm.location_id = %s'
 
         query = """select DATE(sm.date) as date, DATE(sm.date) as date_d, sm.origin as origin, pt.name as product,\
-                      sm.product_uom_qty as out_qty, sm.reference as ref, pp.default_code as product_code, pp.id as product_id \
+                      sm.product_uom_qty as out_qty, sm.reference as ref, pp.id as product_id \
                       from stock_move as sm JOIN product_product as pp ON pp.id = sm.product_id \
                       JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                       where sm.date >= %s and sm.date <= %s \
@@ -113,6 +114,16 @@ class dev_stock_card(models.TransientModel):
         date = date.strftime('%Y-%m-%d')
         qty = product.with_context(to_date=date, location_id=self.location_id.id).qty_available
         return qty
+    
+    def get_product_cost(self,product):
+        product = self.env['product.product'].browse(product)
+        product_cost = product.with_context().standard_price
+        return product_cost
+    
+    def get_product_code(self,product):
+        product = self.env['product.product'].browse(product)
+        product_code = product.with_context().default_code
+        return product_code
             
     
     
@@ -203,6 +214,8 @@ class dev_stock_card(models.TransientModel):
         worksheet.write(row,2, 'In Qty', header_style)
         worksheet.write(row,3, 'Out Qty', header_style)
         worksheet.write(row,4, 'Balance', header_style)
+        worksheet.write(row,5, 'Cost', header_style)
+        worksheet.write(row,6, 'Total', header_style)
         lines = self.get_lines()
         
         p_group_style = easyxf('font:height 200;pattern: pattern solid, fore_color ivory;'
@@ -222,7 +235,9 @@ class dev_stock_card(models.TransientModel):
         for line in lines:
             worksheet.write_merge(row,row, 0,4, line.get('product'), p_group_style)
             row += 1
-            worksheet.write_merge(row,row, 0,4, 'This Product code is %s' %line.get('values')[0].get('product_code') , p_group_style)
+            worksheet.write_merge(row,row, 0,4, 'This Product code is %s' 
+                                  %self.get_product_code(line.get('values')[0].get('product_id')) 
+                                  , p_group_style)
             row += 1
             count = 0
             balance = 0
@@ -244,6 +259,8 @@ class dev_stock_card(models.TransientModel):
                 worksheet.write(row,2, val.get('in_qty'), text_right)
                 worksheet.write(row,3, val.get('out_qty'), text_right)
                 worksheet.write(row,4, balance, text_right)
+                worksheet.write(row,5, self.get_product_cost(val.get('product_id')), text_right)
+                worksheet.write(row,6, self.get_product_cost(val.get('product_id'))*balance, text_right)
                 row+=1
             worksheet.write_merge(row,row,0,1, 'Total', group_style_right)
             worksheet.write(row,2, t_in_qty, group_style_right)
