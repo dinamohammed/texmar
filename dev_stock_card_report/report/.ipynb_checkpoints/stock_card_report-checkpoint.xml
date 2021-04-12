@@ -103,6 +103,7 @@
 										<t t-set="t_out_qty" t-value="0"/>
                                     	<t t-set="b_qty" t-value="0"/>
                                     	<t t-set="count" t-value="0"/>
+                                        <t t-set="total_cost" t-value="0"/>
                                     	<t t-foreach="line.get('values')" t-as="val">
                                     	    <t t-if="count == 0">
                                     	        <t t-set="open_qty" t-value="o.get_opening_quantity(val.get('product_id'))"/>
@@ -148,6 +149,9 @@
                                                 <td class="text-right" style="border-right:1px solid #efefef">
 													<span t-esc="o.get_product_cost(val.get('product_id'))"/>
 												</td>
+                                                <t t-set="total_cost" 
+                                                   t-value="total_cost + (o.get_product_cost(val.get('product_id'))*b_qty)"/>
+
                                                 <td class="text-right" style="border-right:1px solid #efefef">
 													<span t-esc="'%.2f'%(o.get_product_cost(val.get('product_id'))*b_qty)"/>
 												</td>
@@ -170,6 +174,12 @@
 											</td>
 											<td class="text-right" style="border-right:1px solid #efefef">
 											    <b><span t-esc="'%.2f'%(b_qty)"/></b>
+											</td>
+                                            <td class="text-right" style="border-right:1px solid #efefef">
+											    <b></b>
+											</td>
+                                            <td class="text-right" style="border-right:1px solid #efefef">
+											    <b><span t-esc="'%.2f'%(total_cost)"/></b>
 											</td>
 										</tr>
 									
