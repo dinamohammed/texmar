@@ -19,13 +19,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','sale','sale_management','purchase'],
+    'depends': ['base','sale','sale_management','purchase','sale_quotation_number'],
 
     # always loaded
     'data': [
 #         'security/ir.model.access.csv',
         'data/irsequence.xml',
-#         'views/views.xml',
+        'views/views.xml',
 #         'views/templates.xml',
     ],
 

@@ -7,8 +7,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_cancel']" position="before">
                     <button name="action_confirm_note_order"
-                            attrs="{'invisible': [('state','not in', ('note_order'))]}"
-                            type="object" string="Confirm NO"/>
+                            states = 'note_order'
+                            type="object" string="Confirm Request"/>
 <!--                     <button name="prepare_so"
                             attrs="{'invisible': [('state','not in', ('note_order'))]}"
                             type="object" string="Prepare Sale Order"/> -->
@@ -17,8 +17,8 @@
                         <field name="state" widget="statusbar" statusbar_visible="note_order,draft,sent,sale"/>
                 </xpath>
                 <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='name']" position="after">
-                  <field name="to_sell" attrs="{'invisible': [('state','not in', ['note_order'])]}"/>
-                  <field name="to_request" attrs="{'invisible': [('state','not in', ['note_order'])]}"/>
+                  <field name="to_sell" attrs="{'invisible': [('state','not in', ('note_order'))]}"/>
+                  <field name="to_request" attrs="{'invisible': [('state','not in', ('note_order'))]}"/>
               </xpath>
 <!--                 <xpath expr="//button[@name='action_cancel']" position="after">
                     <button name="prepare_sol"
