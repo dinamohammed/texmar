@@ -242,6 +242,7 @@ class dev_stock_card(models.TransientModel):
             count = 0
             balance = 0
             t_in_qty = t_out_qty = 0
+            total = 0
             for val in line.get('values'):
                 count += 1
                 if count == 1:
@@ -260,12 +261,15 @@ class dev_stock_card(models.TransientModel):
                 worksheet.write(row,3, val.get('out_qty'), text_right)
                 worksheet.write(row,4, balance, text_right)
                 worksheet.write(row,5, self.get_product_cost(val.get('product_id')), text_right)
-                worksheet.write(row,6, self.get_product_cost(val.get('product_id'))*balance, text_right)
+                total_cost = self.get_product_cost(val.get('product_id'))*balance
+                total = total + total_cost
+                worksheet.write(row,6,total_cost , text_right)
                 row+=1
             worksheet.write_merge(row,row,0,1, 'Total', group_style_right)
             worksheet.write(row,2, t_in_qty, group_style_right)
             worksheet.write(row,3, t_out_qty, group_style_right)
             worksheet.write(row,4, balance, group_style_right)
+            worksheet.write(row,6, total, group_style_right)
             row+=2
         
         row+=1
