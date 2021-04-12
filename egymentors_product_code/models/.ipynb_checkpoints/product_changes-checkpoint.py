@@ -69,6 +69,12 @@ class ProductCategoryInherit(models.Model):
 class ProductTemplateInherit(models.Model):
     _inherit = 'product.template'
     
+    _sql_constraints = [
+                     ('default_code_unique', 
+                      'unique(default_code)',
+                      'Internal Reference has to be unique!')
+    ]
+    
     placeholder = fields.Char(compute='o_change')
     parent_categ = fields.Many2one('product.category', 'Parent Category')
     style_field = fields.Char(string="Style")
@@ -162,9 +168,15 @@ class ProductTemplateInherit(models.Model):
 class ProductProductInherit(models.Model):
     _inherit = 'product.product'
     
+    _sql_constraints = [
+                     ('default_code_unique', 
+                      'unique(default_code)',
+                      'Internal Reference has to be unique!')
+    ]
+    
     style_field = fields.Char(string="Style")
-    default_code = fields.Char(size=18)
-    barcode = fields.Char(size=15)
+    default_code = fields.Char()
+    barcode = fields.Char()
     parent_categ = fields.Many2one('product.category', 'Parent Category')
     category_code = fields.Char(compute='_generate_product_code', size=2,
                                 help="Category Code from field [Category Code] [2 digits]")
