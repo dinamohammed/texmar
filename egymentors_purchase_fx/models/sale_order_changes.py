@@ -114,6 +114,8 @@ class SaleOrderLineInherit(models.Model):
 	approval_status = fields.Selection([('approved', 'Approved'),
 	                                    ('refused', 'Refused')], "Approval Status")
 	
+	branch_id = fields.Many2one(related = 'order_id.branch_id')
+	
 	def write(self, vals):
 		"""
 		Change Status Of SO
