@@ -30,10 +30,13 @@
 """,
     'version': '10.0',
     'depends': ['sale', 'sale_stock', 'purchase_stock',
-                'account', 'stock_picking_batch', 'mrp','sale_purchase'],
+                'account', 'stock_picking_batch', 'mrp','sale_purchase','purchase'],
+#     to be added in next phase 'branch'
     'data': [
         'data/inventory_adjustment_data.xml',
         'data/po_type_data.xml',
+#         tobe addded in next phase
+#         'data/ir_sequence.xml',
         'data/sale_order_shedual_action.xml',
         'security/ir.model.access.csv',
         'security/sale_order_security.xml',

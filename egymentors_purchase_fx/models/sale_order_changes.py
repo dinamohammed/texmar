@@ -113,8 +113,9 @@ class SaleOrderLineInherit(models.Model):
 	line_delivery_date = fields.Date("Delivery Date")
 	approval_status = fields.Selection([('approved', 'Approved'),
 	                                    ('refused', 'Refused')], "Approval Status")
-	
-	branch_id = fields.Many2one(related = 'order_id.branch_id', store = True)
+	#     ##################### To be Added in next phase #########################
+
+# 	branch_id = fields.Many2one(related = 'order_id.branch_id', store = True)
 	
 	def write(self, vals):
 		"""
