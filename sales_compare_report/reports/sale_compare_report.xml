@@ -51,7 +51,7 @@
                             </tr>
                         </thead>
                     <tbody>
-                        <t t-set="lines" t-value="o.get_lines()"/>
+                        <t t-set="lines" t-value="o.get_lines('o.product_id')"/>
                         <t t-foreach="lines" t-as="line">
                             <t t-foreach="line.get('purchase_orders')" t-as="line">
                             </t>
