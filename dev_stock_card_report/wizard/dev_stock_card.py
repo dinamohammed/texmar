@@ -99,7 +99,7 @@ class dev_stock_card(models.TransientModel):
             f_date = ' '
             if res.get('date'):
                 data_date = datetime.strptime(str(res.get('date')),'%Y-%m-%d')
-                f_date = data_date.strftime('%d-%d-%Y')
+                f_date = data_date.strftime('%d-%m-%Y')
             res.update({
                 'in_qty': 0.0,
                 'date':f_date,
@@ -154,9 +154,9 @@ class dev_stock_card(models.TransientModel):
     
     def get_date(self):
         s_date = datetime.strptime(str(self.start_date), '%Y-%m-%d %H:%M:%S').date()
-        start_date = s_date.strftime('%m-%d-%Y')
+        start_date = s_date.strftime('%d-%m-%Y')
         e_date = datetime.strptime(str(self.end_date), '%Y-%m-%d %H:%M:%S').date()
-        end_date = e_date.strftime('%m-%d-%Y')        
+        end_date = e_date.strftime('%d-%m-%Y')        
         
         data = {'start_date':start_date , 'end_date':end_date}
         return data

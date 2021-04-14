@@ -31,5 +31,6 @@ class PurchaseOrderLine(models.Model):
                 if attribute.attribute_id == color_attr \
                             and attribute.product_attribute_value_id:
                     line.product_color = attribute.product_attribute_value_id.name.split('-')[1]
+
                                         
                     
