@@ -25,11 +25,12 @@ class SaleOrderInherit(models.Model):
 	                                    help="Flag to show if there is related purchase order and if it's delivered")
 	has_mto = fields.Boolean(compute='_check_lines_mto')
 	hide_cancel = fields.Boolean("Hide Cancel?")
-	stop_cancel_at = fields.Datetime("Stop Cancel", compute='compute_stop_cancel_at')
+	stop_cancel_at = fields.Datetime("Stop Cancel")
+# 	compute='compute_stop_cancel_at'
 	
 	display_name = fields.Char("Order", compute='get_display_name')
 	po_type_id = fields.Many2one('purchase.order.type', "PO Type")
-#     fx_num_id = fields.Many2one('fx.number', "Fx No.")
+	fx_num_id = fields.Many2one('fx.number', "Fx/Production No.")
 	
 	@api.onchange('name', 'client_order_ref')
 	def get_display_name(self):
@@ -41,11 +42,11 @@ class SaleOrderInherit(models.Model):
 				display_name += '/' + order.client_order_ref
 			order.display_name = display_name
 	
-	@api.onchange('date_order')
-	def compute_stop_cancel_at(self):
-		for order in self:
-			order.stop_cancel_at = (order.date_order +
-			                        relativedelta(days=1)).replace(hour=7, minute=0, second=0)
+# 	@api.onchange('date_order')
+# 	def compute_stop_cancel_at(self):
+# 		for order in self:
+# 			order.stop_cancel_at = (order.date_order +
+# 			                        relativedelta(days=1)).replace(hour=7, minute=0, second=0)
 	
 	@api.model
 	def cron_stop_cancel_sale_order(self):
@@ -94,8 +95,14 @@ class SaleOrderInherit(models.Model):
 			
 			result.append((so.id, name))
 		return result
-
-
+	
+	def action_confirm(self):
+		res = super(SaleOrderInherit, self).action_confirm()
+		for rec in self:
+			rec.picking_ids.write({'fx_pick_num_id': rec.fx_num_id.id})
+			rec.picking_ids.move_ids_without_package.write({'fx_num_id': rec.fx_num_id.id})
+		return res
+	
 class SaleOrderLineInherit(models.Model):
 	_inherit = 'sale.order.line'
 	
@@ -106,6 +113,9 @@ class SaleOrderLineInherit(models.Model):
 	line_delivery_date = fields.Date("Delivery Date")
 	approval_status = fields.Selection([('approved', 'Approved'),
 	                                    ('refused', 'Refused')], "Approval Status")
+	#     ##################### To be Added in next phase #########################
+
+# 	branch_id = fields.Many2one(related = 'order_id.branch_id', store = True)
 	
 	def write(self, vals):
 		"""
@@ -146,6 +156,8 @@ class SaleOrderLineInherit(models.Model):
 		values = super(SaleOrderLineInherit, self)._prepare_procurement_values(group_id)
 		if self.line_delivery_date:
 			values['date_planned'] = self.line_delivery_date
+# 		if self.order_id.fx_num_id:
+# 			values['fx_pick_num_id'] = self.order_id.fx_num_id.id
 		return values
 	
 	def _action_launch_stock_rule(self, previous_product_uom_qty=False):
@@ -217,6 +229,28 @@ class SaleOrderLineInherit(models.Model):
 			'date_order': date_order,
 			'fiscal_position_id': fiscal_position_id,
 			'po_type_id': self.order_id.po_type_id.id,
+			'fx_num_id': self.order_id.fx_num_id.id,
+		}
+	def _prepare_invoice_line(self):
+		"""
+		Prepare the dict of values to create the new invoice line for a sales order line.
+		:param qty: float quantity to invoice
+		"""
+		self.ensure_one()
+		return {
+			'display_type': self.display_type,
+			'sequence': self.sequence,
+			'name': self.name,
+			'product_id': self.product_id.id,
+			'fx_num_id': self.order_id.fx_num_id.id,
+			'product_uom_id': self.product_uom.id,
+			'quantity': self.qty_to_invoice,
+			'discount': self.discount,
+			'price_unit': self.price_unit,
+			'tax_ids': [(6, 0, self.tax_id.ids)],
+			'analytic_account_id': self.order_id.analytic_account_id.id,
+			'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
+			'sale_line_ids': [(4, self.id)],
 		}
 
 

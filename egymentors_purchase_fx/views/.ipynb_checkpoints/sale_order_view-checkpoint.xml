@@ -142,6 +142,7 @@
                     <field name="approval_status" optional="show"/>
                     <field name="line_status" optional="show"/>
                     <field name="is_cut"/>
+<!--       to be added in next phase              <field name="branch_id"/> -->
                 </xpath>
                 <xpath expr="//tree" position="attributes">
                     <attribute name="decoration-info">is_cut == False</attribute>
@@ -165,6 +166,7 @@
                     <filter name="line_status" string="Line Status" context="{'group_by':'line_status'}" />
                     <filter name="approval_status" string="Approval Status" context="{'group_by':'approval_status'}" />
                     <filter name="sample_date" string="Sample Date" context="{'group_by':'sample_date'}" />
+<!--            to be added in next phase         <filter name="branch_id" string="Branch" context="{'group_by':'branch_id'}" /> -->
                     <filter name="line_delivery_date" string="Delivery Date" context="{'group_by':'line_delivery_date'}" />
                 </xpath>
             </field>
@@ -175,6 +177,7 @@
             <field name="res_model">sale.order.line</field>
             <field name="view_mode">tree,form,pivot,graph</field>
             <field name="context">{'search_default_product': 1,'search_default_order': 1}</field>
+<!--    to be added in next phase 'search_branch_id': 1          -->
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Create a new order line.
