@@ -31,28 +31,5 @@ class PurchaseOrderLine(models.Model):
                 if attribute.attribute_id == color_attr \
                             and attribute.product_attribute_value_id:
                     line.product_color = attribute.product_attribute_value_id.name.split('-')[1]
-                    
-                    
-                    
-    ############# Function called in preparation report ############
-    
-    def get_lines(self):
-#         product_ids = self.get_product_ids()
-#         result = []
-#         if product_ids:
-#             in_lines = self.in_lines(product_ids)
-#             out_lines = self.out_lines(product_ids)
-#             lst = in_lines + out_lines
-#             new_lst = sorted(lst, key=itemgetter('product'))
-#             groups = itertools.groupby(new_lst, key=operator.itemgetter('product'))
-#             result = [{'product': k, 'values': [x for x in v]} for k, v in groups]
-#             for res in result:
-#                 print 
-#                 l_data = res.get('values')
-#                 new_lst = sorted(l_data, key=itemgetter('date'))
-#                 print ("")
-#                 res['values'] = new_lst
-
-        return result
-                                        
+                        
                     
