@@ -20,7 +20,43 @@
                                 <th class="text-center"><span>Request</span></th>
                                 <th class="text-center"><span>PO Qty</span></th>
                             </tr>
+                            <tr>
+                                <th class="text-right"><span></span></th>
+                                <th class="text-right"><span></span></th>
+                                <th class="text-right"><span></span></th>
+                                <th class="text-right"><span></span></th>
+                                <th class="text-right"><span></span></th>
+                                <th class="text-right"><span></span></th>
+                                <th class="text-center">
+                                    <span>PO</span>
+                                    <span>QTY</span>
+                                    <span>Deliver</span>
+                                    <span>Rest</span>
+                                    <span>Date</span>
+                                    <span>Status</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Gallery</span>
+                                    <span>Dealer</span>
+                                    <span>Market</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Gallery</span>
+                                    <span>Dealer</span>
+                                    <span>Market</span>
+                                </th>
+                                <th class="text-center"><span></span></th>
+                                <th class="text-center"><span></span></th>
+                                <th class="text-center"><span></span></th>
+                            </tr>
                         </thead>
+                    <tbody>
+                        <t t-set="lines" t-value="o.get_lines()"/>
+                        <t t-foreach="lines" t-as="line">
+                            <t t-foreach="line.get('purchase_orders')" t-as="line">
+                            </t>
+                        </t>
+                    </tbody>
                 </table>
             </div>
         </t>
