@@ -49,7 +49,7 @@
 		<menuitem name ="Preparation Report 2"
                   id='menu_preparation_2_report'
                   parent="purchase.purchase_report"
-                  action="action_dev_stock_card_report"
+                  action="action_product_purchase_line_report"
                   sequence="120"/>
 		
         

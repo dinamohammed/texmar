@@ -4,7 +4,7 @@
       <record id="sales_compare_paperformat" model="report.paperformat">
             <field name="name">Sales Compare Paper Format</field>
             <field name="default" eval="True" />
-            <field name="format">A4</field>
+            <field name="format">A3</field>
             <field name="orientation">Landscape</field>
             <field name="margin_top">45</field>
             <field name="margin_bottom">45</field>
@@ -17,16 +17,15 @@
       
       <report
             string="Sales Compare Report"
-            id="purchase.action_report_sales_compare"
-            model="purchase.order"
+            id="action_report_sales_compare"
+            model="product.purchase.line"
             report_type="qweb-pdf"
             name="sales_compare_report.report_sales_compare"
             file="sales_compare_report.report_sales_compare"
-            menu="True"
             paperformat="sales_compare_report.sales_compare_paperformat"
         />
       
-      <report
+<!--       <report
               id="action_report_sales_compare_xlsx"
               model="sale.order"
               string="Sales Compare Report xlsx"
@@ -35,6 +34,6 @@
               file="sales_compare_report.report_sales_compare_xlsx"
               attachment_use="False"
               menu="True"
-        />
+        /> -->
   </data>
 </odoo>
