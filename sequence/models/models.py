@@ -174,7 +174,7 @@ class SaleOrder(models.Model):
                    if 'company_id' in vals:
                        vals['name'] = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
                            'request.order', sequence_date=seq_date) or _('New')
-                   else:
+            else:
                        vals['name'] = self.env['ir.sequence'].next_by_code('note.order', sequence_date=seq_date) or _('New')
 
         # Makes sure partner_invoice_id', 'partner_shipping_id' and 'pricelist_id' are defined
