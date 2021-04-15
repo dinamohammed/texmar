@@ -173,9 +173,9 @@ class SaleOrder(models.Model):
                        seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(vals['date_order']))
                    if 'company_id' in vals:
                        vals['name'] = self.env['ir.sequence'].with_context(force_company=vals['company_id']).next_by_code(
-                           'note.order', sequence_date=seq_date) or _('New')
+                           'request.order', sequence_date=seq_date) or _('New')
                    else:
-                       vals['name'] = self.env['ir.sequence'].next_by_code('request.order', sequence_date=seq_date) or _('New')
+                       vals['name'] = self.env['ir.sequence'].next_by_code('note.order', sequence_date=seq_date) or _('New')
 
         # Makes sure partner_invoice_id', 'partner_shipping_id' and 'pricelist_id' are defined
             if any(f not in vals for f in ['partner_invoice_id', 'partner_shipping_id', 'pricelist_id']):
