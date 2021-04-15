@@ -76,11 +76,12 @@ class ProductTemplateInherit(models.Model):
     ]
     
     placeholder = fields.Char(compute='o_change')
-    parent_categ = fields.Many2one('product.category', 'Parent Category')
-    style_field = fields.Char(string="Style")
+    parent_categ = fields.Many2one(related = 'categ_id.parent_id')
+    style_field = fields.Char(string="Style", copy = False)
     # Cloths Parameters
     category_type = fields.Selection(related='categ_id.category_type')
     
+    default_code = fields.Char('Internal Reference', index=True, copy = False)
     # Fabric Parameters
     landry_code_id = fields.Many2one('product.landry.code', "Landry Code")
     texmar_weight = fields.Many2many('texmar.weight', 'product_weight_rel', 'product_id', 'weight_id',
@@ -182,8 +183,8 @@ class ProductProductInherit(models.Model):
     ]
     
     style_field = fields.Char(string="Style")
-    default_code = fields.Char()
-    barcode = fields.Char()
+    default_code = fields.Char(copy=False)
+    barcode = fields.Char(copy=False)
     parent_categ = fields.Many2one('product.category', 'Parent Category')
     category_code = fields.Char(compute='_generate_product_code', size=2,
                                 help="Category Code from field [Category Code] [2 digits]")
