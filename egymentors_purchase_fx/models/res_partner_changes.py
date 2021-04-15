@@ -9,21 +9,21 @@ class ResPartnerInherit(models.Model):
 
     sequence_id = fields.Many2one('ir.sequence', "Po Sequence")
 #     ##################### To be Added in next phase #########################
-#     ref = fields.Char('Reference',required=True, index=True, copy=False, default='New', store = True)
+    ref = fields.Char('Reference',required=True, index=True, copy=False, default='New', store = True)
     
-#     @api.model
-#     def create(self, vals):
-#         """
-#         Add new option to get sequence automatic of ref number
-#         :param vals:
-#         :return:
-#         """
-#         if vals.get('ref', 'New') == 'New':
-# #             raise ValidationError('%s'%self.env['ir.sequence'].next_by_code('contact.ref'))
-#             vals['ref'] = self.env['ir.sequence'].sudo().next_by_code('contact.ref.seq') or '/'
-#         result = super(ResPartnerInherit, self).create(vals)
+    @api.model
+    def create(self, vals):
+        """
+        Add new option to get sequence automatic of ref number
+        :param vals:
+        :return:
+        """
+        if vals.get('ref', 'New') == 'New':
+#             raise ValidationError('%s'%self.env['ir.sequence'].next_by_code('contact.ref'))
+            vals['ref'] = self.env['ir.sequence'].sudo().next_by_code('contact.ref.seq') or '/'
+        result = super(ResPartnerInherit, self).create(vals)
 
-#         return result
+        return result
     
     @api.constrains('ref')
     def ref_unique_constrain(self):
