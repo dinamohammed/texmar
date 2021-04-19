@@ -225,7 +225,7 @@ class ProductProductInherit(models.Model):
     parent_categ_code = fields.Char(related = 'parent_categ.code')
     
     @api.onchange('parent_categ', 'categ_id', 'product_tmpl_id',
-                  'product_template_attribute_value_ids')
+                  'product_template_attribute_value_ids','product_tmpl_id.attribute_line_ids')
     @api.depends('categ_id.code')
     def _generate_product_code(self):
         """
