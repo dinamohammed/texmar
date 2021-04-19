@@ -18,10 +18,16 @@ class ProductPurchaseLine(models.TransientModel):
     
     
     def get_product_ids(self):
-        return self.product_ids.ids
+        products = self.env['purchase.order.line'].search([('id','in',self.product_ids.ids)])
+        return products
     
-    def get_purchase_order(self,product_ids):
-        pass
-        
-#         purchase_orders = self.env['purchase_order_line'].groupby()
+    def get_purchase_order(self,product_id):
+        po_lines = self.env['purchase.order.line'].search([('product_id','=',product_id)])
+        return po_lines
+    
+    
+    def print_pdf(self):
+        data={}
+        data['form'] = self.read()[0]
+        return self.env.ref('sales_compare_report.action_report_sales_compare').report_action(self, data=None)
         

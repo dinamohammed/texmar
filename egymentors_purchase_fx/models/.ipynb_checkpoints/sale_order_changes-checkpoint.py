@@ -115,7 +115,7 @@ class SaleOrderLineInherit(models.Model):
 	                                    ('refused', 'Refused')], "Approval Status")
 	#     ##################### To be Added in next phase #########################
 
-# 	branch_id = fields.Many2one(related = 'order_id.branch_id', store = True)
+	branch_id = fields.Many2one(related = 'order_id.branch_id', store = True)
 	
 	def write(self, vals):
 		"""

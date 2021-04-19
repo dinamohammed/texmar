@@ -210,6 +210,18 @@ attrs="{'required':[('category_type','=','yarn')]}"
                   name="Product Width"
                   action="action_product_width"
                   sequence="200" groups="sales_team.group_sale_manager"/>
-
+        
+<!--         <record id="product_template_only_form_view_inherit4444" model="ir.ui.view">
+            <field name="name">product.category.form.inheri2222t</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr = "//field[@name='barcode']" position = "replace">
+                    <field name = 'barcode' force_save="1"/>
+                </xpath>
+            </field>
+        </record>
+ -->
     </data>
 </odoo>
+

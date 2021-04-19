@@ -1,8 +1,7 @@
 <odoo>
     <template id="report_sales_compare_document">
         <t t-call="web.external_layout">
-            <t t-set="o" t-value="o.with_context(lang=lang)"/>
-            <div class="page"  style="font-size:30px;">
+            <div class="page"  style="font-size:15px;">
                 <h3><strong>PREPARATION</strong></h3>
                 <table class="table" style="width:100%;border-collapse: collapse;">
                         <thead>
@@ -28,22 +27,31 @@
                                 <th class="text-right"><span></span></th>
                                 <th class="text-right"><span></span></th>
                                 <th class="text-center">
-                                    <span>PO</span>
-                                    <span>QTY</span>
-                                    <span>Deliver</span>
-                                    <span>Rest</span>
-                                    <span>Date</span>
-                                    <span>Status</span>
+                                    <span>PO </span>
+                                    <span>| </span>
+                                    <span>QTY </span>
+                                    <span>| </span>
+                                    <span>Deliver </span>
+                                    <span>| </span>
+                                    <span>Rest </span>
+                                    <span>| </span>
+                                    <span>Date </span>
+                                    <span>| </span>
+                                    <span>Status </span>
                                 </th>
                                 <th class="text-center">
-                                    <span>Gallery</span>
-                                    <span>Dealer</span>
-                                    <span>Market</span>
+                                    <span>Gallery </span>
+                                    <span>| </span>
+                                    <span>Dealer </span>
+                                    <span>| </span>
+                                    <span>Market </span>
                                 </th>
                                 <th class="text-center">
-                                    <span>Gallery</span>
-                                    <span>Dealer</span>
-                                    <span>Market</span>
+                                    <span>Gallery </span>
+                                    <span>| </span>
+                                    <span>Dealer </span>
+                                    <span>| </span>
+                                    <span>Market </span>
                                 </th>
                                 <th class="text-center"><span></span></th>
                                 <th class="text-center"><span></span></th>
@@ -51,22 +59,27 @@
                             </tr>
                         </thead>
                     <tbody>
-                        <t t-set="lines" t-value="o.get_lines('o.product_id')"/>
-                        <t t-foreach="lines" t-as="line">
-                            <t t-foreach="line.get('purchase_orders')" t-as="line">
+                        <t t-set="serial" t-value="1"/>
+                        <t t-set="products" t-value="o.get_product_ids()"/>
+                        <t t-foreach="products" t-as="product">
+                                <div><span t-esc="serial"/></div>
+                                <div><span t-esc="product.default_code"/></div>
+                                <div><span t-esc="product.name"/></div>
+                            <t t-set="lines" t-value="o.get_purchase_order(product)"/>
+                            <t t-foreach="lines" t-as="line">
+                                <t t-set="serial" t-value="serial + 1"/>
                             </t>
                         </t>
                     </tbody>
                 </table>
             </div>
-        </t>
+            </t>
     </template>
     
     <template id="report_sales_compare">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-set="lang" t-value="o.partner_id.lang"/>
-                <t t-call="sales_compare_report.report_sales_compare_document" t-lang="lang"/>
+                <t t-call="sales_compare_report.report_sales_compare_document"/>
             </t>
         </t>
     </template>
