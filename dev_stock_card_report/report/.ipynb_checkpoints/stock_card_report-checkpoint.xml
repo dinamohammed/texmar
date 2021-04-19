@@ -57,7 +57,7 @@
                                     t-esc="datetime.datetime.strptime(o.get_date().get('start_date'),'%m-%d-%Y').strftime('%d-%m-%Y')"/>
                                             To
                                             <span 
-                                    t-esc="datetime.datetime.strptime(o.get_date().get('end_date'))"/>
+                                    t-esc="o.get_date().get('end_date')"/>
                                         </td>
                                         <td> <span t-esc="user.name"/> </td>
                                     </tr>
