@@ -122,7 +122,7 @@ class ProductTemplateInherit(models.Model):
             self.env['product.template'].search_count([('default_code', '=', product.default_code)]) > 1:
                 raise Warning(_("Internal Reference violating unique constrain!!!"))
 
-    @api.onchange('style_field')
+    @api.onchange('style_field','attribute_line_ids')
     @api.depends('style_field')
     def o_change(self):
         for line in self:
@@ -209,8 +209,8 @@ class ProductProductInherit(models.Model):
 #     ]
     
     style_field = fields.Char(string="Style")
-    default_code = fields.Char(copy=False)
-    barcode = fields.Char(copy=False)
+    default_code = fields.Char(copy=False,compute='_generate_product_code',store = True)
+    barcode = fields.Char(copy=False, compute='_generate_product_code', store = True)
     parent_categ = fields.Many2one('product.category', 'Parent Category')
     category_code = fields.Char(compute='_generate_product_code', size=2,
                                 help="Category Code from field [Category Code] [2 digits]")
@@ -226,7 +226,7 @@ class ProductProductInherit(models.Model):
     
     @api.onchange('parent_categ', 'categ_id', 'product_tmpl_id',
                   'product_template_attribute_value_ids','product_tmpl_id.attribute_line_ids')
-    @api.depends('categ_id.code')
+    @api.depends('categ_id.code','product_template_attribute_value_ids')
     def _generate_product_code(self):
         """
         Generate code of each product using it's component 
