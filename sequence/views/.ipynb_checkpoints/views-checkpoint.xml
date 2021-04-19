@@ -45,11 +45,11 @@
                     <field name="product_uom" string="Unit of Measure" on_change="1" can_create="true" can_write="true" invisible="1" modifiers="{'invisible':true,'column_invisible':true}"/>
                     <field name="route_id" options="{'no_create': True}" can_create="true" can_write="true" invisible="1" modifiers="{'invisible':true,'column_invisible':true}"/>
                     <field name="price_subtotal" sum="Total" widget="monetary" modifiers="{'readonly':true}"/>
-                    <field name="sample_date" optional="show" modifiers="{}"/>
-                    <field name="line_delivery_date" optional="show" modifiers="{}"/>
-                    <field name="approval_status" optional="show" modifiers="{}"/>
+<!--                     <field name="sample_date" optional="show" modifiers="{}"/> -->
+<!--                     <field name="line_delivery_date" optional="show" modifiers="{}"/> -->
+<!--                     <field name="approval_status" optional="show" modifiers="{}"/>
                     <field name="line_status" optional="show" modifiers="{}"/>
-                    <field name="is_cut" modifiers="{}"/>
+                    <field name="is_cut" modifiers="{}"/> -->
                 </tree>
             </field>
         </record>
