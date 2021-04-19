@@ -69,11 +69,11 @@ class ProductCategoryInherit(models.Model):
 class ProductTemplateInherit(models.Model):
     _inherit = 'product.template'
     
-    _sql_constraints = [
-                     ('default_code_unique', 
-                      'unique(default_code)',
-                      'Internal Reference has to be unique!')
-    ]
+#     _sql_constraints = [
+#                      ('default_code_unique', 
+#                       'unique(default_code)',
+#                       'Internal Reference has to be unique!')
+#     ]
     
     placeholder = fields.Char(compute='o_change')
     parent_categ = fields.Many2one(related = 'categ_id.parent_id')
@@ -134,7 +134,7 @@ class ProductTemplateInherit(models.Model):
         self._generate_product_code()
 
 
-    @api.onchange('parent_categ', 'categ_id')
+    @api.onchange('parent_categ', 'categ_id','attribute_line_ids')
     @api.depends('categ_id.code')
     def _generate_product_code(self):
         """
@@ -159,28 +159,54 @@ class ProductTemplateInherit(models.Model):
                 else:
                     style_code = "00000000"
                     barcode_style_code = "00000"
-                
-#                 style_code2 = ""
-#                 if len(style_code.lstrip("0")) < 8 :        
-#                     style_code2 = '0' + style_code.lstrip("0")
-#                 else:
-#                     style_code2 = style_code.lstrip("0")
-                            
-                template.default_code = "%s%s-%s" % (parent_categ, category_code, style_code)
-                template.barcode = "%s%s%s" % (parent_categ, category_code, style_code)
+                color_code = ''
+                treatment_code = ''
+#                 raise ValidationError('%s'%len(template.attribute_line_ids.value_ids))
+                if (len(template.attribute_line_ids) == 1 and len(template.attribute_line_ids[0]['value_ids'])==1)\
+                or (len(template.attribute_line_ids) == 2 and len(template.attribute_line_ids[0]['value_ids'])==1 \
+                   and len(template.attribute_line_ids[1]['value_ids'])==1):
+                        
+                        color_attr = self.env.ref('product.product_attribute_2')
+                        treatment_attr = self.env.ref('egymentors_product_code.product_attribute_treatment')
+                    
+                        for attribute in template.attribute_line_ids:
+                            if attribute.attribute_id == color_attr and attribute.value_ids:
+                                color_code = attribute.value_ids.name[:4]
+                            if attribute.attribute_id == treatment_attr and attribute.value_ids:
+                                treatment_code = attribute.value_ids.name[:2]
+                        new_color_code = ''
+                        for word in color_code.split():
+                            if word.isdigit():
+                                new_color_code += word
+                        
+                if color_code != '':
+                    if treatment_code == "":
+                            template.default_code = "%s%s-%s-%s" % (parent_categ, category_code,
+                                                   style_code, new_color_code)
+                    else:
+                            template.default_code = "%s%s-%s-%s-%s" % (parent_categ, category_code,
+                                                   style_code, new_color_code, treatment_code)
+                            template.barcode = "%s%s%s%s%s" % (parent_categ, category_code,
+                                                   style_code, new_color_code, treatment_code)
+                else:
+                    template.default_code = "%s%s-%s" % (parent_categ, category_code, style_code)
+                    template.barcode = "%s%s%s" % (parent_categ, category_code, style_code)
+                    
+                    
             else:
                 template.default_code = ""
                 template.barcode = ""
+                        
             # raise ValidationError('afafa')
 
 class ProductProductInherit(models.Model):
     _inherit = 'product.product'
     
-    _sql_constraints = [
-                     ('default_code_unique', 
-                      'unique(default_code)',
-                      'Internal Reference has to be unique!')
-    ]
+#     _sql_constraints = [
+#                      ('default_code_unique', 
+#                       'unique(default_code)',
+#                       'Internal Reference has to be unique!')
+#     ]
     
     style_field = fields.Char(string="Style")
     default_code = fields.Char(copy=False)
