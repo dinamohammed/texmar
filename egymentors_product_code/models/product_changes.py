@@ -146,6 +146,10 @@ class ProductTemplateInherit(models.Model):
         for template in self:
             single_product_code = False
             if template.categ_id.category_type != 'not':
+                parent_categ = ''
+                category_code = ''
+                style_code = ''
+                barcode_style_code = ''
                 if template.parent_categ and template.parent_categ.code:
                     parent_categ = template.parent_categ.code[:2]
                 else:
