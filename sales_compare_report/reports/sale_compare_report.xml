@@ -62,12 +62,12 @@
                         <t t-foreach="purchase_lines" t-as="line">
                             <tr>
                                 <t t-if = 'line.product_id.id != product_id'>
-                                    <td><span t-esc="serial"/></td>
-                                    <td><span t-esc="line.product_id.default_code"/></td>
-                                    <td><span t-esc="line.product_id.name"/></td>
-                                    <td><span t-esc="line.product_id.product_color"/></td>
-                                    <td>nullll</td>
-                                    <td><span t-esc="line.product_id.qty_available"/></td>
+                                    <td class="text-right"><span t-esc="serial"/></td>
+                                    <td class="text-right"><span t-esc="line.product_id.default_code"/></td>
+                                    <td class="text-right"><span t-esc="line.product_id.name"/></td>
+                                    <td class="text-right"><span t-esc="line.product_id.product_color"/></td>
+                                    <td class="text-right">nullll</td>
+                                    <td class="text-right"><span t-esc="line.product_id.qty_available"/></td>
                                 </t>
                                 <t t-else = ''>
                                     <td></td>
@@ -77,7 +77,7 @@
                                     <td></td>
                                     <td></td>
                                 </t>
-                                <td>
+                                <td class="text-center">
                                     <span t-esc="line.order_id.name"/>
                                     <span> | </span>
                                     <span t-esc="line.product_qty"/>
