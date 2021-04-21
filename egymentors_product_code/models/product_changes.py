@@ -82,6 +82,7 @@ class ProductTemplateInherit(models.Model):
     category_type = fields.Selection(related='categ_id.category_type')
     
     default_code = fields.Char('Internal Reference', index=True, copy = False)
+    barcode = fields.Char('Barcode', related='product_variant_ids.barcode', readonly=False, store = True)
     # Fabric Parameters
     landry_code_id = fields.Many2one('product.landry.code', "Landry Code")
     texmar_weight = fields.Many2many('texmar.weight', 'product_weight_rel', 'product_id', 'weight_id',
