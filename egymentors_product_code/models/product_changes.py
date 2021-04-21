@@ -82,7 +82,6 @@ class ProductTemplateInherit(models.Model):
     category_type = fields.Selection(related='categ_id.category_type')
     
     default_code = fields.Char('Internal Reference', index=True, copy = False)
-    barcode = fields.Char('Barcode', related='product_variant_ids.barcode', readonly=False, store = True)
     # Fabric Parameters
     landry_code_id = fields.Many2one('product.landry.code', "Landry Code")
     texmar_weight = fields.Many2many('texmar.weight', 'product_weight_rel', 'product_id', 'weight_id',
@@ -147,6 +146,10 @@ class ProductTemplateInherit(models.Model):
         for template in self:
             single_product_code = False
             if template.categ_id.category_type != 'not':
+                parent_categ = ''
+                category_code = ''
+                style_code = ''
+                barcode_style_code = ''
                 if template.parent_categ and template.parent_categ.code:
                     parent_categ = template.parent_categ.code[:2]
                 else:
