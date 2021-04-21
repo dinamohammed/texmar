@@ -1,10 +1,10 @@
 <odoo>
     <template id="report_sales_compare_document">
+        <t t-call="web.html_container">
         <t t-call="web.external_layout">
             <div class="page"  style="font-size:15px;">
                 <h3><strong>PREPARATION</strong></h3>
-                <table class="table" style="width:100%;border-collapse: collapse;">
-                        <thead>
+                <table class="table" style="width:100%;">
                             <tr>
                                 <th class="text-right"><span>Ser.</span></th>
                                 <th class="text-right"><span>Code</span></th>
@@ -57,30 +57,40 @@
                                 <th class="text-center"><span></span></th>
                                 <th class="text-center"><span></span></th>
                             </tr>
-                        </thead>
-                    <tbody>
-                        <t t-set="serial" t-value="1"/>
-                        <t t-set="products" t-value="o.get_product_ids()"/>
+                    <t t-set="serial" t-value="1"/>
                         <t t-foreach="products" t-as="product">
-                                <div><span t-esc="serial"/></div>
-                                <div><span t-esc="product.default_code"/></div>
-                                <div><span t-esc="product.name"/></div>
-                            <t t-set="lines" t-value="o.get_purchase_order(product)"/>
+                            <tr>
+                                <td><span t-esc="serial"/></td>
+                                <td><span t-esc="product.product_id.default_code"/></td>
+                                <td><span t-esc="product['name']"/></td>
+                            </tr>
+                            <t t-set="serial" t-value="serial + 1"/>
+                        </t>
+<!--                     <tbody>
+                        <t t-set="serial" t-value="1"/>
+                        <t t-foreach="products" t-as="product">
+                            <tr>
+                                <td><span t-esc="serial"/></td>
+                                <td><t t-esc="product.product_id.default_code"/></td>
+                                <td><t t-esc="product['name']"/></td>
+                            </tr>
+                             <t t-set="lines" t-value="o.get_purchase_order(product)"/>
                             <t t-foreach="lines" t-as="line">
                                 <t t-set="serial" t-value="serial + 1"/>
-                            </t>
+                            </t> 
                         </t>
-                    </tbody>
+                    </tbody> -->
                 </table>
             </div>
             </t>
+        </t>
     </template>
     
-    <template id="report_sales_compare">
+<!--     <template id="report_sales_compare">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="sales_compare_report.report_sales_compare_document"/>
             </t>
         </t>
-    </template>
+    </template> -->
 </odoo>
