@@ -58,28 +58,42 @@
                                 <th class="text-center"><span></span></th>
                             </tr>
                     <t t-set="serial" t-value="1"/>
-                        <t t-foreach="products" t-as="product">
+                    <t t-set="product_id" t-value="0"/>
+                        <t t-foreach="purchase_lines" t-as="line">
                             <tr>
-                                <td><span t-esc="serial"/></td>
-                                <td><span t-esc="product.product_id.default_code"/></td>
-                                <td><span t-esc="product['name']"/></td>
+                                <t t-if = 'line.product_id.id != product_id'>
+                                    <td><span t-esc="serial"/></td>
+                                    <td><span t-esc="line.product_id.default_code"/></td>
+                                    <td><span t-esc="line.product_id.name"/></td>
+                                    <td><span t-esc="line.product_id.product_color"/></td>
+                                    <td>nullll</td>
+                                    <td><span t-esc="line.product_id.qty_available"/></td>
+                                </t>
+                                <t t-else = ''>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </t>
+                                <td>
+                                    <span t-esc="line.order_id.name"/>
+                                    <span> | </span>
+                                    <span t-esc="line.product_qty"/>
+                                    <span> | </span>
+                                    <span t-esc="line.qty_received"/>
+                                    <span> | </span>
+                                    <span t-esc="line.remaining_qty"/>
+                                    <span> | </span>
+                                    <span t-esc="line.date_planned"/>
+                                    <span> | </span>
+                                    <span t-esc="line.state"/>
+                                </td>
                             </tr>
+                            <t t-set="product_id" t-value="line.product_id.id"/>
                             <t t-set="serial" t-value="serial + 1"/>
                         </t>
-<!--                     <tbody>
-                        <t t-set="serial" t-value="1"/>
-                        <t t-foreach="products" t-as="product">
-                            <tr>
-                                <td><span t-esc="serial"/></td>
-                                <td><t t-esc="product.product_id.default_code"/></td>
-                                <td><t t-esc="product['name']"/></td>
-                            </tr>
-                             <t t-set="lines" t-value="o.get_purchase_order(product)"/>
-                            <t t-foreach="lines" t-as="line">
-                                <t t-set="serial" t-value="serial + 1"/>
-                            </t> 
-                        </t>
-                    </tbody> -->
                 </table>
             </div>
             </t>
