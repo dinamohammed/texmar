@@ -144,11 +144,12 @@ class ProductTemplateInherit(models.Model):
         Style Code from field [Variant Style] [8 digits]
 		"""
         for template in self:
+            single_product_code = False
             if template.categ_id.category_type != 'not':
                 if template.parent_categ and template.parent_categ.code:
                     parent_categ = template.parent_categ.code[:2]
                 else:
-                    parent_categ = "00"
+                    parent_categ = "TX"
                 if template.categ_id and template.categ_id.code:
                     category_code = template.categ_id.code[:2]
                 else:
@@ -165,7 +166,7 @@ class ProductTemplateInherit(models.Model):
                 if (len(template.attribute_line_ids) == 1 and len(template.attribute_line_ids[0]['value_ids'])==1)\
                 or (len(template.attribute_line_ids) == 2 and len(template.attribute_line_ids[0]['value_ids'])==1 \
                    and len(template.attribute_line_ids[1]['value_ids'])==1):
-                        
+                        single_product_code = True
                         color_attr = self.env.ref('product.product_attribute_2')
                         treatment_attr = self.env.ref('egymentors_product_code.product_attribute_treatment')
                     
@@ -179,7 +180,7 @@ class ProductTemplateInherit(models.Model):
                             if word.isdigit():
                                 new_color_code += word
                         
-                if color_code != '':
+                if single_product_code == True:
                     if treatment_code == "":
                             template.default_code = "%s%s-%s-%s" % (parent_categ, category_code,
                                                    style_code, new_color_code)
