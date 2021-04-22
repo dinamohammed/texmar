@@ -211,11 +211,12 @@ class dev_stock_card(models.TransientModel):
         
         worksheet.write(row, 0, 'Date', left_header_style)
         worksheet.write(row,1, 'Origin', left_header_style)
-        worksheet.write(row,2, 'In Qty', header_style)
-        worksheet.write(row,3, 'Out Qty', header_style)
-        worksheet.write(row,4, 'Balance', header_style)
-        worksheet.write(row,5, 'Cost', header_style)
-        worksheet.write(row,6, 'Total', header_style)
+        worksheet.write(row,2, 'Reference', left_header_style)
+        worksheet.write(row,3, 'In Qty', header_style)
+        worksheet.write(row,4, 'Out Qty', header_style)
+        worksheet.write(row,5, 'Balance', header_style)
+        worksheet.write(row,6, 'Cost', header_style)
+        worksheet.write(row,7, 'Total', header_style)
         lines = self.get_lines()
         
         p_group_style = easyxf('font:height 200;pattern: pattern solid, fore_color ivory;'
@@ -256,20 +257,21 @@ class dev_stock_card(models.TransientModel):
                 t_in_qty += val.get('in_qty')
                 t_out_qty += val.get('out_qty')
                 worksheet.write(row,0, datetime.strftime(val.get('date_d'), "%d-%m-%Y "), text_left)
-                worksheet.write(row,1, val.get('origin') or val.get('ref'), text_left)
-                worksheet.write(row,2, val.get('in_qty'), text_right)
-                worksheet.write(row,3, val.get('out_qty'), text_right)
-                worksheet.write(row,4, balance, text_right)
-                worksheet.write(row,5, self.get_product_cost(val.get('product_id')), text_right)
+                worksheet.write(row,1, val.get('origin'), text_left)
+                worksheet.write(row,2, val.get('ref'), text_left)
+                worksheet.write(row,3, val.get('in_qty'), text_right)
+                worksheet.write(row,4, val.get('out_qty'), text_right)
+                worksheet.write(row,5, balance, text_right)
+                worksheet.write(row,6, self.get_product_cost(val.get('product_id')), text_right)
                 total_cost = self.get_product_cost(val.get('product_id'))*balance
                 total = total + total_cost
-                worksheet.write(row,6,total_cost , text_right)
+                worksheet.write(row,7,total_cost , text_right)
                 row+=1
             worksheet.write_merge(row,row,0,1, 'Total', group_style_right)
-            worksheet.write(row,2, t_in_qty, group_style_right)
-            worksheet.write(row,3, t_out_qty, group_style_right)
-            worksheet.write(row,4, balance, group_style_right)
-            worksheet.write(row,6, total, group_style_right)
+            worksheet.write(row,3, t_in_qty, group_style_right)
+            worksheet.write(row,4, t_out_qty, group_style_right)
+            worksheet.write(row,5, balance, group_style_right)
+            worksheet.write(row,7, total, group_style_right)
             row+=2
         
         row+=1

@@ -73,6 +73,7 @@
 									<tr>
 										<th width="14%"> Date </th>
 										<th width="14%"> Origin </th>
+                                        <th width="14%"> Reference </th>
 										<th width="8%" class="text-right"> 
 										    In Quantity 
 										</th>
@@ -127,7 +128,8 @@
                                                         <span t-esc="val.get('date_d').strftime('%d-%m-%Y')"/>
 												    </t>
 												</td>
-												<td style="border-right:1px solid #efefef"><span t-esc="val.get('origin') or val.get('ref')"/> </td>
+												<td style="border-right:1px solid #efefef"><span t-esc="val.get('origin')"/> </td>
+                                                <td style="border-right:1px solid #efefef"><span t-esc="val.get('ref')"/> </td>
 												<td class="text-right" style="border-right:1px solid #efefef">
 													<t t-if="val.get('in_qty')">
 														<t t-set="t_in_qty" t-value="t_in_qty + val.get('in_qty')"/>
@@ -158,6 +160,8 @@
 											</tr>
                                     	</t>
                                     	<tr>
+                                            <td class="text-right" style="border-right:1px solid #efefef">
+											</td>
 											<td colspan="2" class="text-right" style="border-right:1px solid #efefef">
 												<b>TOTAL</b>
 											</td>
