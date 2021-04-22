@@ -16,6 +16,8 @@ class AppointmentReport(models.AbstractModel):
 #                 [['product_id','in',data['form']['product_ids']]],[],groupby=['product_id','order_id'],lazy=False)
             purchase_lines = self.env['purchase.order.line'].search(
                 [('product_id','in',data['form']['product_ids'])],order='product_id')
+            sale_lines = self.env['sale.order.line'].search(
+                [('product_id','in',product_id)],order='product_id')
         else:
             purchase_lines = self.env['purchase.order.line'].search([])
 #         raise ValidationError('%s'%purchase_lines[0])
