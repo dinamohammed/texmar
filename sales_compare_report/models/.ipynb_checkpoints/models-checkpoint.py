@@ -31,5 +31,19 @@ class PurchaseOrderLine(models.Model):
                 if attribute.attribute_id == color_attr \
                             and attribute.product_attribute_value_id:
                     line.product_color = attribute.product_attribute_value_id.name.split('-')[1]
-                        
+                    
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+    
+    product_color = fields.Char("Color", compute = "_return_product_color", store = True)
+    
+    @api.depends('product_template_attribute_value_ids')
+    def _return_product_color(self):
+        for line in self:
+            color_attr = self.env.ref('product.product_attribute_2')
+            for attribute in line.product_template_attribute_value_ids:
+                if attribute.attribute_id == color_attr \
+                            and attribute.product_attribute_value_id:
+                    line.product_color = attribute.product_attribute_value_id.name.split('-')[1]
+                                        
                     

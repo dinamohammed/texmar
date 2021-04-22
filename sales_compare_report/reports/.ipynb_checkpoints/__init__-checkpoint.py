@@ -1,1 +1,1 @@
-from . import sale_compare_report_xlsx
+from . import sale_compare_report

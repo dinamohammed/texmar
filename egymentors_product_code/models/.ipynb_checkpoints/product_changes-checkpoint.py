@@ -249,7 +249,7 @@ class ProductProductInherit(models.Model):
                 if product.parent_categ and product.parent_categ.code:
                     categ_code = product.parent_categ.code[:2]
                 else:
-                    categ_code  = "00"
+                    categ_code  = "TX"
                 if product.categ_id and product.categ_id.code:
                     product.category_code = product.categ_id.code[:2]
                 else:

@@ -27,7 +27,7 @@ class ProductPurchaseLine(models.TransientModel):
     
     
     def print_pdf(self):
-        data={}
-        data['form'] = self.read()[0]
-        return self.env.ref('sales_compare_report.action_report_sales_compare').report_action(self, data=None)
+        data={'form':self.read()[0]}
+#         raise ValidationError('%s'%data)
+        return self.env.ref('sales_compare_report.action_report_sales_compare').report_action(self, data=data)
         
