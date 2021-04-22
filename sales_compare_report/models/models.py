@@ -47,18 +47,18 @@ class ProductProduct(models.Model):
                     line.product_color = attribute.product_attribute_value_id.name.split('-')[1]
                                         
 
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
     
     is_market = fields.Boolean('Market', compute = '_give_values', store = True)
     is_gallery = fields.Boolean('Gallery', compute = '_give_values', store = True)
     is_dealer = fields.Boolean('Dealer', compute = '_give_values', store = True)
     
-    @api.depends('branch_id')
+    @api.depends('order_id.branch_id')
     def _give_values(self):
-        for order in self:
-            if order.branch_id:
-                order.is_gallery = True
+        for line in self:
+            if line.order_id.branch_id:
+                line.is_gallery = True
             else:
-                order.is_market = True
+                line.is_market = True
     
