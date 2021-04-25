@@ -104,12 +104,15 @@ class SaleOrderLine(models.Model):
     is_gallery = fields.Boolean('Gallery', compute = '_get_bool_values', store = True)
     is_dealer = fields.Boolean('Dealer', compute = '_get_bool_values', store = True)
     
-    @api.depends('order_id.branch_id')
+    @api.depends('order_id.branch_id','salesman_id')
     def _get_bool_values(self):
         for line in self:
             if line.order_id.branch_id:
                 line.is_gallery = True
             else:
                 line.is_market = True
+            if line.salesman_id:
+                line.is_dealer = True
+                
                 
         
