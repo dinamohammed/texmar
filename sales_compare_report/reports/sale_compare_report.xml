@@ -58,6 +58,7 @@
                                 <th class="text-center"><span></span></th>
                             </tr>
                     <t t-set="serial" t-value="1"/>
+                    <t t-set="total" t-value="0"/>
                     <t t-set="product_id" t-value="0"/>
                         <t t-foreach="purchase_lines" t-as="line">
                             <tr>
@@ -112,6 +113,14 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
+                                </t>
+                                <t t-set="total" t-value="line.product_id.total_market + line.product_id.total_gallery +line.product_id.total_dealer "/>
+                                <t t-if = 'line.product_id.id != product_id'>
+                                    <td class="text-center"><span t-esc="total"/></td>
+                                    
+                                </t>
+                                <t t-else = ''>
                                     <td></td>
                                 </t>
                             </tr>
