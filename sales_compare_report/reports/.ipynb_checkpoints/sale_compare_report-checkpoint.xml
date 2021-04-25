@@ -90,6 +90,30 @@
                                     <span> | </span>
                                     <span t-esc="line.state"/>
                                 </td>
+                                <t t-if = 'line.product_id.id != product_id'>
+                                    <td class="text-center">
+                                        <span t-esc="line.product_id.total_market"/>
+                                        <span> | </span>
+                                        <span t-esc="line.product_id.total_gallery"/>
+                                        <span> | </span>
+                                        <span t-esc="line.product_id.total_dealer"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line.product_id.last_total_market"/>
+                                        <span> | </span>
+                                        <span t-esc="line.product_id.last_total_gallery"/>
+                                        <span> | </span>
+                                        <span t-esc="line.product_id.last_total_dealer"/>
+                                    </td>
+                                </t>
+                                <t t-else = ''>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </t>
                             </tr>
                             <t t-set="product_id" t-value="line.product_id.id"/>
                             <t t-set="serial" t-value="serial + 1"/>

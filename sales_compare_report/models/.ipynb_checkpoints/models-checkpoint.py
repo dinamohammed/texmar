@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-
+from datetime import datetime
 
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
@@ -37,6 +37,56 @@ class ProductProduct(models.Model):
     
     product_color = fields.Char("Color", compute = "_return_product_color", store = True)
     
+    total_market = fields.Integer('Current Year Market', compute = '_get_total_values_current_year', store = True)
+    total_gallery = fields.Integer('Current Year Gallery', compute = '_get_total_values_current_year', store = True)
+    total_dealer = fields.Integer('Current Year Dealer', compute = '_get_total_values_current_year', store = True)
+    
+    last_total_market = fields.Integer('Last Year Market', compute = '_get_total_values_last_year', store = True)
+    last_total_gallery = fields.Integer('Last Year Gallery', compute = '_get_total_values_last_year', store = True)
+    last_total_dealer = fields.Integer('Last Year Dealer', compute = '_get_total_values_last_year', store = True)
+    
+#     @api.depends('')
+    def _get_total_values_current_year(self):
+        from_date = datetime. strptime('01/01/%s'%datetime.today().year, '%d/%m/%Y')
+        to_date = datetime. strptime('31/12/%s'%datetime.today().year, '%d/%m/%Y')
+        for product in self:
+            total_m = total_g = total_d = 0
+            sale_order_lines = self.env['sale.order.line'].search([('product_id','=',product.id),
+                                                                   ('create_date','>=',from_date),
+                                                                  ('create_date','<=',to_date)])
+            for sol in sale_order_lines:
+                if sol.is_market:
+                    total_m += 1
+                elif sol.is_gallery:
+                    total_g += 1
+                elif sol.is_dealer:
+                    total_d += 1
+            product.total_market = total_m
+            product.total_gallery = total_g
+            product.total_dealer = total_d
+    
+    def _get_total_values_last_year(self):
+        from_date = datetime. strptime('01/01/%s'%(datetime.today().year-1), '%d/%m/%Y')
+        to_date = datetime. strptime('31/12/%s'%(datetime.today().year-1), '%d/%m/%Y')
+        for product in self:
+            total_m = total_g = total_d = 0
+            sale_order_lines = self.env['sale.order.line'].search([('product_id','=',product.id),
+                                                                   ('create_date','>=',from_date),
+                                                                  ('create_date','<=',to_date)])
+            for sol in sale_order_lines:
+                if sol.is_market:
+                    total_m += 1
+                elif sol.is_gallery:
+                    total_g += 1
+                elif sol.is_dealer:
+                    total_d += 1
+            product.last_total_market = total_m
+            product.last_total_gallery = total_g
+            product.last_total_dealer = total_d
+            
+        
+    
+    
     @api.depends('product_template_attribute_value_ids')
     def _return_product_color(self):
         for line in self:
@@ -50,15 +100,16 @@ class ProductProduct(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     
-    is_market = fields.Boolean('Market', compute = '_give_values', store = True)
-    is_gallery = fields.Boolean('Gallery', compute = '_give_values', store = True)
-    is_dealer = fields.Boolean('Dealer', compute = '_give_values', store = True)
+    is_market = fields.Boolean('Market', compute = '_get_bool_values', store = True)
+    is_gallery = fields.Boolean('Gallery', compute = '_get_bool_values', store = True)
+    is_dealer = fields.Boolean('Dealer', compute = '_get_bool_values', store = True)
     
     @api.depends('order_id.branch_id')
-    def _give_values(self):
+    def _get_bool_values(self):
         for line in self:
             if line.order_id.branch_id:
                 line.is_gallery = True
             else:
                 line.is_market = True
-    
+                
+        
