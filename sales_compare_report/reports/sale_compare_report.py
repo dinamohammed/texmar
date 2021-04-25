@@ -14,8 +14,6 @@ class AppointmentReport(models.AbstractModel):
             products = self.env['product.product'].search([('id','in',data['form']['product_ids'])])
             purchase_lines = self.env['purchase.order.line'].search(
                 [('product_id','in',data['form']['product_ids'])],order='product_id')
-            sale_lines = self.env['sale.order.line'].search(
-                [('product_id','in',product_id)],order='product_id')
         else:
             purchase_lines = self.env['purchase.order.line'].search([])
         ###### call function to update product values: Market Gallery Dealer
