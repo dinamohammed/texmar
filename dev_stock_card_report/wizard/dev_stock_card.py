@@ -59,7 +59,7 @@ class dev_stock_card(models.TransientModel):
                   where sm.date >= %s and sm.date <= %s \
                   and sm.location_dest_id = %s and sm.product_id in %s \
                   and sm.state not in %s and sm.company_id = %s \
-                  order by sm.date desc
+                  order by date_d desc
                   """
 
         params = (self.start_date, self.end_date, self.location_id.id, tuple(product_ids), state, self.company_id.id)
@@ -90,7 +90,7 @@ class dev_stock_card(models.TransientModel):
                       where sm.date >= %s and sm.date <= %s \
                       and sm.location_id = %s and sm.product_id in %s \
                       and sm.state not in %s and sm.company_id = %s \
-                      order by sm.date desc
+                      order by date_d desc
                       """
 
         params = (self.start_date, self.end_date, self.location_id.id, tuple(product_ids), state, self.company_id.id)
@@ -142,7 +142,7 @@ class dev_stock_card(models.TransientModel):
             for res in result:
                 print 
                 l_data = res.get('values')
-                new_lst = sorted(l_data, key=itemgetter('date'))
+                new_lst = sorted(l_data, key=itemgetter('date_d'))
                 print ("")
                 res['values'] = new_lst
 
