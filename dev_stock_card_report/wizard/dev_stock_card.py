@@ -58,7 +58,8 @@ class dev_stock_card(models.TransientModel):
                   JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                   where sm.date >= %s and sm.date <= %s \
                   and sm.location_dest_id = %s and sm.product_id in %s \
-                  and sm.state not in %s and sm.company_id = %s
+                  and sm.state not in %s and sm.company_id = %s \
+                  order by sm.date desc
                   """
 
         params = (self.start_date, self.end_date, self.location_id.id, tuple(product_ids), state, self.company_id.id)
@@ -88,7 +89,8 @@ class dev_stock_card(models.TransientModel):
                       JOIN product_template as pt ON pp.product_tmpl_id = pt.id \
                       where sm.date >= %s and sm.date <= %s \
                       and sm.location_id = %s and sm.product_id in %s \
-                      and sm.state not in %s and sm.company_id = %s
+                      and sm.state not in %s and sm.company_id = %s \
+                      order by sm.date desc
                       """
 
         params = (self.start_date, self.end_date, self.location_id.id, tuple(product_ids), state, self.company_id.id)
