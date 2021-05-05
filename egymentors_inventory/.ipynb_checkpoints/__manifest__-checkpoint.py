@@ -33,7 +33,7 @@
                 'egymentors_product_code', 'sales_custome'],
     'data': [
         'reports/reports.xml',
-#         'reports/delivery_slip_report.xml',
+        'reports/delivery_slip_report.xml',
         'reports/return_delivery_report.xml',
         'views/quantity_in_words.xml',
     ],
