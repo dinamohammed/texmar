@@ -30,7 +30,7 @@
             <field name="dpi">140</field>
         </record>
 
-        <report
+<!--         <report
             string="Delivery Slip"
             id="stock.action_report_delivery"
             model="stock.picking"
@@ -39,7 +39,7 @@
             file="stock.report_deliveryslip"
             paperformat="egymentors_inventory.picking_paperformat"
             print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
-        />
+        /> -->
         
         <!-- Returns Report -->
         <report
